@@ -1,0 +1,98 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">案例标题</span>
+            <input class="layui-input" name="title" placeholder="请输入案例标题" required value="{$vo.title|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">拟定人</span>
+            <input class="layui-input" name="author" placeholder="请输入拟定人" required value="{$vo.author|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">页数</span>
+            <input class="layui-input" name="page" placeholder="请输入页数" required value="{$vo.page|default=0}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">原价</span>
+            <input class="layui-input" name="original_price" placeholder="请输入价格" required value="{$vo.original_price|default=0.00}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">活动价</span>
+            <input class="layui-input" name="sales_price" placeholder="请输入页数" required value="{$vo.sales_price|default=0.00}">
+        </label>
+
+        <div class="layui-form-item" style="padding-top:10px;">
+            <label class="color-green font-w7">合同文件上传</label>
+            <div class="layui-input-block">
+                <div class="padding-right-0 padding-left-0">
+                    <input style="margin: 10px;  width:100%" name="file_url" required value="{$vo.file_url|default=''}"
+                           class="layui-input" title="请输入链接或点击上传文件" placeholder="请输入链接或点击上传文件" >
+                </div>
+                <div class="padding-right-0 padding-left-0">
+                    <button id="file_url" data-file="one" data-type="doc,docx" data-field="file_url" type="button" class="layui-btn layui-btn-sm" style="height:38px;line-height:38px;width:100%">
+                        点我重新上传文件
+                    </button>
+                </div>
+                <p class="help-block"><b></b></p>
+            </div>
+        </div>
+
+        <div class="layui-form-item" data-rebate="1">
+            <span class="label-required-prev font-w7 color-green">图文内容</span>
+
+            <textarea class="layui-hide" name="content">{$vo.content|default=''|raw}</textarea>
+        </div>
+
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+    /*! 加载扩展插件 */
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content"]', {height: 500});
+        window.createEditor('[name="audio_desc"]', {height: 500});
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+    });
+
+    $(document).ready(function() {
+        // select下拉框选中触发事件
+        form.on('select(type)', function (data) {
+
+
+        });
+    });
+
+
+</script>
+{/block}

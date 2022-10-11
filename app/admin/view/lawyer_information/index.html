@@ -1,0 +1,81 @@
+{extend name="../../admin/view/main"}
+
+{block name="button"}
+
+<!--{if auth("add")}-->
+<button data-open='{:url("add")}' data-title="添加信息" class='layui-btn layui-btn-sm layui-btn-primary'>添加信息</button>
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<a data-confirm="确定要永久删除这些信息吗？" data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</a>
+<!--{/if}-->
+
+{/block}
+
+{block name="content"}
+<div class="layui-tab layui-tab-card think-bg-white table-block">
+    <!--<ul class="layui-tab-title notselect">
+        {foreach ['0'=>'正常显示','1'=>'草 稿 箱'] as $k=>$v}
+        {if isset($mode) and $mode eq $k}
+        <li class="layui-this" data-open="{:url('index')}?mode={$k}">{$v}</li>
+        {else}
+        <li data-open="{:url('index')}?mode={$k}">{$v}</li>
+        {/if}
+        {/foreach}
+    </ul>-->
+    <div class="layui-tab-content think-box-shadow table-block table-block">
+        {include file='lawyer_information/index_search'}
+        <table class="layui-table margin-top-10" lay-skin="line">
+            <thead>
+            <tr>
+                <th class='list-table-check-td think-checkbox'>
+                    <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+                </th>
+                <th class='list-table-sort-td'>
+                    <button type="button" data-reload class="layui-btn layui-btn-xs">刷 新</button>
+                </th>
+                <th class='text-center nowrap' width="">ID</th>
+                <th class='text-center nowrap' width="">图片</th>
+                <th class='text-center nowrap' width="">姓名</th>
+                <th class='text-center nowrap' width="">审核状态</th>
+                <th class='text-center nowrap' width="">创建时间</th>
+                <th class='text-center nowrap' width="">修改时间</th>
+
+               <!-- <th class='text-center nowrap' width="5%">所属分类</th>
+                <th class='text-center nowrap' width="5%">资讯类型</th>
+                <th class='text-center nowrap' width="15%">资讯状态</th>
+                <th class='text-center nowrap' width="10%">专题设置</th>-->
+               <!-- <th class='text-center nowrap' width="5%">发布人</th>-->
+                <!--<th class='text-center nowrap' width="10%">发布时间</th>-->
+                <th class='text-center'>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td think-checkbox'>
+                    <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+                </td>
+                <td class='list-table-sort-td'>
+                    <input data-action-blur="{:request()->url()}" data-value="id#{$vo.id};action#sort;sort#{value}" data-loading="false" value="{$vo.sort}" class="list-sort-input">
+                </td>
+                <td class='text-center nowrap'>{$vo.id}</td>
+                <td class='text-center nowrap'><img src="{$vo.profile_photo}" width="60" height="60"></td>
+                <td class='text-center nowrap'>{$vo.name}</td>
+                <td class='text-center nowrap'>{$vo.status}</td>
+                <td class='text-center nowrap'>{$vo.create_time}</td>
+                <td class='text-center nowrap'>{$vo.update_time}</td>
+
+                <td class='text-center nowrap'>
+                    <a data-dbclick class="layui-btn layui-btn-sm" data-open='{:url("edit")}?id={$vo.id}' data-csrf="{:systoken('edit')}">编 辑</a>
+                    <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-black" data-modal="{:url('appoint')}?id={$vo.id}" data-csrf="{:systoken('appoint')}">审 核</a>
+
+
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+    </div>
+</div>
+{/block}

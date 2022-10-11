@@ -1,0 +1,60 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">咨询名称</span>
+            <input class="layui-input" name="consultation_title" placeholder="请输入咨询名称" required value="{$vo.consultation_title|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">价格</span>
+            <input class="layui-input" name="price" placeholder="请输入价格" required value="{$vo.price|default='0.00'}">
+        </label>
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+    /*! 加载扩展插件 */
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content"]', {height: 500});
+        window.createEditor('[name="audio_desc"]', {height: 500});
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+    });
+
+    $(document).ready(function() {
+        // select下拉框选中触发事件
+        form.on('select(type)', function (data) {
+
+
+        });
+    });
+
+
+</script>
+{/block}

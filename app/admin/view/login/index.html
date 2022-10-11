@@ -1,0 +1,69 @@
+{extend name="index/index"}
+
+{block name='style'}
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<script>if (location.href.indexOf('#') > -1) location.replace(location.href.split('#')[0])</script>
+<link rel="stylesheet" href="__ROOT__/static/theme/css/login.css">
+{/block}
+
+{block name="body"}
+<div class="login-container" {$loginStyle|raw}>
+    <div class="header notselect layui-hide-xs">
+        <a href="{:url('@')}" class="title">{:sysconf('app_name')}<span>{:sysconf('app_version')}</span></a>
+        {notempty name='developMode'}
+        <a class="pull-right layui-anim layui-anim-fadein" target="_blank" href='https://gitee.com/zoujingli/ThinkAdmin'>
+            <img src='https://gitee.com/zoujingli/ThinkAdmin/widgets/widget_1.svg' alt='Fork me on Gitee'>
+        </a>
+        {/notempty}
+    </div>
+    <form data-login-form onsubmit="return false" method="post" class="layui-anim layui-anim-upbit" autocomplete="off">
+        <h2 class="notselect">{:sysconf('login_name')?:'统管理'}</h2>
+        <ul>
+            <li class="username">
+                <label class="label-required-null">
+                    <i class="layui-icon layui-icon-username"></i>
+                    <input class="layui-input" required pattern="^\S{4,}$" name="username" autofocus autocomplete="off" placeholder="登录账号" title="请输入登录账号">
+                </label>
+            </li>
+            <li class="password">
+                <label class="label-required-null">
+                    <i class="layui-icon layui-icon-password"></i>
+                    <input class="layui-input" required pattern="^\S{4,}$" name="password" maxlength="32" type="password" autocomplete="off" placeholder="登录密码" title="请输入登录密码">
+                </label>
+            </li>
+            <li class="verify layui-hide">
+                <label class="inline-block relative label-required-null">
+                    <i class="layui-icon layui-icon-picture-fine"></i>
+                    <input class="layui-input" required pattern="^\S{4,}$" name="verify" maxlength="4" autocomplete="off" placeholder="验证码" title="请输入验证码">
+                </label>
+                <label data-captcha="{:url('admin/login/captcha',[],false)}" data-field-verify="verify" data-field-uniqid="uniqid" data-captcha-type="{$captchaType}" data-captcha-token="{$captchaToken}"></label>
+            </li>
+            <li class="text-center padding-top-20">
+                <button type="submit" class="layui-btn layui-disabled full-width" data-form-loaded="立即登入">正在载入</button>
+            </li>
+        </ul>
+    </form>
+    <div class="footer notselect">
+
+        <!--<p class="layui-hide-xs">推荐使用 <a target="_blank" href="https://www.google.cn/chrome">Google Chrome</a> 或 <a target="_blank" href="https://www.microsoft.com/zh-cn/edge#platform">Microsoft Edge</a> 浏览器访问</p>
+        {:sysconf('site_copy')}
+        {if sysconf('beian')}<span class="padding-5">|</span><a target="_blank" href="https://beian.miit.gov.cn/">{:sysconf('beian')}</a>{/if}
+        {if sysconf('miitbeian')}<span class="padding-5">|</span><a target="_blank" href="https://beian.miit.gov.cn/">{:sysconf('miitbeian')}</a>{/if}-->
+
+        <!--<p style="padding:60px 100px;">法趣信息科技（山东）有限公司，创建于2022年8月，一家集技术、资讯、互联网为一体的综合型法律服务公司，以“让律师服务直达用户，让千万中小微企业及国人真正享受到公正、透明、高效、普惠的法律服务”为使命，致力于成为中国知名一站式法律服务平台。
+
+            旗下的“法趣”是一款基于云计算和大数据分析的法律服务平台，客户端包括：APP用户版、微信小程序、抖音小程序、PC网站，致力于为中小企业以及个人提供法律咨询、法律文书服务相关的一站式服务，如企业风险评估、合同定制、合同模板下载、案件委托、在线咨询及各种法律资讯、法律案例分享等功能。
+
+
+            公司依托强大的科技和资源优势，为平台上的律师提供全方位支持和付费服务，帮助律师主动获取客户需求，让律师的服务直达用户。以精准的用户渠道，和海量优质的律师资源，共建律师与公众的交流的平台，成为律师最好的合作伙伴。
+
+            平台除了吸纳优质律师和律师机构入驻外，“法趣”合作对象涵盖个人、协会、金融、第三方企业/机构。平台的理念就是，构建用户线上咨询，线下对接的律师产业创新服务生态一体化联盟。希望用互联网“生态圈”替代传统熟人社会的“朋友圈”，以共享、协作的理念，推动各方资源整合，价值最大化。旨在推动国家公共法律服务体系建设，为依法治国维护社会稳定、实现家长治久安而努力奋斗。</p>-->
+
+        <p>法趣网 <a href="https://beian.miit.gov.cn" target="_blank" >鲁ICP备2022030690号-1</a> faquwang.com 孙即庆 </p>
+    </div>
+</div>
+{/block}
+
+{block name='script'}
+<script src="__ROOT__/static/login.js"></script>
+{/block}

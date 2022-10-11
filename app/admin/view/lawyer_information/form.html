@@ -1,0 +1,127 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+
+        <div class="layui-form-item" data-rebate="1">
+            <span class="color-green font-w7 label-required-prev">头像图片</span>
+
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width:150px">头像图片</th>
+                    <th class="text-center" style="width:auto"></th>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <input name="profile_photo" type="hidden" value="{$vo.profile_photo|default=''}">
+                        <script>$('[name="profile_photo"]').uploadOneImage();</script>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">姓名</span>
+            <input class="layui-input" name="name" placeholder="请输入姓名" required value="{$vo.name|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">职业职称</span>
+            <input class="layui-input" name="professional_title" placeholder="请输入职业职称" required value="{$vo.professional_title|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">经验</span>
+            <input class="layui-input" name="experience" placeholder="请输入经验" required value="{$vo.experience|default=''}">
+        </label>
+
+
+        <div class="layui-form-item">
+            <label class="color-green font-w7">专题研究</label>
+            <div class="layui-input">
+                {foreach $type_arr as $item}
+
+                <input type="checkbox" name="professional_field_id[]" title="{$item.professional}" value="{$item.id|default=''}" {if (isset($professional_field_ids) && in_array($item.id,$professional_field_ids)) } checked {/if} />
+
+                {/foreach}
+
+            </div>
+        </div>
+
+
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">律师所</span>
+            <input class="layui-input" name="law_firm_affiliation" placeholder="请输入律师所" required value="{$vo.law_firm_affiliation|default=''}">
+        </label>
+
+
+        <div class="layui-form-item" data-rebate="2">
+            <span class="label-required-prev font-w7 color-green">律师简介</span>
+            <textarea class="layui-textarea" name="lawyer_introduction" placeholder="请输入律师简介" >{$vo.lawyer_introduction|default=''|raw}</textarea>
+        </div>
+
+        <div class="layui-form-item" data-rebate="2">
+            <span class="label-required-prev font-w7 color-green">荣誉与评价</span>
+            <textarea class="layui-textarea" name="honor" placeholder="请输入荣誉与评价" required> {$vo.honor|default=''|raw}</textarea>
+        </div>
+
+        <div class="layui-form-item" data-rebate="2">
+            <span class="label-required-prev font-w7 color-green">专业研究</span>
+            <textarea class="layui-textarea" name="professional_studies" placeholder="请输入专业研究" required>{$vo.professional_studies|default=''|raw}</textarea>
+        </div>
+
+        <div class="layui-form-item" data-rebate="2">
+            <span class="label-required-prev font-w7 color-green">经典案例</span>
+            <textarea class="layui-textarea" name="classic_case" placeholder="请输入经典案例" required>{$vo.classic_case|default=''|raw}</textarea>
+        </div>
+
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+    /*! 加载扩展插件 */
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="context_desc"]', {height: 500});
+        window.createEditor('[name="audio_desc"]', {height: 500});
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+    });
+
+    $(document).ready(function() {
+        // select下拉框选中触发事件
+        form.on('select(type)', function (data) {
+
+
+        });
+    });
+
+
+</script>
+{/block}
