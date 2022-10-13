@@ -223,11 +223,7 @@ class LawyerInformation extends Controller
     }
 
 
-    /**
-     * 审核律师信息
-     *  @auth true
-     * time  :
-     */
+
     public function appoint() {
         $this->title = '审核律师信息';
         $this->status;

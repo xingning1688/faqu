@@ -146,7 +146,7 @@ class LawyerCaseAudit extends Controller
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
 
-            $this->redirect('/admin/lawyer_case/index','301');
+            $this->redirect('/admin/lawyer_case_audit/index','301');
         }
 
     }

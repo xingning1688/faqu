@@ -37,7 +37,7 @@ class LawyerInformationAudit extends Controller
     private $table = 'lawyer_information';
     public $status = [0=>'待审核','1'=>'审核成功','2'=>'审核失败'];
     /**
-     * 律师用户管理
+     * 审核律师管理
      * @auth true
      * @menu true
      * @throws \think\db\exception\DataNotFoundException
@@ -83,7 +83,7 @@ class LawyerInformationAudit extends Controller
 
 
     /**
-     * 添加律师
+     * 添加审核律师
      * @auth true
      */
     public function add()
@@ -92,7 +92,7 @@ class LawyerInformationAudit extends Controller
     }
 
     /**
-     * 编辑律师
+     * 审核编辑律师
      * @auth true
      */
     public function edit()
@@ -128,7 +128,7 @@ class LawyerInformationAudit extends Controller
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
 
-            $this->redirect('/admin/lawyer_information/index','301');
+            $this->redirect('/admin/lawyer_information_audit/index','301');
 
         }else{
             $professional_field_ids = explode(',',$data['professional_field_id']);

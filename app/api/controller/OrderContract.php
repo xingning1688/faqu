@@ -28,42 +28,41 @@ use app\api\model\OrderContract as OrderContracts;
  *
  */
 class OrderContract  extends AuthController
+//class OrderContract  extends Controller
 {
     public function buyContract()
     {
         //获取订单信息
-
-        //获取参数
-        /* $parameter['lawyer_case_detail'] =  request()->param('lawyer_case_detail');
-        $parameter['open_id'] = request()->param('open_id');
-        $parameter['pay_type'] = request()->param('pay_type');
-        $parameter['platform'] = request()->param('platform');//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']*/
-
-
         //test
         //测试数据 start
-        $lawyer_case_detail=[['lawyer_case_id'=>1,'price'=>0.00,'num'=>2],['lawyer_case_id'=>2,'price'=>1.00,'num'=>3]];
+        /*$lawyer_case_detail=[['lawyer_case_id'=>1,'price'=>0.00,'num'=>2],['lawyer_case_id'=>2,'price'=>1.00,'num'=>3]];
+        $lawyer_case_detail = json_encode($lawyer_case_detail);
 
-
-        $parameter['lawyer_case_detail'] =  $lawyer_case_detail;//合同详情
+        $parameter['lawyer_case_detail'] =  json_decode($lawyer_case_detail,true);//合同详情
         $parameter['open_id'] = 'open_id';
         $parameter['pay_type'] = 1;
-        $parameter['platform'] = 1;//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']
+        $parameter['platform'] = 1;//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']*/
         //测试数据 end
 
-        //dump($lawyerCases);exit;
+        //获取参数
+        $parameter['lawyer_case_detail'] =  json_decode(request()->param('lawyer_case_detail'),true);
+        $parameter['open_id'] = request()->param('open_id');
+        $parameter['pay_type'] = request()->param('pay_type');
+        $parameter['platform'] = request()->param('platform');//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']
+
+
         //验证提交过来的数据
-        if(!is_numeric($parameter['pay_type']) || !is_numeric($parameter['platform']) || empty($parameter['open_id'])){
+        if(!is_numeric($parameter['pay_type']) || !is_numeric($parameter['platform']) || empty($parameter['open_id']) || empty($parameter['lawyer_case_detail'])){
             $this->error('参数不合法1');
         }
 
-        $lawyer_case_ids = array_column($lawyer_case_detail,'lawyer_case_id');
+        $lawyer_case_ids = array_column($parameter['lawyer_case_detail'],'lawyer_case_id');
         $lawyerCases = LawyerCase::detailIds($lawyer_case_ids);
         if(count($lawyerCases) != count($lawyer_case_ids)){
             $this->error('参数不合法2');
         }
         $parameter['order_price'] = 0;
-        foreach($lawyer_case_detail as $key =>$value){
+        foreach($parameter['lawyer_case_detail'] as $key =>$value){
             if(!isset($lawyerCases[$value['lawyer_case_id']]['sales_price'])){
                 $this->error('参数不合法3；'.'lawyer_case_id:'.$value['lawyer_case_id']);
             }
@@ -85,10 +84,6 @@ class OrderContract  extends AuthController
         }
 
 
-
-        //test
-
-
         //添加数据库
         $res = OrderContracts::buyOrderContract($parameter);
         if($res === false){
@@ -98,15 +93,6 @@ class OrderContract  extends AuthController
         $data['order_contract_detail'] = $parameter['order_contract_detail'];
         $this->success('订单成功',$data);
 
-
-        /*if($list===false){
-            $this->error('参数错误');
-        }
-        if(empty($list)){
-            $this->error('暂无数据');
-        }
-
-        $this->success('ok',$list);*/
     }
 
 
