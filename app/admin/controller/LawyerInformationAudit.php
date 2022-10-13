@@ -120,7 +120,7 @@ class LawyerInformationAudit extends Controller
             $time = time();
             $data['professional_field_id'] = ','.(implode(',',$data['professional_field_id'])).',';
             $data['update_time']       = $time;
-            $data['status']       = 0;
+            //$data['status']       = 0;
 
             try {
                 $this->app->db->name($this->table)->where('id', $data['id'])->update($data);
