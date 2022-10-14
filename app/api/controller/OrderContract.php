@@ -45,14 +45,15 @@ class OrderContract  extends AuthController
         //测试数据 end
 
         //获取参数
-        $parameter['lawyer_case_detail'] =  json_decode(request()->param('lawyer_case_detail'),true);
+        //$parameter['lawyer_case_detail'] =  json_decode(request()->param('lawyer_case_detail'),true);
+        $parameter['lawyer_case_detail'] =  request()->param('lawyer_case_detail');
         $parameter['open_id'] = request()->param('open_id');
         $parameter['pay_type'] = request()->param('pay_type');
         $parameter['platform'] = request()->param('platform');//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']
 
 
         //验证提交过来的数据
-        if(!is_numeric($parameter['pay_type']) || !is_numeric($parameter['platform']) || empty($parameter['open_id']) || empty($parameter['lawyer_case_detail'])){
+        if( (isset($parameter['pay_type']) && !is_numeric($parameter['pay_type']) ) || !is_numeric($parameter['platform']) || empty($parameter['open_id']) || empty($parameter['lawyer_case_detail'])){
             $this->error('参数不合法1');
         }
 
