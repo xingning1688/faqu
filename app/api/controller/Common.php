@@ -29,16 +29,14 @@ class Common  extends Controller
         if(empty($version_number) || !is_numeric($version_number)){
             $this->error('参数错误');
         }
-        //正式版本号是 1
-        if($version_number<= 1){
+        //2是 正式版本号（最后一提交成功的版本号）
+        if($version_number<= 5){
             $data['wx'] = '微信号';
         }else{
             $data['wx'] = '快手号';
         }
 
-
         $this->success('ok',$data['wx']);
-
     }
 
 
