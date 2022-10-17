@@ -25,6 +25,7 @@ use think\admin\service\AdminService;
 use think\model\Relation;
 use think\facade\Session;
 use think\facade\Db;
+use app\admin\model\ContractType;
 
 /**
  * 律师合同审核
@@ -104,6 +105,7 @@ class LawyerCaseAudit extends Controller
      */
     public function add()
     {
+        $this->contractType = ContractType::getContractType();
         SystemUser::mForm('form');
     }
 
@@ -114,6 +116,7 @@ class LawyerCaseAudit extends Controller
     public function edit()
     {
         $this->title = '编辑律师合同';
+        $this->contractType = ContractType::getContractType();
         $this->_form($this->table, 'form');
     }
 
@@ -138,7 +141,7 @@ class LawyerCaseAudit extends Controller
             }
 
             $time = time();
-            $data['status']       = 0;
+            //$data['status']       = 0;
             $data['update_time']       = $time;
 
 

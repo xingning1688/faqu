@@ -8,6 +8,7 @@
 namespace app\api\model;
 
 use app\api\model\BaseModel;
+use app\api\model\LawyerCase as LawyerCases;
 use think\facade\Db;
 
 class LawyerCase extends BaseModel {
@@ -70,7 +71,7 @@ class LawyerCase extends BaseModel {
 
         $list = self::field('id,title,author,page,original_price,sales_price,file_url')
             ->where($where)
-            ->limit(2)
+            ->limit(5)
             ->order('sort', 'desc')
             ->order('id', 'desc')
             ->select()
@@ -82,6 +83,30 @@ class LawyerCase extends BaseModel {
 
         return $list;
     }
+
+    //获取合同列表
+    public static function getList($params){
+        $where = [];
+        if(isset($params['contract_type_id']) && !empty($params['contract_type_id'])){
+            $where['contract_type_id'] = $params['contract_type_id'];
+        }
+
+        $data = LawyerCases::where($where)->field(['id','user_id','title','author','original_price','sales_price','file_url'])->page($params['page'],10)->select()->toArray();
+        $data = LawyerCases::getListAssemblyData($data);
+        return $data;
+    }
+
+    public static function getListAssemblyData($data){
+        $userIds = array_unique(array_column($data,'user_id'));
+        $information = LawyerInformations::getByUserIds($userIds);
+        $data = array_map(function($item)use($information){
+            $item['law_firm_affiliation'] = isset($information[$item['user_id']])? $information[$item['user_id']]['law_firm_affiliation']: '';
+            return $item;
+        },$data);
+        return $data;
+    }
+
+
 
 
 

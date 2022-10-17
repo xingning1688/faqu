@@ -45,7 +45,6 @@ class LawyerInformations extends BaseModel {
                     ->select()
                     ->toArray();
 
-
         if(empty($list)){
             return $list;
         }

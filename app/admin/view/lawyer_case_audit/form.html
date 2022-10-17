@@ -12,8 +12,23 @@
 
 
         <label class="layui-form-item">
-            <span class="color-green font-w7">案例标题</span>
-            <input class="layui-input" name="title" placeholder="请输入案例标题" required value="{$vo.title|default=''}">
+            <span class="color-green font-w7">合同标题</span>
+            <input class="layui-input" name="title" placeholder="请输入合同标题" required value="{$vo.title|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 label-required-prev">合同类型</span>
+            <span class="color-desc margin-left-5">Realtime Type</span>
+            <select class="layui-select" name="contract_type_id" lay-filter="type">
+                <option value="0" data-type="0">--请选择--</option>
+                {foreach $contractType as $k=>$item}
+                {if isset($vo.contract_type_id) && $item['id']==$vo.contract_type_id}
+                <option selected value="{$item['id']}">{$item['type_name']}</option>
+                {else}
+                <option value="{$item['id']}">{$item['type_name']}</option>
+                {/if}
+                {/foreach}
+            </select>
         </label>
 
         <label class="layui-form-item">
