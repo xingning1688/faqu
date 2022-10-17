@@ -34,9 +34,6 @@ class LawyerInformations extends BaseModel {
             $where[] = ['professional_field_id', 'like', '%,'.$typeId.',%'];
         }
 
-        /*if(!empty($is_recommend)){
-            $where[] = ['is_recommend', '=', $is_recommend];
-        }*/
 
         $where[] = ['status','=',1];
 
