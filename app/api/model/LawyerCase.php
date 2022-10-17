@@ -63,6 +63,26 @@ class LawyerCase extends BaseModel {
         return $row;
     }
 
+    //获取首页合同列表
+    public static function getCaseIndexList(){
+        $where[] = ['status','=',1];
+        $where[] = ['is_recommend','=',1];
+
+        $list = self::field('id,title,author,page,original_price,sales_price,file_url')
+            ->where($where)
+            ->limit(2)
+            ->order('sort', 'desc')
+            ->order('id', 'desc')
+            ->select()
+            ->toArray();
+
+        if(empty($list)){
+            return $list;
+        }
+
+        return $list;
+    }
+
 
 
 }

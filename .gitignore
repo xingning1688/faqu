@@ -16,3 +16,4 @@ public/favicon.ico
 public/static/theme/css/_*.css*
 public/static/theme/css/node_modules
 public/static/theme/css/package-lock.json
+config/database.php--线上-测试环境

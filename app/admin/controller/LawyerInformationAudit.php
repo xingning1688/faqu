@@ -36,6 +36,8 @@ class LawyerInformationAudit extends Controller
 {
     private $table = 'lawyer_information';
     public $status = [0=>'待审核','1'=>'审核成功','2'=>'审核失败'];
+    public $recommends = [0=>'未推荐','1'=>'推荐'];
+
     /**
      * 审核律师管理
      * @auth true
@@ -48,6 +50,7 @@ class LawyerInformationAudit extends Controller
 
         $this->title = '律师列表';
         $this->status;
+        $this->recommends;
 
         $where = [];
         $status = $this->request->get('status', '');
@@ -249,6 +252,18 @@ class LawyerInformationAudit extends Controller
 
         }
     }
+
+
+    public function recommend_sure() {
+        $this->_applyFormToken();
+        $this->_save($this->table, ['is_recommend' => 1,'update_time'=>time()]);
+    }
+
+    public function recommend_cancel() {
+        $this->_applyFormToken();
+        $this->_save($this->table, ['is_recommend' => 0,'update_time'=>time()]);
+    }
+
 
 
 

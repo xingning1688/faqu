@@ -1,0 +1,62 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+
+        <div class="layui-form-item" data-rebate="1">
+            <span class="color-green font-w7 label-required-prev">图片</span>
+
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width:150px">头像图片</th>
+                    <th class="text-center" style="width:auto"></th>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <input name="img_url" type="hidden" value="{$vo.img_url|default=''}">
+                        <script>$('[name="img_url"]').uploadOneImage();</script>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">跳转地址</span>
+            <input class="layui-input" name="url" placeholder="请输入姓名"  value="{$vo.url|default=''}">
+        </label>
+
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+
+
+    $(document).ready(function() {
+        // select下拉框选中触发事件
+        form.on('select(type)', function (data) {
+
+
+        });
+    });
+
+
+</script>
+{/block}

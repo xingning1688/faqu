@@ -36,16 +36,11 @@
                 <th class='text-center nowrap' width="">ID</th>
                 <th class='text-center nowrap' width="">图片</th>
                 <th class='text-center nowrap' width="">姓名</th>
+                <th class='text-center nowrap' width="">是否推荐</th>
                 <th class='text-center nowrap' width="">审核状态</th>
                 <th class='text-center nowrap' width="">创建时间</th>
                 <th class='text-center nowrap' width="">修改时间</th>
 
-               <!-- <th class='text-center nowrap' width="5%">所属分类</th>
-                <th class='text-center nowrap' width="5%">资讯类型</th>
-                <th class='text-center nowrap' width="15%">资讯状态</th>
-                <th class='text-center nowrap' width="10%">专题设置</th>-->
-               <!-- <th class='text-center nowrap' width="5%">发布人</th>-->
-                <!--<th class='text-center nowrap' width="10%">发布时间</th>-->
                 <th class='text-center'>操作</th>
             </tr>
             </thead>
@@ -61,6 +56,7 @@
                 <td class='text-center nowrap'>{$vo.id}</td>
                 <td class='text-center nowrap'><img src="{$vo.profile_photo}" width="60" height="60"></td>
                 <td class='text-center nowrap'>{$vo.name}</td>
+                <td class='text-center nowrap'>{$vo.is_recommend==0?'否':'是'}</td>
                 <td class='text-center nowrap'>{$vo.status}</td>
                 <td class='text-center nowrap'>{$vo.create_time}</td>
                 <td class='text-center nowrap'>{$vo.update_time}</td>
@@ -68,6 +64,13 @@
                 <td class='text-center nowrap'>
                     <a data-dbclick class="layui-btn layui-btn-sm" data-open='{:url("edit")}?id={$vo.id}' data-csrf="{:systoken('edit')}">编 辑</a>
                     <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-black" data-modal="{:url('appoint')}?id={$vo.id}" data-csrf="{:systoken('appoint')}">审 核</a>
+
+                    {if $vo.is_recommend == 0}
+                        <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-blue"  data-confirm="确定要设置推荐吗?" data-action="{:url('recommend_sure')}" data-value="id#{$vo.id}" data-csrf="{:systoken('recommend_sure')}">设置推荐</a>
+                    {else}
+                        <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-orange" data-confirm="确定要取消推荐吗?" data-action="{:url('recommend_cancel')}"  data-value="id#{$vo.id}" data-csrf="{:systoken('recommend_cancel')}">取消推荐</a>
+                    {/if}
+
                 </td>
             </tr>
             {/foreach}

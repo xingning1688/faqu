@@ -36,6 +36,7 @@ class LawyerCaseAudit extends Controller
 {
     private $table = 'lawyer_case';
     public $status = [0=>'待审核','1'=>'审核成功','2'=>'审核失败'];
+    public $recommends = [0=>'未推荐','1'=>'推荐'];
     /**
      * 律师合同列表
      * @auth true
@@ -47,6 +48,7 @@ class LawyerCaseAudit extends Controller
     public function index() {
 
         $this->title = '律师合同';
+        $this->recommends;
         // 加载对应数据
         $where = [];
         $status = $this->request->get('status', '');
@@ -259,6 +261,23 @@ class LawyerCaseAudit extends Controller
 
         }
     }
+
+
+    public function recommend_sure() {
+        $this->_applyFormToken();
+        $this->_save($this->table, ['is_recommend' => 1,'update_time'=>time()]);
+    }
+
+    public function recommend_cancel() {
+        $this->_applyFormToken();
+        $this->_save($this->table, ['is_recommend' => 0,'update_time'=>time()]);
+    }
+
+
+
+
+
+
 
     /**
      * 修改用户状态

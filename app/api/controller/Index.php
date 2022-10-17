@@ -16,37 +16,30 @@
 
 namespace app\api\controller;
 
+use app\api\model\Jwt;
 use think\admin\Controller;
 use think\facade\Db;
-use app\api\model\LawyerProfessionals;
+use app\api\model\LawyerInformations;
+use app\api\controller\Common;
+use app\api\model\LawyerCase;
+use app\api\model\Banner;
 
 /**
  * Class Index
  * @package app\index\controller
  */
-class LawyerProfessional  extends Controller
+
+class Index  extends Controller
 {
-    public function  list()
-    {
-        $list = LawyerProfessionals::getProfessionalList();
-        if($list===false){
-            $this->error('参数错误');
-        }
-        if(empty($list)){
-            $this->error('暂无数据');
-        }
-        $this->success('ok');
+    //首页接口
+    public function index(){
+        $data['lawyer_list'] = LawyerInformations::getLawyerIndexList();//首页律师列表
+        $data['lawyer_case_list'] = LawyerCase::getCaseIndexList();//首页合同列表
+        $data['banner_list'] = Banner::getBannerList();//首页banner
+        $this->success('ok',$data);
     }
 
-    /*public function detail(){
-        $id = request()->param('id', 0);
-        if(empty($id) || !is_numeric($id)){
-            $this->error('参数错误');
-        }
-        $data = LawyerInformations::detail($id);
-        $this->success('ok');
-    }*/
 
-    
+
 
 }

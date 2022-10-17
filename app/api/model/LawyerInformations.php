@@ -17,7 +17,8 @@ class LawyerInformations extends BaseModel {
         $page = request()->param('page/d', 1);
         $name = request()->param('name', '');
         $typeId = request()->param('type_id', '');
-
+        $limit =  request()->param('limit', 4);
+       /* $is_recommend = request()->param('is_recommend', 0);*/
         if(!is_numeric($page)){
             return false;
         }
@@ -32,11 +33,16 @@ class LawyerInformations extends BaseModel {
             }
             $where[] = ['professional_field_id', 'like', '%,'.$typeId.',%'];
         }
+
+        /*if(!empty($is_recommend)){
+            $where[] = ['is_recommend', '=', $is_recommend];
+        }*/
+
         $where[] = ['status','=',1];
 
         $list = self::field(['id','professional_field_id','profile_photo','name','law_firm_affiliation','professional_title','experience'])
                     ->where($where)
-                    ->limit(4)
+                    ->limit($limit)
                     ->page($page)
                     ->order('id', 'desc')
                     ->select()
@@ -125,6 +131,26 @@ class LawyerInformations extends BaseModel {
         }
         $data = $data->toArray();
         return $data;
+    }
+
+    //获取首页律师列表
+    public static function getLawyerIndexList(){
+        $where[] = ['status','=',1];
+        $where[] = ['is_recommend','=',1];
+
+        $list = self::field(['id','professional_field_id','profile_photo','name','law_firm_affiliation','professional_title','experience'])
+            ->where($where)
+            ->limit(3)
+            ->order('sort', 'desc')
+            ->order('id', 'desc')
+            ->select()
+            ->toArray();
+
+        if(empty($list)){
+            return $list;
+        }
+        $listData = self::assemblyDataList($list);
+        return $listData;
     }
 
 
