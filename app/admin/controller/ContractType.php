@@ -95,7 +95,8 @@ class ContractType extends Controller
      */
     public function add()
     {
-        SystemUser::mForm('form');
+        //SystemUser::mForm('form');
+        $this->_form($this->table, 'form');
     }
 
     /**
@@ -176,7 +177,6 @@ class ContractType extends Controller
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
 
-            $this->redirect('/admin/contract_type/index','301');
         }
     }
 
