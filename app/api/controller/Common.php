@@ -29,8 +29,10 @@ class Common  extends Controller
         if(empty($version_number) || !is_numeric($version_number)){
             $this->error('参数错误');
         }
-        //2是 正式版本号（最后一提交成功的版本号）
-        if($version_number<= 5){
+        //5是 正式版本号（最后一提交成功的版本号）
+        $config_version = Db::table('config_version')->find(1);
+        $config_version['version_number'] = isset($config_version['version_number'])? $config_version['version_number'] : 0;
+        if($version_number<= $config_version['version_number']){
             $data['wx'] = '微信号';
         }else{
             $data['wx'] = '快手号';
