@@ -15,6 +15,12 @@ class ContractType extends BaseModel {
 
     public static function getContractType(){
         $list = self::where('status',0)->select()->toArray();
+        $list = array_map(function($item){
+            $item['name'] = $item['type_name'];
+            return $item;
+        },$list);
+
+        $list = array_merge([['id'=>0,'name'=>'全部']],$list);
         return $list;
     }
 

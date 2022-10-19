@@ -36,7 +36,7 @@ use think\facade\Db;
 class LeaveMessage extends Controller
 {
     private $table = 'leave_message';
-    public $status = [0=>'未处理','1'=>'已处理','-1'=>'搁置'];
+    public $status = ['-1'=>'搁置',0=>'未处理','1'=>'助理确认','2'=>'律师沟通','3'=>'沟通结束'];
     public $platform = [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音'];
     /**
      * 律师咨询列表

@@ -39,7 +39,7 @@ class LeaveMessage  extends AuthController{
         $platform = request()->post('platform');
         $problem = request()->post('problem');
         $lawyer_id = request()->post('lawyer_id');
-
+        $title = request()->post('title','');
         //test
         /*$open_id = '1';
         $phone = '13666666666';
@@ -55,8 +55,10 @@ class LeaveMessage  extends AuthController{
         $data['wx_num'] = $wx_num;
         $data['problem'] = $problem;
         $data['platform'] = $platform;
+        $data['title'] = $title;
+        $data['order_no'] = getOrderNumber();
 
-        if(empty($data['open_id']) || empty($data['phone'])  || empty($data['problem']) || empty($data['platform']) || empty($lawyer_id)  /*|| empty($data['wx_num'])*/){
+        if(empty($data['open_id']) || empty($data['phone'])  || empty($data['problem']) || empty($data['platform']) || empty($lawyer_id) /*|| empty($data['title'])*/  /*|| empty($data['wx_num'])*/){
             $this->error('参数不能为空');
         }
         if(!is_numeric($lawyer_id)){
@@ -86,6 +88,53 @@ class LeaveMessage  extends AuthController{
 
         $this->success('留言成功');
 
+    }
+
+    public function addConsulting(){
+        //获取数据
+        $open_id = request()->post('open_id');
+        $phone = request()->post('phone');
+        $wx_num = request()->post('wx_num','');
+        $platform = request()->post('platform');
+        $problem = request()->post('problem');
+        $title = request()->post('title');
+
+
+        //test
+        /*$open_id = '2';
+        $phone = '13666666666';
+        $wx_num = '3';
+        $platform = '4';
+        $problem = '5';
+        $title ='title';*/
+        //test
+
+        //校验提交过来的数据是否合法
+        $data['open_id'] = $open_id;
+        $data['phone'] = $phone;
+        $data['wx_num'] = $wx_num;
+        $data['problem'] = $problem;
+        $data['platform'] = $platform;
+        $data['title'] = $title;
+        $data['order_no'] = getOrderNumber();
+        $data['type'] = 2;
+
+
+        if(empty($data['open_id']) || empty($data['phone'])  || empty($data['problem']) || empty($data['platform']) || empty($data['title']) ){
+            $this->error('参数不能为空');
+        }
+
+        $validate = new LeaveMessageValidate();
+        $returnVal = $validate->form($data);
+        if($returnVal != ''){
+            $this->error($returnVal);
+        }
+
+        $res = LeaveMessages::addData($data);
+        if(!$res){
+            $this->error('添加失败');
+        }
+        $this->success('咨询留言成功');
     }
     /*public function getCode()
     {

@@ -16,6 +16,7 @@
 
 namespace app\api\controller;
 
+use app\admin\model\OrderContractDetail;
 use app\api\model\Jwt;
 use think\admin\Controller;
 use think\facade\Db;
@@ -30,6 +31,8 @@ use app\api\model\OrderContract as OrderContracts;
 class OrderContract  extends AuthController
 //class OrderContract  extends Controller
 {
+
+
     public function buyContract()
     {
         //获取订单信息
@@ -94,6 +97,40 @@ class OrderContract  extends AuthController
         $data['order_contract_detail'] = $parameter['order_contract_detail'];
         $this->success('订单成功',$data);
 
+    }
+
+    //获取我的合同
+    public static function getMyList($parameter){
+        $open_id = $parameter['open_id'];
+        $page = $parameter['page'];
+        $where['open_id'] = $open_id;
+
+        $data = OrderContracts::where($where)->page($page,10)->select()->toArray();
+        if(empty($data)){
+            return [];
+        }
+        $data = self::getOrderContractDetail($data);
+        return $data;
+    }
+
+    public static function getOrderContractDetail($data){
+        //获取订单详情
+        $order_contract_ids = array_column($data,'id');
+        $order_details = OrderContractDetail::getOrderContractDetails($order_contract_ids);
+        $status = [0=>'未处理',1=>'已处理','-1'=>'搁置'];
+        $pay_status = [0=>'未支付',1=>'支付成功',2=>'支付失败'];
+        $pay_type = [0=>'暂无',1=>'微信',2=>'支付宝'];
+        $platform = [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音'];
+        $data = array_map(function($item) use($order_details,$status,$pay_status,$pay_type,$platform){
+            $item['order_details'] = isset($order_details[$item['id']]) ? $order_details[$item['id']]: [];
+            $item['status'] = isset($status[$item['status']]) ? $status[$item['status']] : '';
+            $item['pay_status'] = isset($pay_status[$item['pay_status']]) ? $pay_status[$item['pay_status']] : '';
+            $item['pay_type'] = isset($pay_type[$item['pay_type']]) ? $pay_type[$item['pay_type']] : '';
+            $item['platform'] = isset($platform[$item['platform']]) ? $platform[$item['platform']] : '';
+            $item['pay_time'] = !empty($item['pay_time'])? date('Y-m-d H:i:s',time()) : '';
+            return $item;
+        },$data);
+        return $data;
     }
 
 

@@ -55,8 +55,8 @@ class Login  extends Controller
         $user_encryptedData = request()->post('user_encryptedData');
         $user_iv = request()->post('user_iv');
 
-        $phone_encryptedData = request()->post('phone_encryptedData');
-        $phone_iv = request()->post('phone_iv');
+        $phone_encryptedData = request()->post('phone_encryptedData','');
+        $phone_iv = request()->post('phone_iv','');
 
         //test
        /* $platform = 1;
@@ -124,14 +124,17 @@ class Login  extends Controller
         }
         $data['platform'] = $platform;
 
-        $phoneData = $KuaiShouModel->decryptData($phone_encryptedData,$phone_iv,$session_key);
-        if($phoneData === false){
-            $this->error('信息获取失败');
+        if(!empty($phone_encryptedData) && !empty($phone_iv)){
+            $phoneData = $KuaiShouModel->decryptData($phone_encryptedData,$phone_iv,$session_key);
+            if($phoneData === false){
+                $this->error('信息获取失败');
+            }
+
+            if(isset($phoneData['phoneNumber']) && !empty($phoneData['phoneNumber'])){
+                $data['phone'] = $phoneData['phoneNumber'];
+            }
         }
 
-        if(isset($phoneData['phoneNumber']) && !empty($phoneData['phoneNumber'])){
-            $data['phone'] = $phoneData['phoneNumber'];
-        }
 
 
 
