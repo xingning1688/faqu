@@ -41,7 +41,7 @@ class LawyerCase extends BaseModel {
             ->field(['id','professional','status'])
             ->where($where)
             ->order('sort', 'desc')
-            ->column('professional','id');
+            ->column('professional','id'); 
 
         return $list;
     }
@@ -86,7 +86,7 @@ class LawyerCase extends BaseModel {
 
     //获取合同列表
     public static function getList($params){
-        $where = [];
+        $where['status'] = 1;
         if(isset($params['contract_type_id']) && !empty($params['contract_type_id'])){
             $where['contract_type_id'] = $params['contract_type_id'];
         }

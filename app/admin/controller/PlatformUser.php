@@ -61,6 +61,9 @@ class PlatformUser extends Controller
         $platform = $this->request->get('platform', '');
         $create_time = $this->request->get('create_time', '');
 
+        $source_url_name = $this->request->get('source_url_name', '');
+        $source_lawyer_name = $this->request->get('source_lawyer_name', '');
+
         if(!empty($nick_name)){
             $where[] = ['nick_name','=',$nick_name];
         }
@@ -84,20 +87,33 @@ class PlatformUser extends Controller
             $where[] = ['create_time','<=',strtotime($time_arr[1])];
         }
 
+        if(!empty($source_url_name)){
+            $where[] = ['source_url_name','=',$source_url_name];
+        }
+
+        if(!empty($source_lawyer_name)){
+            $lawyer_informations = Db::table('lawyer_information')->where('name', $source_lawyer_name)->field('id,user_id,name')->select()->toArray();
+            $user_ids = array_unique(array_column($lawyer_informations,'user_id'));
+            if(empty($user_ids)){
+                $user_ids = [1000000000000];
+            }
+            $where[] = ['source_lawyer_id','in',$user_ids];
+        }
+
         $query = $this->_query($this->table)->where($where)->order('id DESC');
-        //dump(11);
-        //echo $query->db()->buildSql();exit;
         $query->page();
     }
 
     protected function _index_page_filter(&$data){
         $gender = $this->gender;
         $platform = $this->platform;
-        $data = array_map(function($item) use($gender,$platform){
-             //dump($item['gender'],$gender);exit;
+        $source_lawyer_ids = array_unique(array_column($data,'source_lawyer_id'));
+        $lawyer_informations = Db::table('lawyer_information')->whereIn('user_id', $source_lawyer_ids)->column('id,user_id,name', 'user_id');
+
+        $data = array_map(function($item) use($gender,$platform,$lawyer_informations){
             $item['gender'] = isset($gender[$item['gender']]) ? $gender[$item['gender']]:'';
             $item['platform'] = isset($platform[$item['platform']]) ? $platform[$item['platform']]:'';
-            //dump($item);exit;
+            $item['lawyer_name'] = isset($lawyer_informations[$item['source_lawyer_id']]) ? $lawyer_informations[$item['source_lawyer_id']]['name']:'';
             return $item;
         },$data);
 

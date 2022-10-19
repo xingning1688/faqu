@@ -58,6 +58,12 @@ class Login  extends Controller
         $phone_encryptedData = request()->post('phone_encryptedData','');
         $phone_iv = request()->post('phone_iv','');
 
+        $data['source_url'] = request()->post('source_url','');
+        $data['source_url_name'] = request()->post('source_url_name','');
+        $data['source_lawyer_id'] = request()->post('source_lawyer_id',0);
+        if(!is_numeric($data['source_lawyer_id'])){
+            $this->error('数据来源不合法');
+        }
         //test
        /* $platform = 1;
         $session_key = '44Rszv88ezkOFV5r1hWpDQ==';
