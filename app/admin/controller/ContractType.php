@@ -171,11 +171,11 @@ class ContractType extends Controller
             $data['update_time']       = $time;
 
 
-            try {
+            /*try {
                 $this->app->db->name($this->table)->insert($data);
             } catch (\Exception $e) {
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
-            }
+            }*/
 
         }
     }
