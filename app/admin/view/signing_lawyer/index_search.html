@@ -1,0 +1,69 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">姓名</label>
+            <label class="layui-input-inline">
+                <input name="name" value="{:input('get.name')}" placeholder="请输入姓名" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">电话</label>
+            <label class="layui-input-inline">
+                <input name="phone" value="{:input('get.phone')}" placeholder="请输入电话" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">添加时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_time" value="{:input('get.create_time')}" placeholder="请选择添加时间" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">状态</label>
+            <label class="layui-input-inline">
+                <select name="status" class="layui-select">
+                    <option value=''>&#45;&#45; 全部 &#45;&#45;</option>
+
+                    {foreach $status as $k=>$v}
+                    {if input('get.status') eq ''.$k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">平台</label>
+            <label class="layui-input-inline">
+                <select name="platform" class="layui-select">
+                    <option value=''>-- 全部 --</option>
+
+                    {foreach $platform as $k=>$v}
+                    {if input('get.platform') eq ''.$k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+
+                </select>
+            </label>
+        </div>
+
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+</fieldset>
+
+<script>form.render()</script>

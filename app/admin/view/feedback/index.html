@@ -2,15 +2,7 @@
 
 {block name="button"}
 
-<!--{if auth("add")}-->
-<!--<button data-open='{:url("add")}' data-title="添加信息" class='layui-btn layui-btn-sm layui-btn-primary'>添加信息</button>-->
-<!--{/if}-->
-<!--{if auth("remove")}-->
-<!--
-<a data-confirm="确定要永久删除这些信息吗？" data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</a>
--->
 
-<!--{/if}-->
 
 {/block}
 
@@ -26,7 +18,7 @@
         {/foreach}
     </ul>-->
     <div class="layui-tab-content think-box-shadow table-block table-block">
-        {include file='leave_message/index_search'}
+        {include file='feedback/index_search'}
         <table class="layui-table margin-top-10" lay-skin="line">
             <thead>
             <tr>
@@ -38,12 +30,9 @@
                 </th>-->
                 <th class='text-center nowrap' width="">ID</th>
                 <th class='text-center nowrap' width="">openId</th>
-                <th class='text-center nowrap' width="">律师名称</th>
-                <th class='text-center nowrap' width="">咨询标题</th>
-
                 <th class='text-center nowrap' width="">电话</th>
-                <th class='text-center nowrap' width="">微信号</th>
-                <th class='text-center nowrap' width="">问题</th>
+                <th class='text-center nowrap' width="">邮箱</th>
+                <th class='text-center nowrap' width="">反馈内容</th>
                 <th class='text-center nowrap' width="">平台</th>
                 <th class='text-center nowrap' width="">状态</th>
                 <th class='text-center nowrap' width="">备注</th>
@@ -61,12 +50,9 @@
 
                 <td class='text-center nowrap'>{$vo.id}</td>
                 <td class='text-center nowrap'>{$vo.open_id}</td>
-                <td class='text-center nowrap'>{$vo.lawyer_name}</td>
-                <td class='text-center nowrap'>{$vo.title}</td>
-
                 <td class='text-center nowrap'>{$vo.phone}</td>
-                <td class='text-center nowrap'>{$vo.wx_num}</td>
-                <td class='text-center '>{$vo.problem}</td>
+                <td class='text-center nowrap'>{$vo.email}</td>
+                <td class='text-center nowrap'>{$vo.content}</td>
                 <td class='text-center nowrap'>{$vo.platform}</td>
                 <td class='text-center nowrap'>{$vo.status}</td>
                 <td class='text-center nowrap'>{:htmlspecialchars_decode( $vo.remark)}</td>
