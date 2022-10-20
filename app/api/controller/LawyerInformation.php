@@ -43,6 +43,20 @@ class LawyerInformation  extends Controller
         $this->success('ok',$list);
     }
 
+    public function list2()
+    {
+
+        $list = LawyerInformations::getInformationList2();
+        if($list===false){
+            $this->error('参数错误');
+        }
+        if(empty($list)){
+            $this->error('暂无数据');
+        }
+
+        $this->success('ok',$list);
+    }
+
     public function detail(){
         $id = request()->param('id', 0);
         if(empty($id) || !is_numeric($id)){

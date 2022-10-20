@@ -13,8 +13,7 @@ class LawyerInformations extends BaseModel {
     protected $createTime = 'create_time';
     protected $updateTime = 'update_time';
 
-    public static function getInformationList2(){
-
+    public static function getInformationList(){
         $page = request()->param('page/d', 1);
         $name = request()->param('name', '');
         $typeId = request()->param('type_id', '');
@@ -45,49 +44,6 @@ class LawyerInformations extends BaseModel {
                     ->order('id', 'desc')
                     ->select()
                     ->toArray();
-        $count = self::where($where)->count('id');
-
-        if(empty($list)){
-            $data['list_data'] = [];
-            $data['list_total'] = 0;
-            return $data;
-        }
-        $listData = self::assemblyDataList($list);
-        $data['list_data'] = $listData;
-        $data['list_total'] = $count;
-        return $data;
-    }
-    public static function getInformationList(){
-        $page = request()->param('page/d', 1);
-        $name = request()->param('name', '');
-        $typeId = request()->param('type_id', '');
-        $limit =  request()->param('limit', 4);
-        /* $is_recommend = request()->param('is_recommend', 0);*/
-        if(!is_numeric($page)){
-            return false;
-        }
-
-        if(!empty($name)){
-            $where[] = ['name', '=', $name];
-        }
-
-        if(!empty($typeId)){
-            if(!is_numeric($typeId)){
-                return false;
-            }
-            $where[] = ['professional_field_id', 'like', '%,'.$typeId.',%'];
-        }
-
-
-        $where[] = ['status','=',1];
-
-        $list = self::field(['id','professional_field_id','profile_photo','name','law_firm_affiliation','professional_title','experience'])
-            ->where($where)
-            ->limit($limit)
-            ->page($page)
-            ->order('id', 'desc')
-            ->select()
-            ->toArray();
 
         if(empty($list)){
             return $list;

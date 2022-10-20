@@ -48,6 +48,12 @@ class SigningLawyer  extends Controller
         $data['platform'] = request()->post('platform',0);
 
         //校验提交过来的数据是否合法
+        if( empty($data['name']) ){
+            $this->error('姓名不能为空');
+        }
+        if( empty($data['phone']) ){
+            $this->error('手机号不能为空');
+        }
         if( empty($data['name']) ||   empty($data['phone']) || empty($data['platform']) ){
             $this->error('参数不能为空');
         }

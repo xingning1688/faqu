@@ -156,6 +156,7 @@ class Login  extends Controller
         $result['users']['session_key'] = $session_key;
         $result['users']['nick_name'] = $data['nick_name'];
         $result['users']['avatar_url'] = $data['avatar_url'];
+        $result['users']['gender'] = $data['gender'];
         $token = $jwt->createToken($result['users']);
         $result['token'] = $token;
         $this->success('登录成功',$result);
