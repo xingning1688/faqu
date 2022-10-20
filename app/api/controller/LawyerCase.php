@@ -43,6 +43,7 @@ class LawyerCase  extends Controller
     //合同列表
     public function list(){
         $params['contract_type_id'] = request()->param('contract_type_id', 0);
+        $params['title'] = request()->param('title', '');
         $params['page'] = request()->param('page', 1);
 
         $where['status'] = 1;

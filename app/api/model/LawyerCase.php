@@ -86,11 +86,15 @@ class LawyerCase extends BaseModel {
 
     //获取合同列表
     public static function getList($params){
-        $where['status'] = 1;
+
+        $where[] = ['status','=',1];
         if(isset($params['contract_type_id']) && !empty($params['contract_type_id'])){
-            $where['contract_type_id'] = $params['contract_type_id'];
+            $where[] = ['contract_type_id','=',$params['contract_type_id']];
         }
 
+        if(isset($params['title']) && !empty($params['title'])){
+            $where[] = ['title','like','%'.$params['title'].'%'];
+        }
         $data = LawyerCases::where($where)->field(['id','user_id','title','author','original_price','sales_price','file_url'])->page($params['page'],10)->select()->toArray();
         $data = LawyerCases::getListAssemblyData($data);
         return $data;
