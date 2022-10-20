@@ -105,7 +105,7 @@ class OrderContract  extends AuthController
         $page = $parameter['page'];
         $where['open_id'] = $open_id;
 
-        $data = OrderContracts::where($where)->page($page,10)->select()->toArray();
+        $data = OrderContracts::where($where)->page($page,50)->select()->toArray();
         if(empty($data)){
             return [];
         }
