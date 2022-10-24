@@ -54,7 +54,7 @@ class PlatformUser extends Controller
         $this->platform;
 
         $where = [];
-        //$status = $this->request->get('status', '');
+        $open_id = $this->request->get('open_id', '');
         $nick_name = $this->request->get('nick_name', '');
         $phone = $this->request->get('phone', '');
         $gender = $this->request->get('gender', '');
@@ -66,6 +66,10 @@ class PlatformUser extends Controller
 
         if(!empty($nick_name)){
             $where[] = ['nick_name','=',$nick_name];
+        }
+
+        if(!empty($open_id)){
+            $where[] = ['open_id','=',$open_id];
         }
 
         if(!empty($phone)){
