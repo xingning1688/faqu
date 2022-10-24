@@ -1,0 +1,123 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">问答标题</span>
+            <span class="color-desc margin-left-5"></span>
+            <input class="layui-input" name="title" placeholder="请输入问答标题" required value="{$vo.title|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">作者</span>
+            <span class="color-desc margin-left-5"></span>
+            <input class="layui-input" name="author" placeholder="请输入作者" required value="{$vo.author|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">问答分类</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="question_classification_id">
+                <option value="0" data-type="0">--请选择--</option>
+                {foreach $question_classification as $classification}
+                {if isset($vo.question_classification_id) && $classification['id']==$vo.question_classification_id}
+                <option selected value="{$classification['id']}">{$classification['classification_name']}</option>
+                {else}
+                <option value="{$classification['id']}">{$classification['classification_name']}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">所属律师</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="user_id">
+                <option value="0" data-type="0">--请选择--</option>
+                {foreach $users as $item}
+                {if isset($vo.user_id) && $item['id']==$vo.user_id}
+                <option selected value="{$item['id']}">{$item['nickname']}</option>
+                {else}
+                <option value="{$classification['id']}">{$item['nickname']}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+        <div class="layui-form-item" data-rebate="1">
+            <span class="color-green font-w7 ">缩略图</span>
+
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width:150px">缩略图</th>
+                    <th class="text-center" style="width:auto"></th>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <input name="img" type="hidden" value="{$vo.img|default=''}">
+                        <script>$('[name="img"]').uploadOneImage();</script>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+        <div class="layui-form-item" data-rebate="1">
+            <span class="label-required-prev font-w7 color-green">问答内容</span>
+            <span class="color-desc margin-left-5"></span>
+            <textarea class="layui-hide" name="content">{$vo.content|default=''|raw}</textarea>
+        </div>
+
+
+
+        <!--<label class="layui-form-item">
+            <span class="color-green font-w7">问答分类</span>
+            <input class="layui-input" name="classification_name" placeholder="请输入问答分类" required value="{$vo.classification_name|default=''}">
+        </label>
+-->
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+    /*! 加载扩展插件 */
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content"]', {height: 500});
+        /*window.createEditor('[name="audio_desc"]', {height: 500});*/
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+    });
+    $(document).ready(function() {
+        // select下拉框选中触发事件
+        form.on('select(type)', function (data) {
+
+
+        });
+    });
+
+
+</script>
+{/block}

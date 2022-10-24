@@ -1,0 +1,57 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">问答标题</label>
+            <label class="layui-input-inline">
+                <input name="title" value="{:input('get.title')}" placeholder="请输入问答标题" class="layui-input">
+            </label>
+        </div>
+
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">问答分类</label>
+            <label class="layui-input-inline">
+                <select name="question_classification_id" class="layui-select">
+                    <option value=''>-- 全部 --</option>
+
+                    {foreach $question_classification as $k=>$v}
+                    {if input('get.question_classification_id') eq ''.$k}
+                    <option selected value="{$v.id}">{$v.classification_name}</option>
+                    {else}
+                    <option value="{$v.id}">{$v.classification_name}</option>
+                    {/if}
+                    {/foreach}
+
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">是否推荐</label>
+            <label class="layui-input-inline">
+                <select name="is_recommend" class="layui-select">
+                    <option value=''>-- 全部 --</option>
+
+                    {foreach $recommend as $k=>$v}
+                    {if input('get.is_recommend') eq ''.$k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+
+                </select>
+            </label>
+        </div>
+
+
+
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+</fieldset>
+
+<script>form.render()</script>
