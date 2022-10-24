@@ -68,7 +68,7 @@ class LawyerInformations extends BaseModel {
         }
 
         if(!empty($name)){
-            $where[] = ['name', '=', $name];
+            $where[] = ['name', 'like', '%'.$name.'%'];
         }
 
         if(!empty($typeId)){

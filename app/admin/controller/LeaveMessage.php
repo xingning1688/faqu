@@ -98,12 +98,14 @@ class LeaveMessage extends Controller
         $platform = $this->platform;
         $lawyer_user_ids = array_unique(array_column($data,'lawyer_user_id'));
         $lawyerInformations =    LawyerInformations::getByUserIds($lawyer_user_ids);
-
-        $data = array_map(function($item) use($status,$platform,$lawyerInformations){
+        $open_ids = array_column($data,'open_id');
+        $platform_user = $this->app->db->name('platform_user')->whereIn('open_id',$open_ids)->column('id,open_id,nick_name','open_id');
+        $data = array_map(function($item) use($status,$platform,$lawyerInformations,$platform_user){
              //dump($item['gender'],$gender);exit;
             $item['status'] = isset($status[$item['status']]) ? $status[$item['status']]:'';
             $item['platform'] = isset($platform[$item['platform']]) ? $platform[$item['platform']]:'';
             $item['lawyer_name'] = isset($lawyerInformations[$item['lawyer_user_id']])?$lawyerInformations[$item['lawyer_user_id']]['name'] : '';
+            $item['nick_name'] = isset($platform_user[$item['open_id']]) ? $platform_user[$item['open_id']]['nick_name'] : '';
             return $item;
         },$data);
         //dump($data);exit;

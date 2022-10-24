@@ -95,13 +95,19 @@ class OrderContract extends Controller
         $pay_status = $this->pay_status;
         $pay_type = $this->pay_type;
         $platform = $this->platform;
-        $data = array_map(function($item) use($order_details,$status,$pay_status,$pay_type,$platform){
+
+        $open_ids = array_column($data,'open_id');
+
+        $platform_user = $this->app->db->name('platform_user')->whereIn('open_id',$open_ids)->column('id,open_id,nick_name','open_id');
+        $data = array_map(function($item) use($order_details,$status,$pay_status,$pay_type,$platform,$platform_user){
             $item['order_details'] = isset($order_details[$item['id']]) ? $order_details[$item['id']]: [];
             $item['status'] = isset($status[$item['status']]) ? $status[$item['status']] : '';
             $item['pay_status'] = isset($pay_status[$item['pay_status']]) ? $pay_status[$item['pay_status']] : '';
             $item['pay_type'] = isset($pay_type[$item['pay_type']]) ? $pay_type[$item['pay_type']] : '';
             $item['platform'] = isset($platform[$item['platform']]) ? $platform[$item['platform']] : '';
             $item['pay_time'] = !empty($item['pay_time'])? date('Y-m-d H:i:s',time()) : '';
+
+            $item['nick_name'] = isset($platform_user[$item['open_id']]) ? $platform_user[$item['open_id']]['nick_name'] : '';
 
             return $item;
         },$data);
