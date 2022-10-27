@@ -16,6 +16,7 @@
 
 namespace app\api\controller;
 
+use app\api\model\DouYinModel;
 use app\api\model\Jwt;
 use think\admin\Controller;
 use think\facade\Db;
@@ -46,6 +47,9 @@ class Login  extends Controller
             $data = $KuaiShouModel->code2Session($code);
         }else if($platform == 2){
             $WeiXinModel = new WeiXinModel();
+            $data = $WeiXinModel->code2Session($code);
+        }else if($platform == 3){
+            $WeiXinModel = new DouYinModel();
             $data = $WeiXinModel->code2Session($code);
         }
 
@@ -141,7 +145,7 @@ class Login  extends Controller
         }
 
 
-        if(empty($session_key) || !isset($data['open_id']) || empty($data['open_id']) || !in_array($platform,[0,1,2])){
+        if(empty($session_key) || !isset($data['open_id']) || empty($data['open_id']) || !in_array($platform,[0,1,2,3])){
             $this->error('信息获取失败,数据不合法11');
         }
         $data['platform'] = $platform;
@@ -183,6 +187,11 @@ class Login  extends Controller
     }
 
     public function test(){
+        $data['code'] = 'j05U5jOK-4pcgjAXe2PTrJMWQt-htSSvzVo4LjEdM_s_PPyG4okg33Kq_0G7jk4chBadoQbn4v1DC4MMZ285oQeI0UMIJyrB-UFZxGF6qaa-QB5O80NGfnqIEjM';
+        $data['appid'] = 'tt13c3657e8cfd546101';
+        $data['secret'] = '56a416ab025c99241b4d48b4df5ad1685ce893c6';
+        $res = json_encode($data);
+        echo $res;exit;
         $content= [['name'=>'name1','age'=>18],['name'=>'name2','age'=>19]];
         file_put_contents('./test.txt', var_export($content,true)."\r\n",FILE_APPEND | LOCK_EX);
         exit;
