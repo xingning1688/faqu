@@ -13,3 +13,8 @@
         $osn = date('Ymd').'-' . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
         return $osn;
     }
+
+    function getRandNumber(){
+        $rand_number = str_pad(mt_rand(1, 99999), 6, '0', STR_PAD_LEFT);
+        return $rand_number;
+    }

@@ -48,8 +48,12 @@ class OrderContract  extends AuthController
         //测试数据 end
 
         //获取参数
-        //$parameter['lawyer_case_detail'] =  json_decode(request()->param('lawyer_case_detail'),true);
-        $parameter['lawyer_case_detail'] =  request()->param('lawyer_case_detail');
+        if(is_array(request()->param('lawyer_case_detail'))){
+            $parameter['lawyer_case_detail'] =  request()->param('lawyer_case_detail');
+        }else{
+            $parameter['lawyer_case_detail'] =  json_decode(request()->param('lawyer_case_detail'),true);
+        }
+
         $parameter['open_id'] = request()->param('open_id');
         $parameter['pay_type'] = request()->param('pay_type');
         $parameter['platform'] = request()->param('platform');//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']

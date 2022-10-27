@@ -21,6 +21,7 @@ use think\admin\Controller;
 use think\facade\Db;
 use app\api\model\LawyerInformations;
 use app\api\model\KuaiShouModel;
+use app\api\model\WeiXinModel;
 use app\api\model\PlatformUser;
 
 /**
@@ -32,11 +33,22 @@ class Login  extends Controller
 
     public function code2Session(){
         $code = request()->post('code');
+        $platform = request()->post('platform',0);
         if(empty($code)){
             $this->error('参数错误');
         }
-        $KuaiShouModel = new KuaiShouModel();
-        $data = $KuaiShouModel->code2Session($code);
+        if(empty($platform) && !in_array($platform,[1,2,3])){
+            $this->error('参数错误2');
+        }
+
+        if($platform == 1){
+            $KuaiShouModel = new KuaiShouModel();
+            $data = $KuaiShouModel->code2Session($code);
+        }else if($platform == 2){
+            $WeiXinModel = new WeiXinModel();
+            $data = $WeiXinModel->code2Session($code);
+        }
+
         if($data === false){
             $this->error('失败');
         }
@@ -64,6 +76,9 @@ class Login  extends Controller
         if(!is_numeric($data['source_lawyer_id'])){
             $this->error('数据来源不合法');
         }
+
+        //file_put_contents('./test.txt', '解析前1：'.var_export($user_rawData,true)."\r\n",FILE_APPEND | LOCK_EX);
+        //file_put_contents('./test.txt', '解析前2：'.var_export($user_encryptedData,true)."\r\n",FILE_APPEND | LOCK_EX);
         //test
        /* $platform = 1;
         $session_key = '44Rszv88ezkOFV5r1hWpDQ==';
@@ -88,6 +103,7 @@ class Login  extends Controller
         $KuaiShouModel = new KuaiShouModel();
 
         $userData = $KuaiShouModel->decryptData($user_encryptedData,$user_iv,$session_key);
+        //file_put_contents('./test.txt', '解析后：'.var_export($userData,true)."\r\n",FILE_APPEND | LOCK_EX);
         if($userData === false){
             $this->error('信息获取失败');
         }
@@ -141,7 +157,10 @@ class Login  extends Controller
             }
         }
 
-
+        //如果是微信登录
+        if($platform == 2 && (!isset($data['nick_name']) || empty($data['nick_name']) || $data['nick_name'] == '微信用户') ){
+            $data['nick_name'] = '法趣用户'.getRandNumber();
+        }
 
 
         //添加登录信息
@@ -149,13 +168,13 @@ class Login  extends Controller
         if($res === false){
             $this->error('登录失败');
         }
-
+        //file_put_contents('./test.txt', '添加前'.var_export($data,true)."\r\n",FILE_APPEND | LOCK_EX);
         //登录成功  返回token
         $jwt = new Jwt();
         $result['users']['open_id'] =  $data['open_id'];
         $result['users']['session_key'] = $session_key;
-        $result['users']['nick_name'] = $data['nick_name'];
-        $result['users']['avatar_url'] = $data['avatar_url'];
+        $result['users']['nick_name'] = isset($data['nick_name'])? $data['nick_name'] : '';
+        $result['users']['avatar_url'] = isset($data['avatar_url'])? $data['avatar_url'] : '';
         $result['users']['gender'] = isset($data['gender'])? $data['gender'] : 0;
         $token = $jwt->createToken($result['users']);
         $result['token'] = $token;
@@ -164,10 +183,18 @@ class Login  extends Controller
     }
 
     public function test(){
-        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOm51bGwsInN1YiI6bnVsbCwiYXVkIjpudWxsLCJleHAiOjE2NjU1NTQ1NTMsIm5iZiI6MTY2NTM4MTc1MywiaWF0IjoxNjY1MzgxNzUzLCJvcGVuX2lkIjoiZjE4ZTYwZDM1N2ExZDFjNDE0YmY1NzI0ODIyZTNjN2EiLCJzZXNzaW9uX2tleSI6IlRLd053bGN1OXpVOTEySU9hbWsyblE9PSIsIm5pY2tfbmFtZSI6IkRleHRlcnh4eCIsImF2YXRhcl91cmwiOiJodHRwczovL3AyLmEueXhpbWdzLmNvbS91aGVhZC9BQi8yMDE5LzEwLzIxLzE2L0JNakF4T1RFd01qRXhOakV6TURkZk1UVTBNekkwTURjMk1GOHhYMmhrTmpjd1h6ZzFNZz09X3MuanBnIn0.noJtDTGze0bOiaiscgwPjzRVwEElS0p9W2Sg0CyhvSc';
+        $content= [['name'=>'name1','age'=>18],['name'=>'name2','age'=>19]];
+        file_put_contents('./test.txt', var_export($content,true)."\r\n",FILE_APPEND | LOCK_EX);
+        exit;
+        $a = str_pad(mt_rand(1, 99999), 6, '0', STR_PAD_LEFT);
+        dump($a);exit;
+        $WeiXinModel = new WeiXinModel();
+        $data = $WeiXinModel->code2Session('081LW20w3RVDsZ2t200w3d0tsT2LW20X');
+        dump($data);exit;
+        /*$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOm51bGwsInN1YiI6bnVsbCwiYXVkIjpudWxsLCJleHAiOjE2NjU1NTQ1NTMsIm5iZiI6MTY2NTM4MTc1MywiaWF0IjoxNjY1MzgxNzUzLCJvcGVuX2lkIjoiZjE4ZTYwZDM1N2ExZDFjNDE0YmY1NzI0ODIyZTNjN2EiLCJzZXNzaW9uX2tleSI6IlRLd053bGN1OXpVOTEySU9hbWsyblE9PSIsIm5pY2tfbmFtZSI6IkRleHRlcnh4eCIsImF2YXRhcl91cmwiOiJodHRwczovL3AyLmEueXhpbWdzLmNvbS91aGVhZC9BQi8yMDE5LzEwLzIxLzE2L0JNakF4T1RFd01qRXhOakV6TURkZk1UVTBNekkwTURjMk1GOHhYMmhrTmpjd1h6ZzFNZz09X3MuanBnIn0.noJtDTGze0bOiaiscgwPjzRVwEElS0p9W2Sg0CyhvSc';
         $jwt = new Jwt();
         $res = $jwt->decodeToken($token);
-        dump($res);exit;
+        dump($res);exit;*/
     }
 
     /*public function getCode()
