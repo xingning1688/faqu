@@ -75,7 +75,7 @@ class DouYinModel extends BaseModel {
     public function code2Session($code){
         $data['code'] = $code;
         $data['appid'] = $this->appid;
-        $data['secret'] = $this->appsecret;  
+        $data['secret'] = $this->appsecret;
         $data = json_encode($data);
         $url = 'https://developer.toutiao.com/api/apps/v2/jscode2session';
 
