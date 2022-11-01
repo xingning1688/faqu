@@ -34,7 +34,7 @@ class Login  extends Controller
 
     public function code2Session(){
         $code = request()->post('code');
-        $platform = request()->post('platform',0);
+        $platform = request()->post('platform',1);
         if(empty($code)){
             $this->error('参数错误');
         }
@@ -74,10 +74,10 @@ class Login  extends Controller
         $phone_encryptedData = request()->post('phone_encryptedData','');
         $phone_iv = request()->post('phone_iv','');
 
-        $data['source_url'] = request()->post('source_url','');
-        $data['source_url_name'] = request()->post('source_url_name','');
-        $data['source_lawyer_id'] = request()->post('source_lawyer_id',0);
-        if(!is_numeric($data['source_lawyer_id'])){
+        $source_url= request()->post('source_url','');
+        $source_url_name = request()->post('source_url_name','');
+        $source_lawyer_id = request()->post('source_lawyer_id',0);
+        if(!is_numeric($source_lawyer_id)){
             $this->error('数据来源不合法');
         }
 
@@ -165,6 +165,20 @@ class Login  extends Controller
         if($platform == 2 && (!isset($data['nick_name']) || empty($data['nick_name']) || $data['nick_name'] == '微信用户') ){
             $data['nick_name'] = '法趣用户'.getRandNumber();
         }
+
+        //增加用户来源
+        if(isset($source_url) && !empty($source_url)){
+            $data['source_url'] = $source_url;
+        }
+
+        if(isset($source_url_name) && !empty($source_url_name)){
+            $data['source_url_name'] = $source_url_name;
+        }
+
+        if(isset($source_lawyer_id) && $source_lawyer_id !=0){
+            $data['source_lawyer_id'] = $source_lawyer_id;
+        }
+
 
 
         //添加登录信息
