@@ -23,7 +23,7 @@ use app\api\model\LawyerCase as LawyerCases;
 
 class Common  extends Controller
 {
-    //合同详情
+
     public function fabuConfig(){
         $version_number = request()->param('version_number', 0);//大于正式版本的 测试版本号
         $platform = request()->param('platform', 1);//大于正式版本的 测试版本号
@@ -47,8 +47,13 @@ class Common  extends Controller
             }
 
         }else if($platform == 2){
+            if(($version_number<= $config_version['version_number'])){
+                $data['wx'] = '微信号';
+            }else{
+                $data['wx'] = '微信号';
+            }
 
-            $data['wx'] = '微信号';
+
 
         }else if($platform == 3){
 
@@ -64,6 +69,60 @@ class Common  extends Controller
 
 
         $this->success('ok',$data['wx']);
+    }
+
+    public function fabuConfig2(){
+        $version_number = request()->param('version_number', 0);
+        $platform = request()->param('platform', 1);
+        if(empty($version_number) || !is_numeric($version_number)){
+            $this->error('参数错误');
+        }
+
+        if(empty($platform) || !is_numeric($platform)){
+            $this->error('参数错误2');
+        }
+        //5是 正式版本号（最后一提交成功的版本号）
+        $config_version = Db::table('config_version')->find(1);
+        $config_version['version_number'] = isset($config_version['version_number'])? $config_version['version_number'] : 0;
+
+        if($platform == 1){
+
+            if(($version_number<= $config_version['version_number'])){
+                $data['platform'] = '微信号';
+                $data['status'] = 1;
+            }else{
+                $data['platform'] = '快手号';
+                $data['status'] = 0;
+            }
+
+        }else if($platform == 2){
+            if(($version_number<= $config_version['version_number'])){
+                $data['platform'] = '微信号';
+                $data['status'] = 1;
+            }else{
+                $data['platform'] = '微信号';
+                $data['status'] = 0;
+            }
+
+
+
+        }else if($platform == 3){
+
+            if(($version_number<= $config_version['version_number'])){
+                $data['platform'] = '微信号';
+                $data['status'] = 1;
+            }else{
+                $data['platform'] = '抖音号';
+                $data['status'] = 0;
+            }
+
+        }else{
+            $data['platform'] = '微信号';
+            $data['status'] = 0;
+        }
+
+
+        $this->success('ok',$data);
     }
 
 

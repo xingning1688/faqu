@@ -99,6 +99,11 @@ class User extends Controller
                 'repassword.confirm:password' => '两次输入的密码不一致！',
             ]);
             $user = SystemUser::mk()->findOrEmpty($data['id']);
+            //不能修改管理员密码 start
+            if( $user['id'] == 10000 ){
+                $this->success('修改密码1，修改成功1！', '');
+            }
+            //不能修改管理员密码 end
             if ($user->isExists() && $user->save(['password' => md5($data['password'])])) {
                 sysoplog('系统用户管理', "修改用户[{$data['id']}]密码成功");
                 $this->success('密码修改成功，请使用新密码登录！', '');
