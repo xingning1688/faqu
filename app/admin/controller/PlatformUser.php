@@ -112,7 +112,8 @@ class PlatformUser extends Controller
         $gender = $this->gender;
         $platform = $this->platform;
         $source_lawyer_ids = array_unique(array_column($data,'source_lawyer_id'));
-        $lawyer_informations = Db::table('lawyer_information')->whereIn('user_id', $source_lawyer_ids)->column('id,user_id,name', 'user_id');
+
+        $lawyer_informations = Db::table('lawyer_information')->whereIn('id', $source_lawyer_ids)->column('id,user_id,name', 'id');
 
         $data = array_map(function($item) use($gender,$platform,$lawyer_informations){
             $item['gender'] = isset($gender[$item['gender']]) ? $gender[$item['gender']]:'';
