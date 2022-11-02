@@ -194,7 +194,15 @@ class LawyerInformations extends BaseModel {
     }
 
 
-
+    public static function detailUser($user_id){
+        $data = LawyerInformations::where('user_id',$user_id)->where('status',1)->field(['id','user_id','professional_field_id','name','law_firm_affiliation','profile_photo','lawyer_introduction ','honor','professional_studies','professional_title','experience','classic_case','share_copy'])->find();
+        if(empty($data)){
+            return [];
+        }
+        $data = $data->toArray();
+        $DetailData = self::assemblyDataDetail($data);
+        return $DetailData;
+    }
 
 
 
