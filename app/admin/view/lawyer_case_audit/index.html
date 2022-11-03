@@ -3,7 +3,7 @@
 {block name="button"}
 
 <!--{if auth("add")}-->
-<button data-open='{:url("add")}' data-title="添加信息" class='layui-btn layui-btn-sm layui-btn-primary'>添加信息</button>
+<!--<button data-open='{:url("add")}' data-title="添加信息" class='layui-btn layui-btn-sm layui-btn-primary'>添加信息</button>-->
 <!--{/if}-->
 <!--{if auth("remove")}-->
 <a data-confirm="确定要永久删除这些信息吗？" data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</a>

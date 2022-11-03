@@ -39,7 +39,7 @@ class LawyerCaseAudit extends Controller
     public $status = [0=>'待审核','1'=>'审核成功','2'=>'审核失败'];
     public $recommends = [0=>'未推荐','1'=>'推荐'];
     /**
-     * 律师合同列表
+     * 律师合同审核列表
      * @auth true
      * @menu true
      * @throws \think\db\exception\DataNotFoundException
@@ -48,7 +48,7 @@ class LawyerCaseAudit extends Controller
      */
     public function index() {
 
-        $this->title = '律师合同';
+        $this->title = '律师合同审核列表';
         $this->recommends;
         // 加载对应数据
         $where = [];
@@ -100,7 +100,7 @@ class LawyerCaseAudit extends Controller
     }
 
     /**
-     * 添加律师合同
+     * 添加律师合同审核
      * @auth true
      */
     public function add()
@@ -110,12 +110,12 @@ class LawyerCaseAudit extends Controller
     }
 
     /**
-     * 编辑律师合同
+     * 编辑律师合同审核
      * @auth true
      */
     public function edit()
     {
-        $this->title = '编辑律师合同';
+        $this->title = '编辑律师合同审核';
         $this->contractType = ContractType::getContractType();
         $this->_form($this->table, 'form');
     }
@@ -147,7 +147,7 @@ class LawyerCaseAudit extends Controller
 
             try {
                 $this->app->db->name($this->table)->where('id', $data['id'])->update($data);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
 
@@ -211,7 +211,7 @@ class LawyerCaseAudit extends Controller
 
             try {
                 $this->app->db->name($this->table)->insert($data);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
 

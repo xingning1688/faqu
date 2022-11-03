@@ -47,6 +47,26 @@
             <input class="layui-input" name="sales_price" placeholder="请输入页数" required value="{$vo.sales_price|default=0.00}">
         </label>
 
+        <div class="layui-form-item" >
+            <span class="color-green font-w7 label-required-prev">合同图片</span>
+
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width:150px">合同图片</th>
+                    <th class="text-center" style="width:auto"></th>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <input name="case_img_url" type="hidden" value="{$vo.case_img_url|default=''}">
+                        <script>$('[name="case_img_url"]').uploadOneImage();</script>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
         <div class="layui-form-item" style="padding-top:10px;">
             <label class="color-green font-w7">合同文件上传</label>
             <div class="layui-input-block">
@@ -64,7 +84,7 @@
         </div>
 
         <div class="layui-form-item" data-rebate="1">
-            <span class="label-required-prev font-w7 color-green">图文内容</span>
+            <span class=" font-w7 color-green">图文内容</span>
 
             <textarea class="layui-hide" name="content">{$vo.content|default=''|raw}</textarea>
         </div>
