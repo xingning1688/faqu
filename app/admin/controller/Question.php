@@ -84,7 +84,7 @@ class Question extends Controller
 
 
     /**
-     * 添加问答分类
+     * 添加问答内容
      * @auth true
      */
     public function add()
@@ -94,12 +94,12 @@ class Question extends Controller
     }
 
     /**
-     * 编辑问答分类
+     * 编辑问答内容
      * @auth true
      */
     public function edit()
     {
-        $this->title = '编辑问答分类';
+        $this->title = '编辑问答内容';
         $this->_form($this->table, 'form');
     }
 
@@ -223,7 +223,7 @@ class Question extends Controller
     }
 
     /**
-     * 删除问答分类
+     * 删除问答内容
      * @auth true
      * @login true
      */
