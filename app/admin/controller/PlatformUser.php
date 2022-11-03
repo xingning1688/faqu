@@ -97,11 +97,11 @@ class PlatformUser extends Controller
 
         if(!empty($source_lawyer_name)){
             $lawyer_informations = Db::table('lawyer_information')->where('name', $source_lawyer_name)->field('id,user_id,name')->select()->toArray();
-            $user_ids = array_unique(array_column($lawyer_informations,'user_id'));
-            if(empty($user_ids)){
-                $user_ids = [1000000000000];
+            $ids = array_unique(array_column($lawyer_informations,'id'));
+            if(empty($ids)){
+                $ids = [1000000000000];
             }
-            $where[] = ['source_lawyer_id','in',$user_ids];
+            $where[] = ['source_lawyer_id','in',$ids];
         }
 
         $query = $this->_query($this->table)->where($where)->order('id DESC');
