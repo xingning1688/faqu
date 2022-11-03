@@ -11,10 +11,16 @@
             <input class="layui-input" name="title" placeholder="请输入问答标题" required value="{$vo.title|default=''}">
         </label>
 
+        <div class="layui-form-item" >
+            <span class="label-required-prev font-w7 color-green">内容简介</span>
+            <textarea class="layui-textarea" name="abstract" placeholder="请输入内容简介，字符串不能超过60个文字" >{$vo.abstract|default=''|raw}</textarea>
+        </div>
+
+
         <label class="layui-form-item">
             <span class="color-green font-w7">分享文案</span>
             <span class="color-desc margin-left-5"></span>
-            <input class="layui-input" name="share_title" placeholder="请输入分享文案" required value="{$vo.share_title|default=''}">
+            <input class="layui-input" name="share_title" placeholder="请输入分享文案"  value="{$vo.share_title|default=''}">
         </label>
 
         <label class="layui-form-item">
@@ -54,6 +60,21 @@
                 <option selected value="{$item['id']}">{$item['nickname']}</option>
                 {else}
                 <option value="{$item['id']}">{$item['nickname']}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">图文类型</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="type" required>
+                <option value="0" data-type="0">--请选择--</option>
+                {foreach $type as $key=>$item}
+                {if isset($vo.type) && $key==$vo.type}
+                <option selected value="$key">{$item}</option>
+                {else}
+                <option value="{$key}">{$item}</option>
                 {/if}
                 {/foreach}
             </select>

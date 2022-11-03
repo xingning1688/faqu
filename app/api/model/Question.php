@@ -10,6 +10,7 @@ namespace app\api\model;
 use app\api\model\BaseModel;
 use app\api\model\LawyerCase as LawyerCases;
 use think\facade\Db;
+use think\Request;
 
 class  Question extends BaseModel {
     protected $table = 'question';
@@ -21,17 +22,18 @@ class  Question extends BaseModel {
 
     //热门问答列表
     public static function getList(){
-        $list = self::getListWhere()->field('id,title,img,content,read_number,author,create_time')->select()->toArray();
-        $list = self::assemblyDataList($list);
+        $list = self::getListWhere()->field('id,title,abstract,img,content,read_number,author,type,create_time')->select()->toArray();
+        //$list = self::assemblyDataList($list);
         return $list;
     }
 
     public static function getListWhere(){
-        $search = request()->all();
-        $search['page'] = isset($search['page']) ? $search['page'] : 1;
-        $search['limit'] = isset($search['limit']) ? $search['page'] : 10;
+        $search['page'] = request()->param('page',1);
+        $search['limit'] = request()->param('limit',10);
+        $search['title'] = request()->param('title','');
+
         $query = self::order('create_time', 'desc');
-        if (isset($search['title']) && $search['title']){
+        if (isset($search['title']) && !empty($search['title'])){
             $query->where('title', $search['title']);
         }
 
@@ -44,13 +46,13 @@ class  Question extends BaseModel {
 
     public static function assemblyDataList($data){
         foreach($data as $key=>$item){
-            $data[$key]['content_abstract']= mb_substr($item['content'],0,50,'utf-8');
+            $data[$key]['content_abstract']= mb_substr(htmlspecialchars_decode($item['content']),0,50,'utf-8').'......';
         }
         return $data;
     }
 
     public static function detail($id){
-        $row = self::where('id',$id)->field('title,share_title,img,content,author,read_number,user_id,question_classification_id,is_recommend,create_time')->find();
+        $row = self::where('id',$id)->field('title,abstract,share_title,img,content,author,read_number,user_id,question_classification_id,is_recommend,type,create_time')->find();
         if(empty($row)){
             return [];
         }

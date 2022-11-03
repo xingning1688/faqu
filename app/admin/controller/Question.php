@@ -36,6 +36,8 @@ class Question extends Controller
 {
     private $table = 'question';
     public $recommend = [0=>'非推荐','1'=>'推荐'];
+    public $type = [1=>'类型一',2=>'类型二', 3=>'类型三'];
+
     /**
      * 问答列表
      * @auth true
@@ -119,24 +121,40 @@ class Question extends Controller
 
     //编辑保存
     protected function _edit_form_filter(&$data) {
-        if(empty($data['id']) || !is_numeric($data['id'])) {
-            $this->error('参数错误！');
+
+        if ($this->request->isPost()) {
+            if(empty($data['id']) || !is_numeric($data['id'])) {
+                $this->error('参数错误！');
+            }
+
+            if(empty($data['question_classification_id']) && $data['question_classification_id']!=0 ){
+                $this->error('问答分类不能为空');
+            }
+
+            if(empty($data['abstract'])){
+                $this->error('内容简介不能为空');
+            }
+
+            if(empty($data['type'])){
+                $this->error('请选择图文类型');
+            }
+
+
+        }else{
+            $this->question_classification = $this->app->db->name('question_classification')->where('is_delete', '0')->where('status',0)->order('sort DESC, id DESC')->field('id,classification_name')->select();   // 资讯分类
+            $users = [];
+            $lawyers = $this->app->db->name('lawyer_information')->field('id,user_id')->select()->toArray();
+            if(!empty($lawyers)){
+                $userIds = array_unique(array_column($lawyers,'user_id'));
+                $users = $this->app->db->name('system_user')->whereIn('id',$userIds)->column('username,nickname','id');
+            }
+
+            $this->users = $users;
+            $this->lawyers = $lawyers;
+            $this->type;
         }
 
-        if(empty($data['question_classification_id']) && $data['question_classification_id']!=0 ){
-            $this->error('问答分类不能为空');
-        }
 
-        $this->question_classification = $this->app->db->name('question_classification')->where('is_delete', '0')->where('status',0)->order('sort DESC, id DESC')->field('id,classification_name')->select();   // 资讯分类
-        $users = [];
-        $lawyers = $this->app->db->name('lawyer_information')->field('id,user_id')->select()->toArray();
-        if(!empty($lawyers)){
-            $userIds = array_unique(array_column($lawyers,'user_id'));
-            $users = $this->app->db->name('system_user')->whereIn('id',$userIds)->column('username,nickname','id');
-        }
-
-        $this->users = $users;
-        $this->lawyers = $lawyers;
 
     }
 
@@ -174,6 +192,21 @@ class Question extends Controller
                 $this->error('问答分类不能为空');
             }
 
+            if(empty($data['abstract'])){
+                $this->error('内容简介不能为空');
+            }
+
+            if(empty($data['content'])){
+                $this->error('内容不能为空');
+            }
+
+            if(mb_strlen($data['abstract'],'UTF-8') > 60){
+                $this->error('字符串不能超过60个文字');
+            }
+            if(empty($data['type'])){
+                $this->error('请选择图文类型');
+            }
+
             $time = time();
             $data['create_time']       = $time;
             $data['update_time']       = $time;
@@ -192,6 +225,7 @@ class Question extends Controller
 
             $this->users = $users;
             $this->lawyers = $lawyers;
+            $this->type;
 
         }
     }
