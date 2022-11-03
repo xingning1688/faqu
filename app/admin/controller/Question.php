@@ -123,7 +123,7 @@ class Question extends Controller
             $this->error('参数错误！');
         }
 
-        if(empty($data['question_classification_id'])){
+        if(empty($data['question_classification_id']) && $data['question_classification_id']!=0 ){
             $this->error('问答分类不能为空');
         }
 
@@ -170,7 +170,7 @@ class Question extends Controller
     {
 
         if ($this->request->isPost()) {
-            if(empty($data['question_classification_id'])){
+            if(empty($data['question_classification_id']) && $data['question_classification_id']!=0){
                 $this->error('问答分类不能为空');
             }
 
