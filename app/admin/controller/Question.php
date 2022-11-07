@@ -266,8 +266,20 @@ class Question extends Controller
         $this->_save($this->table, ['is_delete' => 1,'delete_time'=>time()]);
     }
 
-
-
+    /**
+     * 预览问答
+     * @auth true
+     * @menu true
+     *
+     */
+    public function show(){
+        $data = $this->request->all();
+        $question = $this->app->db->name('question')->where('id',$data['id'])->find();
+        $question['create_time'] = date('Y-m-d H:i:s',$question['create_time']);
+        $this->question = $question;
+        //dump($question);exit;
+        $this->fetch('show', $question);
+    }
 
 
 

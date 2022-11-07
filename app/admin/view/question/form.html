@@ -72,7 +72,7 @@
                 <option value="0" data-type="0">--请选择--</option>
                 {foreach $type as $key=>$item}
                 {if isset($vo.type) && $key==$vo.type}
-                <option selected value="$key">{$item}</option>
+                <option selected value="{$key}">{$item}</option>
                 {else}
                 <option value="{$key}">{$item}</option>
                 {/if}

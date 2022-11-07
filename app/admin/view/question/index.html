@@ -64,6 +64,7 @@
 
                 <td class='text-center nowrap'>
                     <a data-dbclick class="layui-btn layui-btn-sm" data-open='{:url("edit")}?id={$vo.id}' data-csrf="{:systoken('edit')}">编 辑</a>
+                    <a data-dbclick class="layui-btn layui-btn-sm" target="_blank" href='{:url("show")}?id={$vo.id}' data-csrf="{:systoken('show')}">预 览</a>
                     {if $vo.is_recommend == 0}
                     <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-blue"  data-confirm="确定要设置推荐吗?" data-action="{:url('recommend')}" data-value="id#{$vo.id};is_recommend#{$vo.is_recommend}" data-csrf="{:systoken('recommend')}">设置推荐</a>
                     {else}
