@@ -48,7 +48,7 @@ class LawyerCase extends BaseModel {
 
     //获取合同详情
     public static function detail($id){
-        $row = self::where('status',1)->field('id,title,author,page,original_price,sales_price,file_url')->find($id);
+        $row = self::where('status',1)->field('id,title,author,page,original_price,sales_price,file_url,case_img_url')->find($id);
         if(empty($row)){
             return [];
         }
