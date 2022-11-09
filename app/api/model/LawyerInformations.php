@@ -25,7 +25,7 @@ class LawyerInformations extends BaseModel {
         }
 
         if(!empty($name)){
-            $where[] = ['name', '=', $name];
+            $where[] = ['name', 'like', '%'.$name.'%'];
         }
 
         if(!empty($typeId)){
@@ -42,7 +42,7 @@ class LawyerInformations extends BaseModel {
                     ->where($where)
                     ->limit($limit)
                     ->page($page)
-                    ->order('id', 'desc')
+                    ->order('id', 'asc')
                     ->select()
                     ->toArray();
         $count = self::where($where)->count('id');
@@ -85,7 +85,7 @@ class LawyerInformations extends BaseModel {
             ->where($where)
             ->limit($limit)
             ->page($page)
-            ->order('id', 'desc')
+            ->order('id', 'asc')
             ->select()
             ->toArray();
 

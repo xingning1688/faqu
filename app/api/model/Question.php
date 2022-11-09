@@ -32,7 +32,7 @@ class  Question extends BaseModel {
         $search['limit'] = request()->param('limit',10);
         $search['title'] = request()->param('title','');
 
-        $query = self::order('create_time', 'desc');
+        $query = self::order('create_time', 'desc')->where('delete_time',NULL);
         if (isset($search['title']) && !empty($search['title'])){
             $query->where('title', $search['title']);
         }
