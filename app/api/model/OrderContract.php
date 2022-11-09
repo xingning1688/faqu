@@ -48,6 +48,15 @@ class OrderContract extends BaseModel {
         return true;
     }
 
+    public static function getOrderContractById($order_no){
+        $row = self::where('order_no',$order_no)->find();
+        if(empty($row)){
+            return [];
+        }
+        $row = $row->toArray();
+        return $row;
+    }
+
 
 
 
