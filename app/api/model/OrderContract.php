@@ -57,7 +57,22 @@ class OrderContract extends BaseModel {
         return $row;
     }
 
+    //获取某个合同订单的详情
+    public static function getContractById($oid){
+        $row = self::where('id',$oid)->find();
+        if(empty($row)){
+            return [];
+        }
+        $row = $row->toArray();
+        $order_details = OrderContractDetail::getOrderContractDetail([$row]);
+        return $order_details[0];
 
+    }
 
 
 }
+
+
+
+
+

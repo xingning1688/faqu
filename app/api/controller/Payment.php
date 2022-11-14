@@ -86,9 +86,11 @@ class Payment  extends AuthController
                 $res = $pay->miniCreateOrder($options);
 
             }elseif( ($order['platform'] == 1) &&  ($pay_type == 10) ){
-
                 $pay = new PayKs();
                 $res = $pay->createOrder($order['id'],$order_type);
+                if(!is_array($res)){
+                    $this->error('快手预付单失败:'.$res);
+                }
             }
 
 
