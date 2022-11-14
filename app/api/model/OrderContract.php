@@ -43,6 +43,7 @@ class OrderContract extends BaseModel {
             return false;
         }
         $parameter['order_contract_id'] = $res->id;
+        $parameter['order_contract']['id'] =  $res->id;
         $parameter['order_contract']['order_no'] =  $order_contract['order_no'];
         $parameter['order_contract']['create_time'] =  date('Y-m-d H:i:s',time());
         return true;

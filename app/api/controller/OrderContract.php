@@ -137,7 +137,15 @@ class OrderContract  extends AuthController
         return $data;
     }
 
-
+    //支付成功后，查询某个订单
+    public function getByIdOrderContract(){
+        $oid = request()->param('id');
+        $orderContract = OrderContracts::getContractById($oid);//获取数据
+        if(empty($orderContract)){
+            $this->error('失败，暂无数据');
+        }
+        $this->success('订单成功',$orderContract);
+    }
 
 
 }

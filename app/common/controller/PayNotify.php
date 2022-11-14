@@ -103,7 +103,7 @@ class PayNotify  extends Controller
 
         if(($result['data']['status'] == 'SUCCESS') ){
 
-            $kwaisign = isset($SERVER['HTTP_KWAISIGN'])? $SERVER['HTTP_KWAISIGN'] : '';
+            $kwaisign = isset($_SERVER['HTTP_KWAISIGN'])? $_SERVER['HTTP_KWAISIGN'] : '';
             $appSecret = 'xs9iePnaFdIFG6GBCCw5mw';
             $resulta = json_encode($result);
             $notify = md5($resulta.$appSecret);
@@ -152,13 +152,13 @@ class PayNotify  extends Controller
                         $res = Db::name('order_contract')->where('id', $dataOrder['id'])->update($ordersData);
                         $return =true;
                     } catch (\Exception $e) {
-                        _minipay_log('失败-异常：商城系统中的订单编号:'.$order_no.'微信支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
+                        _minipay_log('快手平台支付失败-异常：商城系统中的订单编号:'.$order_no.'快手支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
                     }
                 }
             }
 
         } else {
-            _minipay_log('支付失败 (失败原因状态：'.$result['data']['status'].')');
+            _minipay_log('快手平台支付失败 (失败原因状态：'.$result['data']['status'].')');
         }
 
         echo $this->getKsReturn($return,$result['message_id']);

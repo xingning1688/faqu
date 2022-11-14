@@ -41,7 +41,7 @@ class OrderContract extends Controller
     private $table = 'order_contract';
     public $status = [0=>'未处理',1=>'已处理','-1'=>'搁置'];
     public $pay_status = [0=>'未支付',1=>'支付成功',2=>'支付失败'];
-    public $pay_type = [0=>'暂无',1=>'微信',2=>'支付宝'];
+    public $pay_type = [0=>'暂无',1=>'微信',2=>'支付宝',10=>'快手-未知',11=>'快手-微信',12=>'快手-支付宝',20=>'微信小程序支付'];
     public $platform = [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音'];
     /**
      *订单合同列表
