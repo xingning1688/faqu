@@ -105,7 +105,7 @@ class OrderContract extends Controller
             $item['pay_status'] = isset($pay_status[$item['pay_status']]) ? $pay_status[$item['pay_status']] : '';
             $item['pay_type'] = isset($pay_type[$item['pay_type']]) ? $pay_type[$item['pay_type']] : '';
             $item['platform'] = isset($platform[$item['platform']]) ? $platform[$item['platform']] : '';
-            $item['pay_time'] = !empty($item['pay_time'])? date('Y-m-d H:i:s',time()) : '';
+            $item['pay_time'] = !empty($item['pay_time'])? date('Y-m-d H:i:s',$item['pay_time']) : '';
 
             $item['nick_name'] = isset($platform_user[$item['open_id']]) ? $platform_user[$item['open_id']]['nick_name'] : '';
 
