@@ -179,7 +179,7 @@ class PayNotify  extends Controller
                     }
                 }
             }elseif(isset($attach['order_type']) && $attach['order_type']==2 ){
-                file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
+                //file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
                 $dataOrder = Db::name('leave_message')->where(['order_no'=>$order_no,'order_price'=>$total_amount,'status'=>0])->field('id')->find();
                 _minipay_log('leave_message 订单数据: '.json_encode($dataOrder));
                 if(!empty($dataOrder)) {

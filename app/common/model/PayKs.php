@@ -97,11 +97,11 @@ class PayKs extends BaseModel{
             $res = $this->doCurl($url,1,$postData,$headers);
             $res =  json_decode($res,true);
             if($res['result'] !== 1){
-                file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+                //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
                 return '快手预付单请求结果返回失败';
             }
 
-        file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
             return $res['order_info'];
 
        /* }*/
