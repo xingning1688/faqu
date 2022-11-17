@@ -35,6 +35,7 @@ class Login  extends Controller
     public function code2Session(){
         $code = request()->post('code');
         $platform = request()->post('platform',1);
+        $dou_yin_type = request()->post('dou_yin_type',0);//区分抖音哪个小程序
         if(empty($code)){
             $this->error('参数错误');
         }
@@ -49,7 +50,7 @@ class Login  extends Controller
             $WeiXinModel = new WeiXinModel();
             $data = $WeiXinModel->code2Session($code);
         }else if($platform == 3){
-            $WeiXinModel = new DouYinModel();
+            $WeiXinModel = new DouYinModel($dou_yin_type);
             $data = $WeiXinModel->code2Session($code);
         }
 

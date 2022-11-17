@@ -65,6 +65,29 @@ class PayNotify  extends Controller
                         _minipay_log('商城系统中的订单编号:'.$order_no.'微信支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
                     }
                 }
+            }elseif( isset($attach['order_type']) && $attach['order_type']==2 ){
+                $dataOrder = Db::name('leave_message')->where(['order_no'=>$order_no,'order_price'=>$total_amount,'status'=>0])->field('id')->find();
+                _minipay_log('leave_message 订单数据: '.json_encode($dataOrder));
+                if(!empty($dataOrder)) {
+                    $time = time();
+                    try {
+                        // 修改订单状态
+                        $ordersData['transaction_id']             = $trade_no;
+                        $ordersData['pay_type']             = isset($attach['pay_type']) ? $attach['pay_type'] : 0;//微信支付
+                        $ordersData['pay_time']             = $time;
+                        $ordersData['update_time']          = $time;
+                        if($result_code == 'SUCCESS') {
+                            $ordersData['status']           = 1;
+                        } else {
+                            $ordersData['status']           = '-1';
+                        }
+
+                        $res = Db::name('leave_message')->where('id', $dataOrder['id'])->update($ordersData);
+                        $return = true;
+                    } catch (\Exception $e) {
+                        _minipay_log('leave_message 商城系统中的订单编号:'.$order_no.'微信支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
+                    }
+                }
             }
 
 
@@ -153,6 +176,31 @@ class PayNotify  extends Controller
                         $return =true;
                     } catch (\Exception $e) {
                         _minipay_log('快手平台支付失败-异常：商城系统中的订单编号:'.$order_no.'快手支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
+                    }
+                }
+            }elseif(isset($attach['order_type']) && $attach['order_type']==2 ){
+                file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
+                $dataOrder = Db::name('leave_message')->where(['order_no'=>$order_no,'order_price'=>$total_amount,'status'=>0])->field('id')->find();
+                _minipay_log('leave_message 订单数据: '.json_encode($dataOrder));
+                if(!empty($dataOrder)) {
+                    $time = time();
+                    try {
+                        // 修改订单状态
+                        $ordersData['platform_order_no']             = $ks_order_no;
+                        $ordersData['transaction_id']             = $trade_no;
+                        $ordersData['pay_type']             = $pay_type;
+                        $ordersData['pay_time']             = $time;
+                        $ordersData['update_time']          = $time;
+                        if($result['data']['status'] == 'SUCCESS') {
+                            $ordersData['status']           = 1;
+                        } else {
+                            $ordersData['status']           = '-1';
+                        }
+
+                        $res = Db::name('leave_message')->where('id', $dataOrder['id'])->update($ordersData);
+                        $return =true;
+                    } catch (\Exception $e) {
+                        _minipay_log('leave_message快手平台支付失败-异常：商城系统中的订单编号:'.$order_no.'快手支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
                     }
                 }
             }

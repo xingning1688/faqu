@@ -48,6 +48,15 @@ class LawyerConsultation extends BaseModel {
         return $list;
     }
 
+    public static function getById($id){
+        $data = self::where('id',$id)->find();
+        if(empty($data)){
+            return [];
+        }
+        $data = $data->toArray();
+        return $data;
+    }
+
 
 
 }

@@ -13,16 +13,29 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 
 class DouYinModel extends BaseModel {
-    private $appid = 'tt13c3657e8cfd546101';
-    private $appsecret = '56a416ab025c99241b4d48b4df5ad1685ce893c6';
+    private $appid ;
+    private $appsecret ;
 
+
+    /*private $appid = 'tt13c3657e8cfd546101';
+    private $appsecret = '56a416ab025c99241b4d48b4df5ad1685ce893c6';*/
     /**
      * 构造函数
      * @param $sessionKey string 用户在小程序登录后获取的会话密钥
      * @param $appid string 小程序的appid
      */
-    public function __construct(){
+    public function __construct($type=0){
+        if($type == 0){
+            $this->appid = 'tt13c3657e8cfd546101';
+            $this->appsecret = '56a416ab025c99241b4d48b4df5ad1685ce893c6';
+        }elseif($type == 1){
+            $this->appid = 'tt356d43d0aa52bf8101';
+            $this->appsecret = '14288e471ad8daa4e113b8aec4f2fa9383788a74';
+        }
 
+
+        /*private $appid = 'tt13c3657e8cfd546101';
+        private $appsecret = '56a416ab025c99241b4d48b4df5ad1685ce893c6';*/
     }
     /*public function __construct( $appid='', $sessionKey='',$appsecret='')
     {
@@ -94,7 +107,7 @@ class DouYinModel extends BaseModel {
     }
 
     public function getCode(){
-
+        dump($this->appid);exit;
         $code = request()->post('code');
         return $code;
     }

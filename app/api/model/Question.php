@@ -23,7 +23,6 @@ class  Question extends BaseModel {
     //热门问答列表
     public static function getList(){
         $list = self::getListWhere()->field('id,title,abstract,img,content,read_number,author,type,create_time')->select()->toArray();
-        //$list = self::assemblyDataList($list);
         return $list;
     }
 
@@ -31,10 +30,15 @@ class  Question extends BaseModel {
         $search['page'] = request()->param('page',1);
         $search['limit'] = request()->param('limit',10);
         $search['title'] = request()->param('title','');
+        $search['user_id'] = request()->param('user_id','');
 
         $query = self::order('create_time', 'desc')->where('delete_time',NULL);
         if (isset($search['title']) && !empty($search['title'])){
             $query->where('title', $search['title']);
+        }
+
+        if (isset($search['user_id']) && !empty($search['user_id'])){
+            $query->where('user_id', $search['user_id']);
         }
 
         if (isset($search['page']) && $search['page']) {

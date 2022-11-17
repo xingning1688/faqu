@@ -1,5 +1,6 @@
 <?php
 namespace app\common\model;
+use app\api\model\LeaveMessages;
 use app\api\model\OrderContract;
 use app\api\model\PlatformAccess;
 class PayKs extends BaseModel{
@@ -51,9 +52,17 @@ class PayKs extends BaseModel{
             return '快手平台信息获取失败';
         }
 
-        if($order_type==1){
-            $orderContract = OrderContract::getContractById($oid);//获取数据
-            if(empty($orderContract)){
+       /* if($order_type==1){*/
+            if($order_type == 1){ //合同订单
+                $order = OrderContract::getContractById($oid);//获取数据
+                $subject = '购买合同';
+            }elseif($order_type == 2){//咨询订单
+                $order = LeaveMessages::getOrderById($oid);//获取数据
+                $order['order_details'] = $order['title'];
+                $subject = $order['title'];
+            }
+
+            if(empty($order)){
                 return '获取订单数据失败';
             }
 
@@ -68,11 +77,11 @@ class PayKs extends BaseModel{
             $config['app_id'] =  $platformAccess['app_id'];
             $config['access_token'] = $access_token;
 
-            $postData['open_id'] =   isset($orderContract['open_id']) ? $orderContract['open_id'] : '';
-            $postData['out_order_no'] =   isset($orderContract['order_no']) ? $orderContract['order_no'] : '';
-            $postData['total_amount'] =   $orderContract['order_price']*100;//金额
-            $postData['subject'] =  '购买合同';
-            $postData['detail'] =  isset($orderContract['order_details']) ? json_encode($orderContract['order_details']) : '';
+            $postData['open_id'] =   isset($order['open_id']) ? $order['open_id'] : '';
+            $postData['out_order_no'] =   isset($order['order_no']) ? $order['order_no'] : '';
+            $postData['total_amount'] =   $order['order_price']*100;//金额
+            $postData['subject'] =  isset($subject)? $subject : '';
+            $postData['detail'] =  isset($order['order_details']) ? json_encode($order['order_details']) : '';
             $postData['type'] =  3306;
             $postData['expire_time'] =  7200;
             $postData['notify_url'] =  $notify_url;
@@ -88,10 +97,14 @@ class PayKs extends BaseModel{
             $res = $this->doCurl($url,1,$postData,$headers);
             $res =  json_decode($res,true);
             if($res['result'] !== 1){
+                file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
                 return '快手预付单请求结果返回失败';
             }
+
+        file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
             return $res['order_info'];
-        }
+
+       /* }*/
 
     }
 

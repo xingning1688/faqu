@@ -19,7 +19,7 @@ class LeaveMessageValidate {
             'phone' => 'mobile',
             //'wx_num' => 'require',
             'problem' => 'require',
-            'platform' => 'require',
+            //'platform' => 'require',
 
         ];
         $msg = [
@@ -28,7 +28,7 @@ class LeaveMessageValidate {
             'phone.mobile' => '手机号不合法！',
             //'wx_num.require' => '请填写微信号！',
             'problem.require' => '请填写问题描述！',
-            'platform.require' => '数据不合法2！',
+            //'platform.require' => '平台参数必填！',
         ];
         $validate = \think\facade\Validate::rule($rule)->message($msg);
         if (!$validate->check($data)) {

@@ -152,7 +152,7 @@ class LawyerInformations extends BaseModel {
         $data['share_copy'] = !empty($data['share_copy'])? $data['share_copy']: '快速获取我的更多法律服务';
 
         unset($data['professional_field_id']);
-        unset($data['user_id']);
+        //unset($data['user_id']);
         return $data;
     }
 
