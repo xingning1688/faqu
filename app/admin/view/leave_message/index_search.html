@@ -42,6 +42,24 @@
         </div>
 
         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">支付状态</label>
+            <label class="layui-input-inline">
+                <select name="pay_status" class="layui-select">
+                    <option value=''>&#45;&#45; 全部 &#45;&#45;</option>
+
+                    {foreach $payStatus as $k=>$v}
+                    {if input('get.pay_status') eq ''.$k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">平台</label>
             <label class="layui-input-inline">
                 <select name="platform" class="layui-select">

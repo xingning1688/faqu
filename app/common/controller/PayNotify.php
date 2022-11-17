@@ -78,8 +78,10 @@ class PayNotify  extends Controller
                         $ordersData['update_time']          = $time;
                         if($result_code == 'SUCCESS') {
                             $ordersData['status']           = 1;
+                            $ordersData['pay_status']           = 1;
                         } else {
                             $ordersData['status']           = '-1';
+                            $ordersData['pay_status']           = '-1';
                         }
 
                         $res = Db::name('leave_message')->where('id', $dataOrder['id'])->update($ordersData);
@@ -193,8 +195,10 @@ class PayNotify  extends Controller
                         $ordersData['update_time']          = $time;
                         if($result['data']['status'] == 'SUCCESS') {
                             $ordersData['status']           = 1;
+                            $ordersData['pay_status']           = 1;
                         } else {
                             $ordersData['status']           = '-1';
+                            $ordersData['pay_status']           = '-1';
                         }
 
                         $res = Db::name('leave_message')->where('id', $dataOrder['id'])->update($ordersData);

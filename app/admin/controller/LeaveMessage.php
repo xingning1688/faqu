@@ -37,6 +37,7 @@ class LeaveMessage extends Controller
 {
     private $table = 'leave_message';
     public $status = ['-1'=>'搁置',0=>'未处理','1'=>'助理确认','2'=>'律师沟通','3'=>'沟通结束'];
+    public $payStatus = ['-1'=>'支付失败',0=>'未支付','1'=>'支付成功'];
     public $platform = [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音'];
     /**
      * 律师咨询列表
@@ -52,10 +53,12 @@ class LeaveMessage extends Controller
         //获取session
         $this->title = '律师咨询列表';
         $this->status;
+        $this->payStatus;
         $this->platform;
 
         $where = [];
         $status = $this->request->get('status', '');
+        $pay_status = $this->request->get('pay_status', '');
         $phone = $this->request->get('phone', '');
         $wx_num = $this->request->get('wx_num', '');
         $platform = $this->request->get('platform', '');
@@ -68,6 +71,10 @@ class LeaveMessage extends Controller
 
         if($status!==''){
             $where[] = ['status','=',$status];
+        }
+
+        if($pay_status!==''){
+            $where[] = ['pay_status','=',$pay_status];
         }
 
         if(!empty($wx_num)){
@@ -95,13 +102,15 @@ class LeaveMessage extends Controller
 
     protected function _index_page_filter(&$data){
         $status = $this->status;
+        $payStatus = $this->payStatus;
         $platform = $this->platform;
         $lawyer_user_ids = array_unique(array_column($data,'lawyer_user_id'));
         $lawyerInformations =    LawyerInformations::getByUserIds($lawyer_user_ids);
         $open_ids = array_column($data,'open_id');
         $platform_user = $this->app->db->name('platform_user')->whereIn('open_id',$open_ids)->column('id,open_id,nick_name','open_id');
-        $data = array_map(function($item) use($status,$platform,$lawyerInformations,$platform_user){
+        $data = array_map(function($item) use($status,$platform,$lawyerInformations,$platform_user,$payStatus){
              //dump($item['gender'],$gender);exit;
+            $item['pay_status'] = isset($payStatus[$item['pay_status']]) ? $payStatus[$item['pay_status']]:'';
             $item['status'] = isset($status[$item['status']]) ? $status[$item['status']]:'';
             $item['platform'] = isset($platform[$item['platform']]) ? $platform[$item['platform']]:'';
             $item['lawyer_name'] = isset($lawyerInformations[$item['lawyer_user_id']])?$lawyerInformations[$item['lawyer_user_id']]['name'] : '';
@@ -132,6 +141,18 @@ class LeaveMessage extends Controller
                 'id.require'         => '参数错误1！',
                 'status.require' => '请选择状态！'
             ]);
+            /*
+                       $row = Db::table('leave_message')->where('id', $data['id'])->find();
+
+                      if($row['status'] < 1 && $data['status']==1){
+                           $this->error('审核状态不能改为助理确认（支付状态）');
+                       }
+
+                       if($row['status'] > 1 && $data['status']<1){
+
+                           $this->error('审核状态不能改为助理确认（支付状态）前的状态');
+                       }*/
+
             $data['update_time'] = time();
 
         }

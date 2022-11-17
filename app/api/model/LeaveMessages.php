@@ -84,7 +84,8 @@ class LeaveMessages extends BaseModel {
         if(isset($data['consultation_id'])){
             unset($data['consultation_id']);
         }
-        $res = self::create($data);
+        $leaveMessages = new self();
+        $res= $leaveMessages->create($data);
         if(!isset($res->id) && empty($res->id)){
             return false;
         }
