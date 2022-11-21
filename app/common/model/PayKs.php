@@ -60,6 +60,9 @@ class PayKs extends BaseModel{
                 $order = LeaveMessages::getOrderById($oid);//获取数据
                 $order['order_details'] = $order['title'];
                 $subject = $order['title'];
+            }elseif($order_type == 3){ //服务商城
+                $order = Order::getOrderDetailById($oid);//获取数据
+                $subject = '购买服务商城';
             }
 
             if(empty($order)){
