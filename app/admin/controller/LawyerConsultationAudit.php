@@ -146,8 +146,8 @@ class LawyerConsultationAudit extends Controller
             } catch (Exception $e) {
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
+            $this->success('编辑成功！', 'javascript:history.back()');
 
-            $this->redirect('/admin/lawyer_consultation_audit/index','301');
         }
 
     }

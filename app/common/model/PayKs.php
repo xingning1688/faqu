@@ -79,7 +79,7 @@ class PayKs extends BaseModel{
 
             $postData['open_id'] =   isset($order['open_id']) ? $order['open_id'] : '';
             $postData['out_order_no'] =   isset($order['order_no']) ? $order['order_no'] : '';
-            $postData['total_amount'] =   $order['order_price']*100;//金额
+            $postData['total_amount'] =   intval(strval($order['order_price']*100));//金额
             $postData['subject'] =  isset($subject)? $subject : '';
             $postData['detail'] =  isset($order['order_details']) ? json_encode($order['order_details']) : '';
             $postData['type'] =  3306;
@@ -89,7 +89,8 @@ class PayKs extends BaseModel{
             $postData['sign'] = $this->makeSign($config,$postData,$platformAccess['app_secret']);
 
             $url = 'https://open.kuaishou.com/openapi/mp/developer/epay/create_order?'.http_build_query($config);
-
+ //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($order['order_price'],true)."\r\n",FILE_APPEND | LOCK_EX);
+ //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($postData['total_amount'],true)."\r\n",FILE_APPEND | LOCK_EX);
             $postData = json_encode($postData);
             $headers = [
                 'Content-Type: application/json',
