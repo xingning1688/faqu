@@ -1,0 +1,79 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body think-box-shadow padding-left-40">
+
+        <div class="layui-tab">
+
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div>订单号：{$order['order_no']}</div>
+                    <table class="layui-table margin-top-10" lay-skin="line">
+                        <thead>
+                        <tr>
+                            <th class='text-center nowrap' width="5%">ID</th>
+                            <th class='text-center nowrap' width="10%">律师</th>
+                            <th class='text-center nowrap' width="10%">产品名称</th>
+                            <th class='text-center nowrap' width="10%">价格</th>
+                            <th class='text-center nowrap' width="15%">数量</th>
+                            <th class='text-center nowrap' width="15%">添加时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $order['order_details'] as $item}
+                                <tr>
+                                    <td class='text-center nowrap'>{$item.id}</td>
+                                    <td class='text-center nowrap'>{$item.lawyer_user_name}</td>
+                                    <td class='text-center nowrap'>{$item.product_name}</td>
+                                    <td class='text-center nowrap'>{$item.price}</td>
+                                    <td class='text-center nowrap'>{$item.num}</td>
+                                    <td class='text-center nowrap'>{$item.create_time}</td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div>留言信息</div>
+                    <table class="layui-table margin-top-10" lay-skin="line">
+                        <thead>
+                        <tr>
+
+                            <th class='text-center nowrap' width="10%">联系人</th>
+                            <th class='text-center nowrap' width="10%">联系电话</th>
+                            <th class='text-center nowrap' >留言内容</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+
+                            <td class='text-center nowrap'>{$order['order_consignee']['name']}</td>
+                            <td class='text-center nowrap'>{$order['order_consignee']['phone']}</td>
+                            <td class='text-center '>{$order['order_consignee']['content']}</td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="layui-form-item text-center">
+            <button class="layui-btn layui-btn-danger" type='button' data-close>关 闭</button>
+        </div>
+    </div>
+
+</form>
