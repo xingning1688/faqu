@@ -34,9 +34,11 @@ class Order  extends Controller
     public function createOrder()
     {
         //获取订单信息
+        //file_put_contents('./text.txt', '接收信息：'.var_export( request()->all(),true)."\r\n",FILE_APPEND | LOCK_EX);
+
         //test
         //测试数据 start
-        $order_detail=[['product_id'=>0,'price'=>0.00,'num'=>2,'product_name'=>'产品名称1','lawyer_user_id'=>10000],['product_id'=>0,'price'=>1.00,'num'=>3,'product_name'=>'产品名称2','lawyer_user_id'=>10000]];
+       /* $order_detail=[['product_id'=>0,'price'=>0.00,'num'=>2,'product_name'=>'产品名称1','lawyer_user_id'=>10000],['product_id'=>0,'price'=>1.00,'num'=>3,'product_name'=>'产品名称2','lawyer_user_id'=>10000]];
         $order_detail = json_encode($order_detail);
 
         $order_consignee=['name'=>'name','phone'=>'13666666666','content'=>'content'];
@@ -46,11 +48,11 @@ class Order  extends Controller
         $parameter['order_consignee'] =  json_decode($order_consignee,true);
         $parameter['open_id'] = 'open_id';
         $parameter['platform'] = 1;//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']
-        $parameter['order_type'] = 1;
+        $parameter['order_type'] = 1;*/
         //测试数据 end
 
         //获取参数
-        /*if(is_array(request()->param('order_detail'))){
+        if(is_array(request()->param('order_detail'))){
             $parameter['order_detail'] =  request()->param('order_detail');
         }else{
             $parameter['order_detail'] =  json_decode(request()->param('order_detail'),true);
@@ -65,28 +67,26 @@ class Order  extends Controller
         $parameter['open_id'] = request()->param('open_id');
         $parameter['pay_type'] = request()->param('pay_type');
         $parameter['platform'] = request()->param('platform');//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']
-        $parameter['order_type'] = request()->param('order_type');*/
+        $parameter['order_type'] = request()->param('order_type');
 
         //验证提交过来的数据
         if( (isset($parameter['pay_type']) && !is_numeric($parameter['pay_type']) ) || !is_numeric($parameter['platform']) || empty($parameter['open_id']) || empty($parameter['order_detail'])  || empty($parameter['order_consignee'])){
             $this->error('参数不合法1');
         }
 
+        if( empty($parameter['order_detail'])){
+            $this->error('参数不合法2');
+        }
+
+        if( empty($parameter['order_consignee'])){
+            $this->error('参数不合法3');
+        }
+
 
         $parameter['order_price'] = 0;
         foreach($parameter['order_detail'] as $key =>$value){
             $parameter['order_price'] += $value['price'] * $value['num'];
-
-            /*//组装返回信息
-            $parameter['order_contract']['order_price'] = $parameter['order_price'];
-
-            $parameter['order_contract_detail'][$key]['price'] = $value['price'];
-            $parameter['order_contract_detail'][$key]['num'] = $value['num'];
-            $parameter['order_contract_detail'][$key]['title'] = isset($lawyerCases[$value['lawyer_case_id']]['title']) ? $lawyerCases[$value['lawyer_case_id']]['title'] : '';
-            $parameter['order_contract_detail'][$key]['author'] = isset($lawyerCases[$value['lawyer_case_id']]['author']) ? $lawyerCases[$value['lawyer_case_id']]['author'] : '';
-            $parameter['order_contract_detail'][$key]['lawyer_case_id'] = $value['lawyer_case_id'];*/
         }
-
 
         //添加数据库
         $res = OrderModel::createOrder($parameter);
@@ -133,14 +133,14 @@ class Order  extends Controller
     }*/
 
     //支付成功后，查询某个订单
-    /*public function getByIdOrderContract(){
+    public function getByIdOrder(){
         $oid = request()->param('id');
-        $orderContract = OrderContracts::getContractById($oid);//获取数据
-        if(empty($orderContract)){
+        $order = OrderModel::getOrderDetailById($oid);//获取数据
+        if(empty($order)){
             $this->error('失败，暂无数据');
         }
-        $this->success('订单成功',$orderContract);
-    }*/
+        $this->success('订单成功',$order);
+    }
 
 
 }
