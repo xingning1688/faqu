@@ -1,0 +1,349 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+{include file='/product/formstyle'}
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" id="GoodsForm">
+    <div class="layui-card-body">
+
+        <label class="layui-form-item block relative">
+            <span class="help-label"><b>商品名称</b></span>
+            <input class="layui-input" name="name" placeholder="请输入商品名称" required value="{$vo.name|default=''}">
+        </label>
+
+        <label class="layui-form-item block relative">
+            <span class="help-label"><b>商品价格</b></span>
+            <input class="layui-input" name="price" placeholder="请输入商品价格"  value="{$vo.price|default='0.00'}">
+        </label>
+        <label class="layui-form-item block relative">
+            <span class="help-label"><b>商品活动价格</b> </span>
+            <input class="layui-input" name="sale_price" placeholder="请输入商品活动价格"  value="{$vo.sale_price|default='0.00'}">
+        </label>
+
+        <label class="layui-form-item block relative">
+            <span class="help-label"><b>服务</b> </span>
+            <input class="layui-input" name="fuwu" placeholder="请输入服务"  value="{$vo.fuwu|default=''}">
+        </label>
+
+        <label class="layui-form-item block relative">
+            <span class="help-label"><b>服务律师</b> </span>
+            <input class="layui-input" name="fuwu_lawyer" placeholder="请输入服务律师"  value="{$vo.fuwu_lawyer|default=''}">
+        </label>
+
+        <label class="layui-form-item block relative">
+            <span class="help-label"><b>服务流程</b> </span>
+            <input class="layui-input" name="fuwu_flow" placeholder="请输入服务流程"  value="{$vo.fuwu_flow|default=''}">
+        </label>
+
+        <label class="layui-form-item block relative">
+            <span class="help-label label-required-prev"><b>所属律师</b></span>
+            <select class="layui-select" lay-search name="lawyer_information_id">
+                <option  value="0">--请选择--</option>
+                {foreach $lawyer as $key=>$item}
+                    {if isset( $vo.lawyer_information_id) && ($key == $vo.lawyer_information_id)}
+                <option selected value="{$key}">{$item}</option>
+                    {else}
+                <option  value="{$key}">{$item}</option>
+                    {/if}
+                {/foreach}
+            </select>
+        </label>
+
+        <label class="layui-form-item block relative">
+            <span class="help-label label-required-prev"><b>服务方式</b></span>
+            <select class="layui-select" lay-search name="way">
+                <option  value="0">--请选择--</option>
+
+                {foreach $way as $key=>$item}
+                {if isset( $vo.way) && ($key == $vo.way)}
+                <option selected value="{$key}">{$item}</option>
+                {else}
+                <option  value="{$key}">{$item}</option>
+                {/if}
+                {/foreach}
+
+
+            </select>
+        </label>
+
+        <label class="layui-form-item block relative">
+            <span class="help-label label-required-prev"><b>服务类型</b></span>
+            <select class="layui-select" lay-search name="type">
+                <option  value="0">--请选择--</option>
+
+                {foreach $type as $key=>$item}
+                {if isset( $vo.type) && ($key == $vo.type)}
+                <option selected value="{$key}">{$item}</option>
+                {else}
+                <option  value="{$key}">{$item}</option>
+                {/if}
+                {/foreach}
+
+            </select>
+        </label>
+
+
+
+        <div class="layui-form-item label-required-prev">
+            <span class="help-label"><b>商品封面及轮播图片</b>Cover and Carousel Pictures</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center">封面</th>
+                    <th class="text-left" style="width:100%">轮播图片</th>
+                </tr>
+                <tr>
+                    <td class="text-center text-top padding-0">
+                        <div class="help-images">
+                            <input name="cover" data-max-width="500" data-max-height="500" type="hidden" value="{$vo.cover|default=''}">
+                            <script>$('[name="cover"]').uploadOneImage();</script>
+                        </div>
+                    </td>
+                    <td class="text-left padding-0">
+                        <div class="help-images">
+                            <input name="slider" data-max-width="2048" data-max-height="1024" type="hidden" value="{$vo.slider|default=''}">
+                            <script>$('[name="slider"]').uploadMultipleImage();</script>
+                        </div>
+                    </td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+
+
+        <label class="layui-form-item block">
+            <span class="help-label"><b>商品简介描述</b></span>
+            <textarea class="layui-textarea" name="description" placeholder="请输入商品简介描述">{$vo.description|default=''|raw}</textarea>
+        </label>
+
+        <div class="layui-form-item block">
+            <span class="help-label label-required-prev"><b>商品富文本详情</b></span>
+            <textarea class="layui-hide" name="content">{$vo.content|default=''|raw}</textarea>
+        </div>
+
+        <div class="layui-form-item  ">
+            <label class="layui-form-label label-required">是否推荐</label>
+            <div class="layui-input-block">
+                {foreach $is_recommend as $k=>$v}
+                <label class="think-radio">
+                    {if (isset($vo.is_recommend) && $k eq $vo.is_recommend) }
+                    <input name="is_recommend"  checked  type="radio" value="{$k}" lay-ignore> {$v}
+                    {else}
+                    <input name="is_recommend" type="radio" value="{$k}" lay-ignore> {$v}
+                    {/if}
+                </label>
+                {/foreach}
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label label-required">是否首页</label>
+            <div class="layui-input-block">
+                {foreach $is_index as $k=>$v}
+                <label class="think-radio">
+                    {if (isset($vo.is_index) && $k eq $vo.is_index) }
+                    <input name="is_index" checked type="radio" value="{$k}" lay-ignore> {$v}
+                    {else}
+                    <input name="is_index" type="radio" value="{$k}" lay-ignore> {$v}
+                    {/if}
+                </label>
+                {/foreach}
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label label-required">上下架</label>
+            <div class="layui-input-block">
+                {foreach $status as $k=>$v}
+                <label class="think-radio">
+                    {if (isset($vo.status) && $k eq $vo.status)}
+                    <input name="status" checked type="radio" value="{$k}" lay-ignore> {$v}
+                    {else}
+                    <input name="status" type="radio" value="{$k}" lay-ignore> {$v}
+                    {/if}
+                </label>
+                {/foreach}
+            </div>
+        </div>
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+
+        <div class="layui-form-item text-center">
+            <button class="layui-btn layui-btn-danger" ng-click="pageBack()" type="button">取消编辑</button>
+            <button class="layui-btn" type="submit">保存商品</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<label class="layui-hide">
+    <textarea id="GoodsSpecs">{$vo.data_specs|raw|default=''}</textarea>
+    <textarea id="GoodsItems">{$vo.data_items|raw|default=''}</textarea>
+</label>
+
+<script>
+    /*! 入会礼包切换 */
+    window.form.on('radio(vip_entry)', setVipEntry);
+    setVipEntry({value: ('{$vo.vip_entry|default="0"}')});
+
+    function setVipEntry(data, $input) {
+        $input = $('select[name="vip_upgrade"]');
+        if (parseInt(data.value)) {
+            $input.removeClass('layui-disabled').removeAttr('disabled');
+        } else {
+            $input.addClass('layui-disabled').attr('disabled', 'disabled');
+        }
+        layui.form.render();
+    }
+
+    /*! 加载扩展插件 */
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content"]', {height: 500});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+       /* function getRand(length, prefix) {
+            return (function (time, code) {
+                code += parseInt(time.substring(0, 1)) + parseInt(time.substring(1, 2)) + time.substring(2);
+                while (code.length < length) code += Math.round(Math.random() * 10);
+                return code;
+            })(Date.now().toString(), prefix || '' + '')
+        }*/
+
+        function callback($rootScope) {
+            $rootScope.mode = '{$mode|default="add"}', $rootScope.navas = [];
+            $rootScope.items = angular.fromJson(angular.element('#GoodsItems').val() || '[]') || {};
+            $rootScope.cache = angular.fromJson(angular.element('#GoodsItems').val() || '[]') || {};
+            $rootScope.specs = angular.fromJson(angular.element('#GoodsSpecs').val() || '[{"name":"默认分组","list":[{"name":"默认规格","check":true}]}]');
+            /*! 批量设置数值 */
+            $rootScope.batchSet = function (name, fixed, title) {
+                layer.prompt({
+                    title: title || (fixed === null ? '请输入内容' : '请输入数量【 取值范围：1 - 999999 】'),
+                    formType: 0, value: fixed === null ? '' : (1).toFixed(fixed), success: function ($fn) {
+                        var min = (1).toFixed(fixed), max = (999999).toFixed(fixed);
+                        $fn.find('.layui-layer-input').attr({'data-value-min': min, 'data-value-max': max, 'data-blur-number': fixed});
+                    }
+                }, function (value, index) {
+                    layer.close(index), $rootScope.$apply(function () {
+                        if (fixed !== null) value = (parseFloat(value) || 0).toFixed(fixed);
+                        $rootScope.items.forEach(function (rows) {
+                            rows.forEach(function (item) {
+                                item[name] = value;
+                            });
+                        });
+                    });
+                });
+            };
+            $rootScope.pageBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+            $rootScope.setValue = function (key, name, value, callback) {
+                $rootScope.items[key] = $rootScope.items[key] || {};
+                $rootScope.cache[key] = $rootScope.cache[key] || {};
+                if (typeof callback === 'string' && callback.indexOf('_') > -1) {
+                    value = eval(callback.replace('_', "'" + value + "'"));
+                }
+                return $rootScope.cache[key][name] = $rootScope.items[key][name] = value;
+            };
+            $rootScope.getValue = function (key, name, value) {
+                var cache = $rootScope.cache[key] || {};
+                if (typeof cache[name] === 'undefined') {
+                    $rootScope.setValue(key, name, value, '_')
+                    cache = $rootScope.cache[key] || {};
+                }
+                return cache[name];
+            };
+            /*! 去除空白字符 */
+            $rootScope.trimSpace = function (value) {
+                return (value + '').replace(/\s*/ig, '');
+            };
+            /*! 当前商品规格发生变化时重新计算规格列表 */
+            $rootScope.$watch('specs', function () {
+                var data = [], navs = [], table = [[]];
+                $rootScope.specs.forEach(function (spec) {
+                    var temp = [];
+                    spec.list.forEach(function (item) {
+                        if (item.check && item.name.length > 0) {
+                            item.show = true, item.group = spec.name;
+                            temp.push(item);
+                        }
+                    });
+                    data.push(temp), navs.push(spec.name);
+                });
+                $rootScope.navas = navs;
+                /*! 表格交叉 */
+                data.forEach(function (rows) {
+                    var temp = [];
+                    table.forEach(function (line) {
+                        rows.forEach(function (item) {
+                            temp.push(line.concat(item));
+                        });
+                    });
+                    table = temp;
+                });
+                /*! 表格数据  */
+                data = angular.fromJson(angular.toJson(table));
+                data.forEach(function (rows) {
+                    var keys = [];
+                    rows.forEach(function (item) {
+                        keys.push(item.group + '::' + item.name);
+                    }), rows.every(function (item) {
+                        item.key = keys.join(';;');
+                        item.sku = $rootScope.getValue(item.key, 'sku', getRand(14, 'S'));
+                        item.status = !!$rootScope.getValue(item.key, 'status', 1);
+                        item.market = $rootScope.getValue(item.key, 'market', '0.00');
+                        item.balance = $rootScope.getValue(item.key, 'balance', '0.00');
+                        item.selling = $rootScope.getValue(item.key, 'selling', '0.00');
+                        item.integral = $rootScope.getValue(item.key, 'integral', '0');
+                        item.express = $rootScope.getValue(item.key, 'express', '1');
+                        item.virtual = $rootScope.getValue(item.key, 'virtual', '0');
+                        return false;
+                    });
+                });
+                $rootScope.items = data;
+            }, true);
+            /*! 判断规则是否能取消选择 */
+            $rootScope.checkListChecked = function (data, check) {
+                for (var i in data) if (data[i].check) return check;
+                return true;
+            };
+            /*! 下移整行规格分组 */
+            $rootScope.dnSpecRow = function (items, index) {
+                if (index + 1 < items.length) (function (item) {
+                    items.splice(index + 1, 1), items.splice(index, 0, item);
+                })(items[index + 1]);
+            };
+            /*! 上移整行规格分组 */
+            $rootScope.upSpecRow = function (items, index) {
+                if (index > 0) (function (item) {
+                    items.splice(index - 1, 1), items.splice(index, 0, item);
+                })(items[index - 1]);
+            };
+            /*! 移除整行规格分组 */
+            $rootScope.delSpecRow = function (items, index) {
+                items.splice(index, 1)
+            };
+            /*! 增加整行规格分组 */
+            $rootScope.addSpecRow = function (data) {
+                data.push({name: '规格分组' + data.length, list: [{name: '规格属性', check: true}]})
+            };
+            /*! 增加分组的属性 */
+            $rootScope.addSpecVal = function (data) {
+                data.push({name: '规格属性' + data.length, check: true});
+            };
+            /*! 移除分组的属性 */
+            $rootScope.delSpecVal = function (data, $index) {
+                var temp = [];
+                data.forEach(function (item, index) {
+                    if (parseInt(index) !== parseInt($index)) temp.push(item);
+                });
+                return temp;
+            };
+        }
+    });
+</script>
+{/block}

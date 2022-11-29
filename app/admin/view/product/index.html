@@ -1,0 +1,108 @@
+{extend name="../../admin/view/main"}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<button class='layui-btn layui-btn-sm layui-btn-primary' data-open='{:url("add")}'>添加商品</button>
+<!--{/if}-->
+
+{/block}
+
+{block name="content"}
+<div class="layui-tab layui-tab-card think-bg-white">
+    <ul class="layui-tab-title">
+        {foreach ['index'=>'商品管理'] as $k=>$v}
+        {if isset($type) and $type eq $k}
+        <li class="layui-this" data-open="{:url('index')}?type={$k}">{$v}</li>
+        {else}
+        <li data-open="{:url('index')}?type={$k}">{$v}</li>
+        {/if}{/foreach}
+    </ul>
+    <div class="layui-tab-content">
+        {include file='product/index_search'}
+        <table class="layui-table margin-top-10" lay-skin="line">
+            {notempty name='list'}
+            <thead>
+            <tr>
+                <th class='list-table-check-td think-checkbox'>
+                    <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+                </th>
+                <th class='list-table-sort-td'>
+                    <button class="layui-btn layui-btn-xs" data-reload type="button">刷 新</button>
+                </th>
+                <th class='text-left nowrap'>商品信息</th>
+                <th class='text-left nowrap'>是否首页</th>
+                <th class='text-left nowrap'>是否推荐</th>
+                <th class='text-left nowrap'>商品状态</th>
+                <th></th>
+            </tr>
+            </thead>
+            {/notempty}
+            <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td think-checkbox'>
+                    <label><input class="list-check-box" type='checkbox' value='{$vo.id}'></label>
+                </td>
+                <td class='list-table-sort-td'>
+                    <label><input class="list-sort-input" data-action-blur="{:sysuri()}" data-loading="false" data-value="id#{$vo.id};action#sort;sort#{value}" value="{$vo.sort}"></label>
+                </td>
+                <td class='nowrap'>
+                    {notempty name='vo.cover'}
+                    <div class="headimg headimg-no" data-tips-hover data-tips-image data-lazy-src="{$vo.cover}"></div>
+                    {/notempty}
+                    <div class="inline-block sub-span-blue">
+                        <div>商品名称：<span>{$vo.name|default='--'}</span></div>
+                        <div>商品价格：<span>{$vo.price|default='--'}</span></div>
+                        <div>活动价格：<span>{$vo.sale_price|default='--'}</span></div>
+                        <div>服务方式：<span>{$vo.way|default='--'}</span></div>
+                        <div>服务类型：<span>{$vo.type|default='--'}</span></div>
+                        <div>所属律师：<span>{$vo.lawyer_name|default='--'}</span></div>
+
+                    </div>
+                </td>
+
+                <td class='nowrap'>
+                    <div class="notselect margin-top-5">
+                        {eq name='vo.is_index' value='1'}<span class="layui-badge layui-bg-gray layui-border-red">是</span>{else}<span class="layui-badge layui-bg-gray layui-border-green">否</span>{/eq}
+                    </div>
+                </td>
+
+                <td class='nowrap'>
+                    <div class="notselect margin-top-5">
+                        {eq name='vo.is_recommend' value='1'}<span class="layui-badge layui-bg-gray layui-border-red">是</span>{else}<span class="layui-badge layui-bg-gray layui-border-green">否</span>{/eq}
+                    </div>
+                </td>
+
+                <td class='nowrap'>
+                    <div class="notselect margin-top-5">
+                        {eq name='vo.status' value='1'}<span class="layui-badge layui-bg-gray layui-border-red">已下架</span>{else}<span class="layui-badge layui-bg-gray layui-border-green">销售中</span>{/eq}
+                    </div>
+                </td>
+
+                <td class='nowrap sub-strong-blue'>
+                    <a class="layui-btn layui-btn-xs" data-open='{:url("edit")}?id={$vo.id}'>编 辑</a>
+                    <!--{if auth("state")}-->
+                    <!--<a class="layui-btn layui-btn-xs layui-btn-warm" data-action="{:url('state')}" data-value="id#{$vo.id};status#0">下 架</a>-->
+                    <!--{else}-->
+                    <!--<a class="layui-btn layui-btn-xs layui-btn-primary layui-disabled" data-tips-text="您没有下架商品的权限哦！">下 架</a>-->
+                    <!--{/if}-->
+
+                    <!--{if auth("state")}-->
+                    <!--<a class="layui-btn layui-btn-xs layui-btn-warm" data-action="{:url('state')}" data-value="id#{$vo.id};status#1">上 架</a>-->
+                    <!--{else}-->
+                    <!--<a class="layui-btn layui-btn-xs layui-btn-primary layui-disabled" data-tips-text="您没有上架商品的权限哦！">上 架</a>-->
+                    <!--{/if}-->
+
+                    <!--{if auth("remove")}-->
+                    <!--<a class="layui-btn layui-btn-xs layui-btn-danger" data-action="{:url('remove')}" data-confirm="确定要移入回收站吗？" data-value="id#{$vo.id};deleted#1">删 除</a>-->
+                    <!--{/if}-->
+
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+    </div>
+</div>
+{/block}

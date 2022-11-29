@@ -7,7 +7,7 @@
  */
 namespace app\admin\model;
 
-use think\Model;
+use think\admin\Model;
 
 class BaseModel extends Model {
 

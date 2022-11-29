@@ -11,4 +11,16 @@ use think\Model;
 
 class BaseModel extends Model {
 
+
+    public static function pluckAttr($attr){
+        return self::column($attr,'id');
+    }
+
+    //根据id获取对应的id,attr数组
+    public static function pluckAttrByIds($ids,$attr='name'){
+        $ids = is_array($ids) ? array_unique($ids) :[$ids];
+        //$res = self::whereIn('id',$ids)->column('id,name','id'); dump($res);exit;
+        $data = self::whereIn('id',$ids)->column($attr,'id');
+        return $data;
+    }
 }

@@ -26,8 +26,8 @@ use app\api\model\OrderContract as OrderContracts;
 use app\common\model\Order as OrderModel;
 
 
-//class Order  extends AuthController
-class Order  extends Controller
+class Order  extends AuthController
+//class Order  extends Controller
 {
 
     //创建订单信息
