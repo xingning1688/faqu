@@ -51,11 +51,17 @@ class OrderDetail extends BaseModel {
     }
 
     public static function assembleData($data){
-        $lawyer_user_ids = array_unique(array_column($data,'lawyer_user_id'));
-        $lawyerInformations = LawyerInformations:: getByUserIds($lawyer_user_ids);
+        $product_ids = array_unique(array_column($data,'product_id'));
+        $products = Product::pluckAttrByIds($product_ids,'id,lawyer_information_id,name,cover'); //产品id=》lawyer_information_id
+        $lawyer_information_ids = array_unique(array_column($products,'lawyer_information_id'));
+        $lawyerInformations = LawyerInformation::pluckAttrByIds($lawyer_information_ids,'id,name');
 
         $newData = [];
-        foreach($data as $key=>$item){
+        foreach($data as $key=>$item){   isset($products[$item['product_id']]) ? (isset($lawyerInformations[$products[$item['product_id']]]) ? $lawyerInformations[$products[$item['product_id']]]['name'] : ''): '';
+            //$item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';
+
+            $item['product_cover'] =  isset($products[$item['product_id']]) ? $products[$item['product_id']]['cover'] : '';
+            $item['product_name2'] =  isset($products[$item['product_id']]) ? $products[$item['product_id']]['name'] : '';
             $item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';
             $newData[$item['order_id']][$item['id']] = $item;
         }

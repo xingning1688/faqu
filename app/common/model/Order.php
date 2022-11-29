@@ -13,6 +13,11 @@ class Order extends BaseModel {
     protected $createTime = 'create_time';
     protected $updateTime = 'update_time';
 
+    public static $status = [0=>'未处理',1=>'已处理','-1'=>'搁置'];
+    public static $pay_status = [0=>'未支付',1=>'支付成功',2=>'支付失败'];
+    public static $pay_type = [0=>'暂无',1=>'微信',2=>'支付宝',10=>'快手-未知',11=>'快手-微信',12=>'快手-支付宝',20=>'微信小程序支付'];
+    public static $platform = [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音'];
+
     public static function createOrder(&$parameter){
         Db::startTrans();
 
@@ -79,6 +84,45 @@ class Order extends BaseModel {
             return $row;
 
         }
+
+
+    //获取我的服务订单
+    public static function myOrder($parameter){
+        $open_id = $parameter['open_id'];
+        $page = $parameter['page'];
+        $where['open_id'] = $open_id;
+
+        $data = self::where($where)->order('create_time','desc')->page($page,15)->select()->toArray();
+        if(empty($data)){
+            return [];
+        }
+        $data = self::getOrderDetail($data);
+        return $data;
+    }
+
+    public static function getOrderDetail($data){
+        //获取订单详情
+        $order_ids = array_unique(array_column($data,'id'));
+        $order_details = OrderDetail::getOrderDetails($order_ids);
+
+
+        $status = self::$status;
+        $pay_status = self::$pay_status;
+        $pay_type = self::$pay_type;
+        $platform = self::$platform;
+
+        $data = array_map(function($item) use($order_details,$status,$pay_status,$pay_type,$platform){
+            $item['order_details'] = isset($order_details[$item['id']]) ? $order_details[$item['id']]: [];
+            $item['status'] = isset($status[$item['status']]) ? $status[$item['status']] : '';
+            $item['pay_status'] = isset($pay_status[$item['pay_status']]) ? $pay_status[$item['pay_status']] : '';
+            $item['pay_type'] = isset($pay_type[$item['pay_type']]) ? $pay_type[$item['pay_type']] : '';
+            $item['platform'] = isset($platform[$item['platform']]) ? $platform[$item['platform']] : '';
+            $item['pay_time'] = !empty($item['pay_time'])? date('Y-m-d H:i:s',$item['pay_time']) : '';
+
+            return $item;
+        },$data);
+        return $data;
+    }
 
 
 }

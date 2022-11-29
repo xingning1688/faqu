@@ -25,6 +25,7 @@ use app\api\model\Feedback as FeedbackModel;
 use app\api\controller\Common;
 use app\api\model\LawyerCase;
 use app\api\model\Banner;
+use app\common\model\Order;
 
 
 
@@ -51,6 +52,16 @@ class My  extends AuthController
         $data = LeaveMessages::myConsulting($parameter);
         $this->success('ok',$data);
 
+    }
+
+    public function myOrder(){
+        $parameter['open_id'] = request()->get('open_id','');
+        $parameter['page'] = request()->get('page',1);
+        if(empty($parameter['open_id']) || !is_numeric($parameter['page'])){
+            $this->error('参数不合法');
+        }
+        $data = Order::myOrder($parameter);
+        $this->success('ok',$data);
     }
 
 
