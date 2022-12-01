@@ -48,11 +48,11 @@
                 <th class='text-center nowrap' width="">价格</th>
                 <th class='text-center nowrap' width="">电话</th>
                 <th class='text-center nowrap' width="">微信号</th>
-                <th class='text-center nowrap' >问题</th>
+               <!-- <th class='text-center nowrap' >问题</th>-->
                 <th class='text-center nowrap' width="">平台</th>
                 <th class='text-center nowrap' width="">支付状态</th>
                 <th class='text-center nowrap' width="">状态</th>
-                <th class='text-center nowrap' width="">备注</th>
+                <!--<th class='text-center nowrap' width="">备注</th>-->
                 <th class='text-center nowrap' width="">留言时间</th>
                 <th class='text-center'>操作</th>
 
@@ -77,14 +77,15 @@
 
                 <td class='text-center nowrap'>{$vo.phone}</td>
                 <td class='text-center nowrap'>{$vo.wx_num}</td>
-                <td class='text-center nowrap' >{$vo.problem}</td>
+                <!--<td class='text-center nowrap' >{$vo.problem}</td>-->
                 <td class='text-center nowrap'>{$vo.platform}</td>
                 <td class='text-center nowrap'>{$vo.pay_status}</td>
                 <td class='text-center nowrap'>{$vo.status}</td>
-                <td class='text-center nowrap'>{:htmlspecialchars_decode( $vo.remark)}</td>
+                <!--<td class='text-center nowrap'>{:htmlspecialchars_decode( $vo.remark)}</td>-->
                 <td class='text-center nowrap'>{$vo.create_time}</td>
 
                 <td class='text-center nowrap'>
+                    <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-black" data-modal="{:url('detail')}?id={$vo.id}" data-csrf="{:systoken('detail')}">详 情</a>
                     <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-black" data-modal="{:url('appoint')}?id={$vo.id}" data-csrf="{:systoken('appoint')}">审 核</a>
                     <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-black" data-modal="{:url('remark')}?id={$vo.id}" data-csrf="{:systoken('remark')}">备 注</a>
                 </td>

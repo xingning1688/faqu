@@ -124,6 +124,23 @@ class LeaveMessage extends Controller
     }
 
     /**
+     * 咨询详情信息
+     *  @auth true
+     * time  :
+     */
+    public function detail(){
+        $this->title = '咨询详情';
+        $order_id = $this->request->param('id/d', 0);
+        if(empty($order_id)) {
+            $this->error('参数错误1！');
+        }
+
+        $order = Db::table($this->table)->where('id', $order_id)->find();
+        $this->assign('order', $order);
+        return $this->fetch();
+    }
+
+    /**
      * 审核律师咨询信息
      *  @auth true
      * time  :

@@ -81,8 +81,6 @@
             </select>
         </label>
 
-
-
         <div class="layui-form-item label-required-prev">
             <span class="help-label"><b>商品封面及轮播图片</b>Cover and Carousel Pictures</span>
             <table class="layui-table">
@@ -110,7 +108,6 @@
         </div>
 
 
-
         <label class="layui-form-item block">
             <span class="help-label"><b>商品简介描述</b></span>
             <textarea class="layui-textarea" name="description" placeholder="请输入商品简介描述">{$vo.description|default=''|raw}</textarea>
@@ -121,12 +118,13 @@
             <textarea class="layui-hide" name="content">{$vo.content|default=''|raw}</textarea>
         </div>
 
+
         <div class="layui-form-item  ">
             <label class="layui-form-label label-required">是否推荐</label>
             <div class="layui-input-block">
                 {foreach $is_recommend as $k=>$v}
                 <label class="think-radio">
-                    {if (isset($vo.is_recommend) && $k eq $vo.is_recommend) }
+                    {if ( (isset($vo.is_recommend) && ($k eq $vo.is_recommend)) || (!isset($vo.id) && $k==0 ) )  }
                     <input name="is_recommend"  checked  type="radio" value="{$k}" lay-ignore> {$v}
                     {else}
                     <input name="is_recommend" type="radio" value="{$k}" lay-ignore> {$v}
@@ -141,7 +139,7 @@
             <div class="layui-input-block">
                 {foreach $is_index as $k=>$v}
                 <label class="think-radio">
-                    {if (isset($vo.is_index) && $k eq $vo.is_index) }
+                    {if (isset($vo.is_index) && ($k eq $vo.is_index) || (!isset($vo.id) && $k==0 )    ) }
                     <input name="is_index" checked type="radio" value="{$k}" lay-ignore> {$v}
                     {else}
                     <input name="is_index" type="radio" value="{$k}" lay-ignore> {$v}
@@ -156,7 +154,7 @@
             <div class="layui-input-block">
                 {foreach $status as $k=>$v}
                 <label class="think-radio">
-                    {if (isset($vo.status) && $k eq $vo.status)}
+                    {if (isset($vo.status) && ($k eq $vo.status)  || (!isset($vo.id) && $k==0 ) )}
                     <input name="status" checked type="radio" value="{$k}" lay-ignore> {$v}
                     {else}
                     <input name="status" type="radio" value="{$k}" lay-ignore> {$v}
@@ -165,7 +163,7 @@
                 {/foreach}
             </div>
         </div>
-
+                                                        
         <div class="hr-line-dashed margin-top-40"></div>
         {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
 

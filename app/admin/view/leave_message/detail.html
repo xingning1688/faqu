@@ -1,0 +1,36 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+
+
+
+
+    <div class="layui-card-body think-box-shadow padding-left-40">
+
+        <!---->
+        <div class="layui-form-item" >
+            订单号：{$order.order_no}
+        </div>
+        <fieldset class="margin-bottom-20 relative" data-max-index="0">
+            <legend class="color-green font-s14">问题<span class="color-desc font-s12"></span></legend>
+            <div class="layui-form-item" >
+                {$order.problem}
+            </div>
+        </fieldset>
+
+        <fieldset class="margin-bottom-20 relative" data-max-index="0">
+            <legend class="color-green font-s14">备注<span class="color-desc font-s12"></span></legend>
+            <div class="layui-form-item" >
+                {$order.remark}
+            </div>
+        </fieldset>
+        <!---->
+
+        </div>
+
+        <div class="hr-line-dashed"></div>
+        <div class="layui-form-item text-center">
+            <button class="layui-btn layui-btn-danger" type='button' data-close>关 闭</button>
+        </div>
+    </div>
+
+</form>

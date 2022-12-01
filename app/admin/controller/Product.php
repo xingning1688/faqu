@@ -109,11 +109,13 @@ class Product extends Controller
             $lawyer = LawyerInformation::allLawyer();
             $this->lawyer = $lawyer;
 
-        } elseif ($this->request->isPost()) {  //dump($data);exit;
+        } elseif ($this->request->isPost()) {
             if (empty($data['cover'])) $this->error('商品图片不能为空！');
             if (empty($data['slider'])) $this->error('轮播图片不能为空！');
             if (empty($data['name'])) $this->error('商品名称不能为空！');
             if (empty($data['lawyer_information_id']) && !is_numeric($data['lawyer_information_id'])) $this->error('请选择所属律师！');
+            if (empty($data['way']) && !is_numeric($data['way'])) $this->error('请选择服务方式！');
+            if (empty($data['type']) && !is_numeric($data['type'])) $this->error('请选择服务类型！');
 
         }
     }
