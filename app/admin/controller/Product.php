@@ -21,7 +21,7 @@ class Product extends Controller
     public $is_recommend = [0=>'正常','1'=>'推荐'];
     public $is_index = [0=>'正常','1'=>'首页'];
     public $status = [0=>'销售中','1'=>'下架'];
-    public $way = [1=>'线上销售','2'=>'线下销售'];
+    public $way = [1=>'线上咨询','2'=>'线下咨询'];
     public $type = [1=>'法律服务工具'];
     /**
      * 商品列表

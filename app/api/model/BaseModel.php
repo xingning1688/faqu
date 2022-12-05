@@ -11,6 +11,10 @@ use think\Model;
 
 class BaseModel extends Model {
 
+    public static function getMsgById($id,$fields=['*']){
+        $row = self::where('id',$id)->field($fields)->find();
+        return $row ? $row->toArray() :[];
+    }
 
     public static function pluckAttr($attr){
         return self::column($attr,'id');

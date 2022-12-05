@@ -62,6 +62,7 @@ class OrderContract extends Controller
         $where = [];
         $order_no = $this->request->get('order_no', '');
         $status = $this->request->get('status', '');
+        $pay_status = $this->request->get('pay_status', '');
         $platform = $this->request->get('platform', '');
         $create_time = $this->request->get('create_time', '');
 
@@ -71,6 +72,10 @@ class OrderContract extends Controller
 
         if($status!==''){
             $where[] = ['status','=',$status];
+        }
+
+        if($pay_status!==''){
+            $where[] = ['pay_status','=',$pay_status];
         }
 
         if($platform !=='' && in_array($platform,[0,1,2,3])){

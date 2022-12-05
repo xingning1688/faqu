@@ -38,7 +38,7 @@ class OrderDetail extends BaseModel {
         $lawyerInformations = LawyerInformations:: getByUserIds($lawyer_user_id);
         $data = array_map(function($item) use($lawyerInformations) {
             $item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';
-            return $item;
+            return $item;    
         },$data);
 
         return $data;
@@ -57,12 +57,17 @@ class OrderDetail extends BaseModel {
         $lawyerInformations = LawyerInformation::pluckAttrByIds($lawyer_information_ids,'id,name');
 
         $newData = [];
-        foreach($data as $key=>$item){   isset($products[$item['product_id']]) ? (isset($lawyerInformations[$products[$item['product_id']]]) ? $lawyerInformations[$products[$item['product_id']]]['name'] : ''): '';
+        foreach($data as $key=>$item){  //dump($item,$products);exit;
+            //dump($item,$products);exit;
+            //dump( isset($products[$item['product_id']]) ? (isset($lawyerInformations[$products[$item['product_id']]]) ? $lawyerInformations[$products[$item['product_id']]]['name'] : ''): '');exit;
+
+            //isset($products[$item['product_id']]) ? (isset($lawyerInformations[$products[$item['product_id']]]) ? $lawyerInformations[$products[$item['product_id']]]['name'] : ''): '';
             //$item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';
 
             $item['product_cover'] =  isset($products[$item['product_id']]) ? $products[$item['product_id']]['cover'] : '';
             $item['product_name2'] =  isset($products[$item['product_id']]) ? $products[$item['product_id']]['name'] : '';
-            $item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';
+            //$item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';
+            $item['lawyer_user_name'] = isset($products[$item['product_id']]) ? (isset($lawyerInformations[$products[$item['product_id']]['lawyer_information_id']]) ? $lawyerInformations[$products[$item['product_id']]['lawyer_information_id']]['name'] : ''): '';
             $newData[$item['order_id']][$item['id']] = $item;
         }
         return $newData;

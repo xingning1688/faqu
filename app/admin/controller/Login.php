@@ -77,7 +77,7 @@ class Login extends Controller
                 $this->error('图形验证码验证失败，请重新输入!');
             }
             /*! 用户信息验证 */
-            $map = ['username' => $data['username'], 'is_deleted' => 0];
+            $map = ['username' => $data['username'], 'is_deleted' => 0];  
             $user = SystemUser::mk()->where($map)->findOrEmpty();
             if ($user->isEmpty()) {
                 $this->app->session->set('LoginInputSessionError', true);

@@ -74,11 +74,15 @@ class Product extends BaseModel {
     }
 
     public static function assemblyDataDetail($data){
+
         $way = self::$way;
         $type = self::$TYPE;
         $data['way'] = isset($way[$data['way']]) ? $way[$data['way']] : '';
         $data['type'] = isset($type[$data['type']]) ? $type[$data['type']] : '';
         $data['slider'] = explode('|',$data['slider']);
+        $row = LawyerInformation::getMsgById( $data['lawyer_information_id'],'id,user_id,name');
+        $data['lawyer_user_id'] = !empty($row['user_id']) ? $row['user_id'] : 0;
+
         return $data;
     }
 
