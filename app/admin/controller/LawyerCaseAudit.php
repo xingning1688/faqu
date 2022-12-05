@@ -133,6 +133,14 @@ class LawyerCaseAudit extends Controller
                 $this->error($returnVal);
             }
 
+            if(!isset($data['description']) || $data['description']=='') {
+                $this->error('请填写合同简介！');
+            }
+
+            if(!isset($data['cover']) || $data['cover']=='') {
+                $this->error('请上传合同封面图片！');
+            }
+
             if(!isset($data['original_price']) || $data['original_price']<0) {
                 $this->error('请填写合法原价！');
             }
@@ -151,7 +159,8 @@ class LawyerCaseAudit extends Controller
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
 
-            $this->redirect('/admin/lawyer_case_audit/index','301');
+            $this->success('合同编辑成功！', 'javascript:history.back()');
+
         }
 
     }
@@ -187,9 +196,26 @@ class LawyerCaseAudit extends Controller
                 $this->error($returnVal);
             }
 
-            /*if(!isset($data['content']) || $data['content']=='') {
-                $this->error('请填写案例内容！');
+            if(!isset($data['description']) || $data['description']=='') {
+                $this->error('请填写合同简介！');
+            }
+
+            if(!isset($data['cover']) || $data['cover']=='') {
+                $this->error('请上传合同封面图片！');
+            }
+
+            if(!isset($data['description']) || $data['description']=='') {
+                $this->error('请填写合同简介！');
+            }
+
+            if(!isset($data['cover']) || $data['cover']=='') {
+                $this->error('请上传合同封面图片！');
+            }
+
+            /*if(!isset($data['slider']) || $data['slider']=='') {
+                $this->error('请上传合同轮播图片！');
             }*/
+
 
             if(!isset($data['original_price']) || $data['original_price']<0) {
                 $this->error('请填写合法原价！');
@@ -208,6 +234,8 @@ class LawyerCaseAudit extends Controller
             $data['user_id'] = $user['user']['id'];
             $data['create_time']       = $time;
             $data['update_time']       = $time;
+
+
 
             try {
                 $this->app->db->name($this->table)->insert($data);

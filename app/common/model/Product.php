@@ -28,6 +28,8 @@ class Product extends BaseModel {
         $search['name'] = request()->param('name','');
         $search['is_index'] = request()->param('is_index','');
         $search['is_recommend'] = request()->param('is_recommend','');
+        $search['lawyer_information_id'] = request()->param('lawyer_information_id',0);
+
 
         $query = self::where('status',0)->order('sort', 'desc')->order('id', 'desc');
         if(isset($search['name']) && !empty($search['name'])){
@@ -44,6 +46,10 @@ class Product extends BaseModel {
 
         if(isset($search['is_recommend']) && !empty($search['is_recommend'])){
             $query->where('is_recommend', $search['is_recommend']);
+        }
+
+        if(isset($search['lawyer_information_id']) && !empty($search['lawyer_information_id'])){
+            $query->where('lawyer_information_id', $search['lawyer_information_id']);
         }
 
         return $query;

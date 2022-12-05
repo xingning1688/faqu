@@ -48,7 +48,7 @@ class LawyerCase extends BaseModel {
 
     //获取合同详情
     public static function detail($id){
-        $row = self::where('status',1)->field('id,title,author,page,original_price,sales_price,file_url,case_img_url')->find($id);
+        $row = self::where('status',1)->field('id,title,author,page,original_price,sales_price,file_url,case_img_url,description,cover,slider')->find($id);
         if(empty($row)){
             return [];
         }
@@ -56,7 +56,7 @@ class LawyerCase extends BaseModel {
     }
 
     public static function detailIds($ids){
-        $row = self::whereIn('id',$ids)->where('status',1)->column(['id','title','author','page','original_price','sales_price','file_url'],'id');
+        $row = self::whereIn('id',$ids)->where('status',1)->column(['id','title','author','page','original_price','sales_price','file_url,,description,cover,slider'],'id');
 
         if(empty($row)){
             return [];

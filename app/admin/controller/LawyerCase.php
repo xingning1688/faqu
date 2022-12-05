@@ -133,6 +133,14 @@ class LawyerCase extends Controller
                 $this->error($returnVal);
             }
 
+            if(!isset($data['description']) || $data['description']=='') {
+                $this->error('请填写合同简介！');
+            }
+
+            if(!isset($data['cover']) || $data['cover']=='') {
+                $this->error('请上传合同封面图片！');
+            }
+
             if(!isset($data['original_price']) || $data['original_price']<0) {
                 $this->error('请填写合法原价！');
             }
@@ -185,6 +193,14 @@ class LawyerCase extends Controller
             $returnVal = $validate->form($data);
             if($returnVal != ''){
                 $this->error($returnVal);
+            }
+
+            if(!isset($data['description']) || $data['description']=='') {
+                $this->error('请填写合同简介！');
+            }
+
+            if(!isset($data['cover']) || $data['cover']=='') {
+                $this->error('请上传合同封面图片！');
             }
 
             /*if(!isset($data['content']) || $data['content']=='') {
