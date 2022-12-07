@@ -113,7 +113,9 @@ class Order extends BaseModel {
 
         $data = array_map(function($item) use($order_details,$status,$pay_status,$pay_type,$platform){
             $item['order_details'] = isset($order_details[$item['id']]) ? $order_details[$item['id']]: [];
+            $item['status2'] = $item['status'];
             $item['status'] = isset($status[$item['status']]) ? $status[$item['status']] : '';
+            $item['pay_status2'] = $item['pay_status'];
             $item['pay_status'] = isset($pay_status[$item['pay_status']]) ? $pay_status[$item['pay_status']] : '';
             $item['pay_type'] = isset($pay_type[$item['pay_type']]) ? $pay_type[$item['pay_type']] : '';
             $item['platform'] = isset($platform[$item['platform']]) ? $platform[$item['platform']] : '';

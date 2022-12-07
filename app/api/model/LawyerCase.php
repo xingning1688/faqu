@@ -56,7 +56,7 @@ class LawyerCase extends BaseModel {
     }
 
     public static function detailIds($ids){
-        $row = self::whereIn('id',$ids)->where('status',1)->column(['id','title','author','page','original_price','sales_price','file_url,,description,cover,slider'],'id');
+        $row = self::whereIn('id',$ids)->where('status',1)->column(['id','title','author','page','original_price','sales_price','file_url,description,cover,slider'],'id');
 
         if(empty($row)){
             return [];
@@ -109,7 +109,6 @@ class LawyerCase extends BaseModel {
         },$data);
         return $data;
     }
-
 
 
 
