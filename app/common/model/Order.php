@@ -92,7 +92,7 @@ class Order extends BaseModel {
         $page = $parameter['page'];
         $where['open_id'] = $open_id;
 
-        $data = self::where($where)->order('create_time','desc')->page($page,15)->select()->toArray();
+        $data = self::where($where)->order('create_time','desc')->page($page,50)->select()->toArray();
         if(empty($data)){
             return [];
         }

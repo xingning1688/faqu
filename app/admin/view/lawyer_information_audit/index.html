@@ -71,6 +71,8 @@
                         <a class="layui-btn layui-btn-sm layui-btn-primary layui-border-orange" data-confirm="确定要取消推荐吗?" data-action="{:url('recommend_cancel')}"  data-value="id#{$vo.id}" data-csrf="{:systoken('recommend_cancel')}">取消推荐</a>
                     {/if}
 
+                    <a class="layui-btn layui-btn-xs" data-open='{:url("add_operational_data")}?id={$vo.id}'>添加运营数据</a>
+
                 </td>
             </tr>
             {/foreach}

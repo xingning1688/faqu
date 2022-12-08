@@ -16,6 +16,11 @@ class BaseModel extends Model {
         return $row ? $row->toArray() :[];
     }
 
+    public static function getMsgByRow($where,$fields=['*']){
+        $row = self::where($where)->field($fields)->find();
+        return $row ? $row->toArray() :[];
+    }
+
     public static function pluckAttr($attr){
         return self::column($attr,'id');
     }

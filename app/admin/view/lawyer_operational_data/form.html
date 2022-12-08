@@ -1,0 +1,84 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">抖音播放量</span>
+            <input class="layui-input" name="dy_num" placeholder="抖音播放量" required value="{$vo.dy_num|default= 0}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">抖音粉丝量</span>
+            <input class="layui-input" name="dy_fans" placeholder="抖音粉丝量" required value="{$vo.dy_fans|default=0}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">视频号播放量</span>
+            <input class="layui-input" name="wx_num" placeholder="视频号播放量" required value="{$vo.wx_num|default=0}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">视频号粉丝量</span>
+            <input class="layui-input" name="wx_fans" placeholder="视频号粉丝量" required value="{$vo.wx_fans|default=0}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">快手播放量</span>
+            <input class="layui-input" name="ks_num" placeholder="视频号播放量" required value="{$vo.ks_num|default=0}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">快手粉丝量</span>
+            <input class="layui-input" name="ks_fans" placeholder="视频号粉丝量" required value="{$vo.ks_fans|default=0}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">数据截止时间</span>
+            <input class="layui-input" data-date-input name="data_end" placeholder="请选择数据截止时间" value="{$vo.data_end|default=''}">
+        </label>
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        {notempty name='lawyer_information_id'}<input name="lawyer_information_id" type="hidden" value="{$lawyer_information_id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+    /*! 加载扩展插件 */
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="context_desc"]', {height: 500});
+        window.createEditor('[name="audio_desc"]', {height: 500});
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+    });
+
+    $(document).ready(function() {
+        // select下拉框选中触发事件
+        form.on('select(type)', function (data) {
+
+
+        });
+    });
+
+
+</script>
+{/block}

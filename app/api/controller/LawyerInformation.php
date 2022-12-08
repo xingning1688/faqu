@@ -69,10 +69,7 @@ class LawyerInformation  extends Controller
         $this->success('ok',$data);
     }
 
-    public function test(){
-        dump(11);
-    }
-/**/
+
 
 
 }

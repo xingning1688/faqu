@@ -1,0 +1,74 @@
+{extend name="../../admin/view/main"}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<!--<button class='layui-btn layui-btn-sm layui-btn-primary' data-open='{:url("add")}'>添加</button>-->
+<!--{/if}-->
+
+{/block}
+
+{block name="content"}
+<div class="layui-tab layui-tab-card think-bg-white">
+    <ul class="layui-tab-title">
+        {foreach ['index'=>'运营数据列表'] as $k=>$v}
+        {if isset($type) and $type eq $k}
+        <li class="layui-this" data-open="{:url('index')}?type={$k}">{$v}</li>
+        {else}
+        <li data-open="{:url('index')}?type={$k}">{$v}</li>
+        {/if}{/foreach}
+    </ul>
+    <div class="layui-tab-content">
+        {include file='lawyer_operational_data/index_search'}
+        <table class="layui-table margin-top-10" lay-skin="line">
+            <thead>
+            <tr>
+                <th class='list-table-check-td think-checkbox'>
+                    <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+                </th>
+
+                <th class='text-center nowrap' width="">ID</th>
+                <th class='text-center nowrap' width="">律师名称</th>
+                <th class='text-center nowrap' width="">抖音播放量</th>
+                <th class='text-center nowrap' width="">抖音粉丝量</th>
+                <th class='text-center nowrap' width="">微信名称</th>
+                <th class='text-center nowrap' width="">微信名称</th>
+                <th class='text-center nowrap' width="">快手名称</th>
+                <th class='text-center nowrap' width="">快手粉丝量</th>
+                <th class='text-center nowrap' width="">数据截止时间</th>
+                <th class='text-center nowrap' width="">创建时间</th>
+                <th class='text-center nowrap' width="">修改时间</th>
+
+                <th class='text-center'>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td think-checkbox'>
+                    <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+                </td>
+
+                <td class='text-center nowrap'>{$vo.id}</td>
+                <td class='text-center nowrap'>{$vo.lawyer_name}</td>
+                <td class='text-center nowrap'>{$vo.dy_num}</td>
+                <td class='text-center nowrap'>{$vo.dy_fans}</td>
+                <td class='text-center nowrap'>{$vo.wx_num}</td>
+                <td class='text-center nowrap'>{$vo.wx_fans}</td>
+                <td class='text-center nowrap'>{$vo.ks_num}</td>
+                <td class='text-center nowrap'>{$vo.ks_fans}</td>
+                <td class='text-center nowrap'>{$vo.data_end}</td>
+                <td class='text-center nowrap'>{$vo.create_time}</td>
+                <td class='text-center nowrap'>{$vo.update_time}</td>
+
+                <td class='text-center nowrap'>
+                    <a data-dbclick class="layui-btn layui-btn-sm" data-open='{:url("edit")}?id={$vo.id}' data-csrf="{:systoken('edit')}">编 辑</a>
+
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+    </div>
+</div>
+{/block}

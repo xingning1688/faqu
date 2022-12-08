@@ -1,0 +1,29 @@
+<form action="{:sysuri()}" autocomplete="off" class="layui-form layui-form-pane form-search" method="get" onsubmit="return false">
+
+
+
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">所属律师</label>
+        <label class="layui-input-inline">
+            <select class="layui-select" name="lawyer_information_id">
+                <option value=''>-- 全部律师 --</option>
+                {foreach $lawyer as $k=>$v}
+                {if input('lawyer_information_id') eq $k}
+                <option selected value="{$k}">{$v}</option>
+                {else}
+                <option value="{$k}">{$v}</option>
+                {/if}{/foreach}
+            </select>
+        </label>
+    </div>
+
+
+
+
+
+
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>

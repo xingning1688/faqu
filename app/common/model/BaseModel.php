@@ -11,9 +11,20 @@ use think\Model;
 
 class BaseModel extends Model {
 
+    public static function getMsgById($id,$fields=['*']){
+        $row = self::where('id',$id)->field($fields)->find();
+        return $row ? $row->toArray() :[];
+    }
+
+    public static function getMsgByRow($where,$fields=['*']){
+        $row = self::where($where)->field($fields)->find();
+        return $row ? $row->toArray() :[];
+    }
+
     public static function pluckAttr($attr){
         return self::column($attr,'id');
     }
+
 
     //根据id获取对应的id,attr数组
     public static function pluckAttrByIds($ids,$attr='name'){
@@ -21,4 +32,6 @@ class BaseModel extends Model {
         $data = self::whereIn('id',$ids)->column($attr,'id');
         return $data;
     }
+
+
 }

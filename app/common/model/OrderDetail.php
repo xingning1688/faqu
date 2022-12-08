@@ -52,7 +52,7 @@ class OrderDetail extends BaseModel {
 
     public static function assembleData($data){
         $product_ids = array_unique(array_column($data,'product_id'));
-        $products = Product::pluckAttrByIds($product_ids,'id,lawyer_information_id,name,cover,description'); //产品id=》lawyer_information_id
+        $products = Product::pluckAttrByIds($product_ids,'id,lawyer_information_id,name,cover,slider,description'); //产品id=》lawyer_information_id
         $lawyer_information_ids = array_unique(array_column($products,'lawyer_information_id'));
         $lawyerInformations = LawyerInformation::pluckAttrByIds($lawyer_information_ids,'id,name');
 
@@ -65,6 +65,7 @@ class OrderDetail extends BaseModel {
             //$item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';
 
             $item['product_cover'] =  isset($products[$item['product_id']]) ? $products[$item['product_id']]['cover'] : '';
+            $item['product_slider'] =  isset($products[$item['product_id']]) ? explode('|',$products[$item['product_id']]['slider']) : '';
             $item['product_name2'] =  isset($products[$item['product_id']]) ? $products[$item['product_id']]['name'] : '';
             $item['product_description'] =  isset($products[$item['product_id']]) ? $products[$item['product_id']]['description'] : '';
             //$item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';

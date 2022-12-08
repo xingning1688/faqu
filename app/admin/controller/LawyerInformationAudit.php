@@ -120,6 +120,12 @@ class LawyerInformationAudit extends Controller
                 $this->error('请选择专业领域');
             }
 
+            if( !empty($data['phone']) ){
+                if(!preg_match("/^1[345678]\d{9}$/",$data['phone'])){
+                    $this->error('手机号不合法');
+                }
+            }
+
             $time = time();
             $data['professional_field_id'] = ','.(implode(',',$data['professional_field_id'])).',';
             $data['update_time']       = $time;
@@ -131,7 +137,7 @@ class LawyerInformationAudit extends Controller
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
 
-            $this->redirect('/admin/lawyer_information_audit/index','301');
+            //$this->redirect('/admin/lawyer_information_audit/index','301');
 
         }else{
             $professional_field_ids = explode(',',$data['professional_field_id']);
@@ -168,7 +174,6 @@ class LawyerInformationAudit extends Controller
      */
     protected function _add_form_filter(array &$data)
     {
-
 
         if ($this->request->isPost()) {
 
@@ -267,8 +272,59 @@ class LawyerInformationAudit extends Controller
 
 
 
+    /**
+     * 添加律师运营数据
+     * @auth true
+     */
+    public function add_operational_data()
+    {
+
+        SystemUser::mForm('operational_data_form');
+    }
+
+    protected function _add_operational_data_form_filter(&$data) {
 
 
+        if($this->request->isPost()) {
+            if(empty($data['data_end'])){
+                $this->error('请选择数据截止日期');
+            }
+            if(empty($data['lawyer_information_id'])){
+                $this->error('数据不合法，lawyer_information_id');
+            }
+            if(!is_numeric($data['dy_num']) || !is_numeric($data['dy_fans']) || !is_numeric($data['wx_num']) || !is_numeric($data['wx_fans']) || !is_numeric($data['ks_num']) || !is_numeric($data['ks_fans']) ){
+                $this->error('数据不合法');
+            }
+            $data['create_time'] = date('Y-m-d H:i:s',time());
+            $data['update_time'] = date('Y-m-d H:i:s',time());
+
+            $res = $this->app->db->name('lawyer_operational_data')->insert($data);
+           if(!$res){
+               $this->error('数据添加失败');
+           }
+
+        }else{
+            $this->title = '律师运营数据';
+            $lawyer_information_id = $this->request->param('id/d', 0);
+            if(empty($lawyer_information_id)) {
+                $this->error('参数错误1！');
+            }
+            $this->lawyer_information_id = $lawyer_information_id;
+        }
+    }
+
+    /**
+     * 表单结果处理
+     * @param boolean $result
+     */
+    protected function _form_result(bool $result,array $data)
+    {
+        // 这里可以获取到数据记录ID
+        //  echo $data['id']
+        if ($result && $this->request->isPost()) {
+            $this->success('数据添加成功！', 'javascript:history.back()');
+        }
+    }
 
     /**
      * 修改用户状态
