@@ -54,12 +54,13 @@ class LawyerCaseAudit extends Controller
         $where = [];
         $status = $this->request->get('status', '');
         $name = $this->request->get('name', '');
+        $title = $this->request->get('title', '');
         $create_time = $this->request->get('create_time', '');
 
-        $user_data =  Db::table('system_user')->whereIn('username',$name)->column('username','id');
+        $lawyer_information_data =  Db::table('lawyer_information')->where('name',$name)->field('id,user_id,name')->select()->toArray();
 
-        if(!empty($user_data)){
-            $userIds = array_keys($user_data);
+        if(!empty($lawyer_information_data)){
+            $userIds = array_column($lawyer_information_data,'user_id');
             $where[] = ['user_id','in',$userIds];
         }
 
@@ -73,6 +74,15 @@ class LawyerCaseAudit extends Controller
             $where[] = ['create_time','<=',strtotime($time_arr[1])];
         }
 
+        if(!empty($title)){
+            $where[] = ['title','=',$title];
+        }
+
+        if(!empty($author)){
+            $where[] = ['author','=',$author];
+        }
+
+
         $query = $this->_query($this->table)->where($where)->order('sort DESC,id DESC');
 
         $query->page();
@@ -85,10 +95,10 @@ class LawyerCaseAudit extends Controller
             $userIds[] = $item['user_id'];
         }
 
-        $user_data =  Db::table('system_user')->whereIn('id',$userIds)->column('username','id');
+        $lawyer_information_data =  Db::table('lawyer_information')->whereIn('user_id',$userIds)->column('name','user_id');
 
-        $data = array_map(function($item) use($user_data){
-            $item['user_name'] = isset($user_data[$item['user_id']])?$user_data[$item['user_id']]:'';
+        $data = array_map(function($item) use($lawyer_information_data){
+            $item['user_name'] = isset($lawyer_information_data[$item['user_id']])?$lawyer_information_data[$item['user_id']]:'';
             return $item;
         },$data);
 
@@ -126,7 +136,7 @@ class LawyerCaseAudit extends Controller
             $this->error('参数错误！');
         }
 
-        if ($this->request->isPost()) {
+        if ($this->request->isPost()) {  //dump($data);exit;
             $validate = new \app\admin\validate\LawyerCase();
             $returnVal = $validate->form($data);
             if($returnVal != ''){
@@ -156,6 +166,7 @@ class LawyerCaseAudit extends Controller
             try {
                 $this->app->db->name($this->table)->where('id', $data['id'])->update($data);
             } catch (\Exception $e) {
+                //dump($this->table,$data,11,$e->getMessage());exit;
                 $this->error('服务器繁忙，请稍后重试！' . $e->getMessage());
             }
 
