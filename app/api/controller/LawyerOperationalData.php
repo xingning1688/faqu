@@ -55,7 +55,7 @@ class LawyerOperationalData  extends AuthController
             $this->success('ok',$data);
         }
         $wherePhone['phone'] = $PlatformUser['phone'];
-         $LawyerInformation = LawyerInformation::getMsgByRow($wherePhone,['id,phone']);
+         $LawyerInformation = LawyerInformation::getMsgByRow($wherePhone,['id,phone,name,profile_photo,fw_end_date']);
          if(empty($LawyerInformation)){
              $this->success('ok',$data);
          }
@@ -63,6 +63,7 @@ class LawyerOperationalData  extends AuthController
         //获取运营数据
         $lawyer_operational_data = LawyerOperationalDataModel::getRowData($LawyerInformation['id']);
         $data['lawyer_operational_data'] = $lawyer_operational_data;
+        $data['lawyer'] = $LawyerInformation;
         $data['user_identity'] = 1; //普通用户  0； 1律师用户
         $this->success('ok',$data);
     }

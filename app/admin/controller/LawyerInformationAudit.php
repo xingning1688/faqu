@@ -121,7 +121,7 @@ class LawyerInformationAudit extends Controller
             }
 
             if( !empty($data['phone']) ){
-                if(!preg_match("/^1[345678]\d{9}$/",$data['phone'])){
+                if(!preg_match("/^1[3456789]\d{9}$/",$data['phone'])){
                     $this->error('手机号不合法');
                 }
             }
@@ -278,7 +278,6 @@ class LawyerInformationAudit extends Controller
      */
     public function add_operational_data()
     {
-
         SystemUser::mForm('operational_data_form');
     }
 
