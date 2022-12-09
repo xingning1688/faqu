@@ -154,7 +154,7 @@ class Login  extends Controller
         if(!empty($phone_encryptedData) && !empty($phone_iv)){
             $phoneData = $KuaiShouModel->decryptData($phone_encryptedData,$phone_iv,$session_key);
             if($phoneData === false){
-                $this->error('信息获取失败');
+                $this->error('信息获取失败2');
             }
 
             if(isset($phoneData['phoneNumber']) && !empty($phoneData['phoneNumber'])){

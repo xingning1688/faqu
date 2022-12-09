@@ -55,7 +55,7 @@
 
         <div class="layui-form-item">
             <label class="color-green font-w7">专题研究</label>
-            <div class="layui-input">
+            <div class="layui-input" style="height:100%;">
                 {foreach $type_arr as $item}
 
                 <input type="checkbox" name="professional_field_id[]" title="{$item.professional}" value="{$item.id|default=''}" {if (isset($professional_field_ids) && in_array($item.id,$professional_field_ids)) } checked {/if} />

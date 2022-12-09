@@ -62,6 +62,15 @@ class LawyerOperationalData  extends AuthController
 
         //获取运营数据
         $lawyer_operational_data = LawyerOperationalDataModel::getRowData($LawyerInformation['id']);
+        if(empty($LawyerInformation['fw_end_date']) || $LawyerInformation['fw_end_date'] == '0000-00-00 00:00:00'){
+            $LawyerInformation['fw_end_date'] = '';
+        }else{
+            $LawyerInformation['fw_end_date'] = date('Y-m-d',strtotime($LawyerInformation['fw_end_date']));
+        }
+        if(isset($lawyer_operational_data['data_end'])){
+            $lawyer_operational_data['data_end'] = date('Y-m-d',strtotime($lawyer_operational_data['data_end']));
+        }
+
         $data['lawyer_operational_data'] = $lawyer_operational_data;
         $data['lawyer'] = $LawyerInformation;
         $data['user_identity'] = 1; //普通用户  0； 1律师用户
