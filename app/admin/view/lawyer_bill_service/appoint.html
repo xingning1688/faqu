@@ -1,0 +1,30 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body think-box-shadow padding-left-40">
+        <fieldset class="margin-bottom-20 relative" data-max-index="0">
+            <legend class="color-green font-s14">审核<span class="color-desc font-s12"></span></legend>
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择</label>
+                <div class="layui-input-block">
+                    <select class="layui-select" name="status" lay-verify="" lay-search>
+                        <option value="">--请直接选择或搜索选择--</option>
+                        {foreach $status as $key=>$val}
+                        {if isset($vo.status) && $key==$vo.status}
+                        <option selected value="{$key}">{$val}</option>
+                        {else /}
+                        <option value="{$key}">{$val}</option>
+                        {/if}
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="layui-form-item text-center" style="margin-top: 250px;">
+            <input type="hidden" name="id" value="{$vo.id}">
+            <button class="layui-btn" type="submit">提交审核</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消审核</button>
+        </div>
+    </div>
+</form>
+
+<script> window.form.render(); </script>

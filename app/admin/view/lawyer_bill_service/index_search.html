@@ -1,0 +1,54 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">所属服务</label>
+            <label class="layui-input-inline">
+                <select name="type_id" class="layui-select">
+                    <option value=''>-- 全部 --</option>
+
+                    {foreach $type as $k=>$v}
+                    {if input('get.type_id') eq ''.$k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">所属律师</label>
+            <label class="layui-input-inline">
+                <select name="lawyer_information_id" class="layui-select">
+                    <option value=''>-- 全部 --</option>
+
+                    {foreach $lawyer as $k=>$v}
+                    {if input('get.lawyer_information_id') eq ''.$k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+
+                </select>
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">账单日期</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="bill_date" value="{:input('get.bill_date')}" placeholder="请选择账单日期" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+</fieldset>
+
+<script>form.render()</script>

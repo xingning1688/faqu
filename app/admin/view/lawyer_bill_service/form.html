@@ -1,0 +1,69 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">所属律师</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="lawyer_information_id">
+                <option value="0" data-type="0">--请选择--</option>
+                {foreach $lawyer as $id=>$name}
+                {if isset($vo.lawyer_information_id) && $id==$vo.lawyer_information_id}
+                <option selected value="{$id}">{$name}</option>
+                {else}
+                <option value="{$id}">{$name}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">服务内容</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="type_id">
+                <option value="0" data-type="0">--请选择--</option>
+                {foreach $type as $type_id=>$name}
+                {if isset($vo.type_id) && $type_id==$vo.type_id}
+                <option selected value="{$type_id}">{$name}</option>
+                {else}
+                <option value="{$type_id}">{$name}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">账单日期</span>
+            <input class="layui-input" data-date-input name="bill_date" placeholder="请选择账单日期" value="{$vo.bill_date|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">服务单价</span>
+            <input class="layui-input" name="price" placeholder="请输入价格" required value="{$vo.price|default='0.00'}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">服务数量</span>
+            <input class="layui-input" name="num" placeholder="服务数量" required value="{$vo.num|default=0}">
+        </label>
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+
+</script>
+{/block}
