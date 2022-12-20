@@ -29,6 +29,7 @@
                 <th class='list-table-sort-td'>
                     <button class="layui-btn layui-btn-xs" data-reload type="button">刷 新</button>
                 </th>
+                <th class='text-left nowrap'>Id</th>
                 <th class='text-left nowrap'>商品信息</th>
                 <th class='text-left nowrap'>是否首页</th>
                 <th class='text-left nowrap'>是否推荐</th>
@@ -46,6 +47,7 @@
                 <td class='list-table-sort-td'>
                     <label><input class="list-sort-input" data-action-blur="{:sysuri()}" data-loading="false" data-value="id#{$vo.id};action#sort;sort#{value}" value="{$vo.sort}"></label>
                 </td>
+                <td class='text-center nowrap'>{$vo.id}</td>
                 <td class='nowrap'>
                     {notempty name='vo.cover'}
                     <div class="headimg headimg-no" data-tips-hover data-tips-image data-lazy-src="{$vo.cover}"></div>
