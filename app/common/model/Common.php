@@ -13,6 +13,7 @@ use app\common\model\LawyerInformation;
 class Common extends Model {
     public static function getUserIdentity(){
         $parameter['open_id'] = request()->get('open_id','');
+        //$parameter['open_id'] = 'f18e60d357a1d1c414bf5724e59a0695';
         $data['code'] = 0;
         if(empty($parameter['open_id'])){
             $data['msg'] = '参数不合法';
@@ -35,7 +36,7 @@ class Common extends Model {
             return $data;
         }
         $wherePhone['phone'] = $PlatformUser['phone'];
-        $LawyerInformation = LawyerInformation::getMsgByRow($wherePhone,['id,phone,name,profile_photo,fw_end_date']);
+        $LawyerInformation = LawyerInformation::getMsgByRow($wherePhone,['id,user_id,phone,name,profile_photo,fw_end_date']);
         if(empty($LawyerInformation)){
             $data['code'] = 1;
             $data['msg'] = '普通用户，有手机号，暂无律师信息';
