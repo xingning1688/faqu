@@ -8,7 +8,7 @@
         <label class="layui-form-item">
             <span class="color-green font-w7 ">所属律师</span>
             <span class="color-desc margin-left-5"></span>
-            <select class="layui-select" name="lawyer_information_id">
+            <select class="layui-select" name="lawyer_information_id" lay-search="">
                 <option value="0" data-type="0">--请选择--</option>
                 {foreach $lawyer as $id=>$name}
                 {if isset($vo.lawyer_information_id) && $id==$vo.lawyer_information_id}
@@ -40,6 +40,7 @@
             <input class="layui-input" data-date-input name="bill_date" placeholder="请选择账单日期" value="{$vo.bill_date|default=''}">
         </label>
 
+
         <label class="layui-form-item">
             <span class="color-green font-w7">服务单价</span>
             <input class="layui-input" name="price" placeholder="请输入价格" required value="{$vo.price|default='0.00'}">
@@ -66,4 +67,6 @@
     window.form.render();
 
 </script>
+
+
 {/block}

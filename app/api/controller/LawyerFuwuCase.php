@@ -35,8 +35,8 @@ use app\common\model\LawyerCase;
 
 
 
-//class LawyerFuwuCase  extends AuthController
-class LawyerFuwuCase  extends Controller
+class LawyerFuwuCase  extends AuthController
+//class LawyerFuwuCase  extends Controller
 {
     //律师的 合同
     public  function  lawyerCase(){

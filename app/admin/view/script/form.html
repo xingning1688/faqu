@@ -1,0 +1,93 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">所属律师</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="lawyer_information_id" lay-search="">
+                <option value="0" data-type="0">--请选择--</option>
+                {foreach $lawyer as $id=>$name}
+                {if isset($vo.lawyer_information_id) && $id==$vo.lawyer_information_id}
+                <option selected value="{$id}">{$name}</option>
+                {else}
+                <option value="{$id}">{$name}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">脚本标题</span>
+            <span class="color-desc margin-left-5"></span>
+            <input class="layui-input" name="title" placeholder="请输入脚本标题" required value="{$vo.title|default=''}">
+        </label>
+
+        <div class="layui-form-item" >
+            <span class="label-required-prev font-w7 color-green">脚本内容</span>
+            <span class="color-desc margin-left-5"></span>
+            <textarea class="layui-hide" name="content">{$vo.content|default=''|raw}</textarea>
+        </div>
+
+        <div class="layui-form-item" >
+            <span class="label-required-prev font-w7 color-green">拍摄要求</span>
+            <span class="color-desc margin-left-5"></span>
+            <textarea class="layui-hide" name="demand">{$vo.demand|default=''|raw}</textarea>
+        </div>
+
+        <div class="layui-form-item" >
+            <span class="label-required-prev font-w7 color-green">注意事项</span>
+            <span class="color-desc margin-left-5"></span>
+            <textarea class="layui-hide" name="notice">{$vo.notice|default=''|raw}</textarea>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content"]', {height: 500});
+        window.createEditor('[name="demand"]', {height: 200});
+        window.createEditor('[name="notice"]', {height: 200});
+        /*window.createEditor('[name="audio_desc"]', {height: 500});*/
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+    });
+
+</script>
+
+
+{/block}
