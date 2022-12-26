@@ -91,6 +91,7 @@ class Script extends Controller
     public function edit()
     {
         $this->title = '编辑脚本';
+        $this->status =  [0=>'待拍摄','1'=>'已拍摄'];
         $this->_form($this->table, 'form');
     }
 
@@ -110,7 +111,7 @@ class Script extends Controller
         $this->type = $type;
         if($this->request->isGet()){
             $this->title = '添加脚本';
-        }elseif($this->request->isPost()){
+        }elseif($this->request->isPost()){  //dump($data);exit;
             if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
             if (empty($data['content'])) $this->error('请填写脚本内容！');
         }

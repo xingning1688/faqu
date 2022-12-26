@@ -21,6 +21,11 @@
         </label>
 
         <label class="layui-form-item">
+            <span class="color-green font-w7">脚本日期</span>
+            <input class="layui-input" data-date-input name="script_date" placeholder="请选择脚本日期" value="{$vo.script_date|default=''}">
+        </label>
+
+        <label class="layui-form-item">
             <span class="color-green font-w7">脚本标题</span>
             <span class="color-desc margin-left-5"></span>
             <input class="layui-input" name="title" placeholder="请输入脚本标题" required value="{$vo.title|default=''}">
@@ -49,7 +54,20 @@
 
 
 
-
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">状态</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="status" lay-search="">
+                <!--<option value="0" data-type="0">&#45;&#45;请选择&#45;&#45;</option>-->
+                {foreach $status as $key=>$item}
+                {if isset($vo.status) && $key==$vo.status}
+                <option selected value="{$key}">{$item}</option>
+                {else}
+                <option value="{$key}">{$item}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
 
 
 
