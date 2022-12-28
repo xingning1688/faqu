@@ -57,7 +57,65 @@ class LawyerFuwuCase  extends AuthController
     }
 
 
+    //添加合同
+    public function addCase(){
+        //test
+        /*$data['user_id'] = 0;
+        $data['title'] = request()->param('title','title');
+        $data['contract_type_id'] = request()->param('contract_type_id',1);
+        $data['file_url'] = request()->param('file_url','file_url');
+        $data['author'] = request()->param('author','author');
+        $data['page'] = request()->param('page',0);
+        $data['original_price'] = request()->param('original_price',0.00);
+        $data['sales_price'] = request()->param('sales_price',0.00);*/
+        //test
 
+        $userIdentity = Common::getUserIdentity();
+        if($userIdentity['code'] == 0){
+            $this->error($userIdentity['msg']);
+        }
+
+        if(($userIdentity['code'] == 1) && ($userIdentity['user_identity'] == 0) ){
+            $this->error('普通用户，暂无其他数据',$userIdentity);
+        }
+
+        $LawyerInformation = $userIdentity['lawyerInformation'];
+        $data['user_id'] = $LawyerInformation['user_id'];
+        $data['title'] = request()->param('title','');
+        $data['contract_type_id'] = request()->param('contract_type_id',0);
+        $data['file_url'] = request()->param('file_url','');
+        $data['author'] = request()->param('author','');
+        $data['page'] = request()->param('page',0);
+        $data['original_price'] = request()->param('original_price',0.00);
+        $data['sales_price'] = request()->param('sales_price',0.00);
+
+        if(empty($data['title'])){
+            $this->error('合同标题不能为空');
+        }
+
+        if(empty($data['contract_type_id'] )){
+            $this->error('合同类型不能为空');
+        }
+
+        if(empty($data['file_url'] )){
+            $this->error('请上传合同');
+        }
+
+        if(empty($data['author'] )){
+            $this->error('拟定人不能为空');
+        }
+
+        if(!is_numeric($data['original_price']) || !is_numeric($data['sales_price'])){
+            $this->error('价格类型不正确');
+        }
+
+        $res = LawyerCase::addData($data);
+        if($res === false){
+            $this->error('合同添加失败');
+        }
+        $this->success('合同添加成功');
+
+    }
 
 
 

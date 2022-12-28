@@ -43,6 +43,14 @@ class LawyerCase extends BaseModel {
         return $query;
     }
 
+    public static  function addData($data){
+        $res = self::create($data);
+        if(!$res){
+            return false;
+        }
+        return true;
+    }
+
 
 
 

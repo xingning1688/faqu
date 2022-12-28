@@ -12,7 +12,8 @@ use app\api\model\PlatformUser;
 use app\common\model\LawyerInformation;
 class Common extends Model {
     public static function getUserIdentity(){
-        $parameter['open_id'] = request()->get('open_id','');
+        //$parameter['open_id'] = request()->get('open_id','');
+        $parameter['open_id'] = request()->param('open_id','');
         //$parameter['open_id'] = 'f18e60d357a1d1c414bf5724e59a0695';
         $data['code'] = 0;
         if(empty($parameter['open_id'])){
