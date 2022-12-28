@@ -35,7 +35,6 @@ use app\common\model\LawyerScript as LawyerScriptModel;
 
 
 
-
 class LawyerScript  extends AuthController
 //class LawyerScript  extends Controller
 {
@@ -57,12 +56,25 @@ class LawyerScript  extends AuthController
 
     }
 
+    // 脚本详情
+    public function scriptDetail(){
+        $id = request()->param('id', 0);
+        if(empty($id) || !is_numeric($id)){
+            $this->error('参数错误');
+        }
+        $data = LawyerScriptModel::detail($id);
+        if(empty($data)){
+            $this->error('暂无数据');
+        }
+        $this->success('ok',$data);
+    }
 
 
 
 
 
-    
+
+
 
 
 

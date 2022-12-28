@@ -49,6 +49,17 @@ class LawyerScript extends BaseModel {
     }
 
 
+    public static function detail($id){
+        $data = self::find($id);
+        if(empty($data)){
+            return [];
+        }
+        $data = $data->toArray();
+
+        return $data;
+    }
+
+
 
 
 
