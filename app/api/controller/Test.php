@@ -32,7 +32,7 @@ use app\common\model\QiChaCha;
 
 
 
-class Test  extends  Controller{
+class Test  extends   Controller{
 
     //发起支付
     public function test(){
