@@ -34,10 +34,10 @@ class LeaveMessage extends BaseModel {
         if (isset($search['type']) && $search['type']) {
 
             if($search['type'] == 1){
-                $query/*->where('pay_status',1)*/->whereIn('status',[0,1,2]);
+                $query->where('pay_status',1)->whereIn('status',[0,1,2]);
 
             }elseif($search['type'] == 2){
-                $query/*->where('pay_status',1)*/->where('status',3);
+                $query->where('pay_status',1)->where('status',3);
             }
         }
 

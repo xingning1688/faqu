@@ -1,0 +1,157 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+<style>
+    .item{border:solid 1px #EEE; margin-left:20px;margin-bottom:10px;}
+    .item span{font-size:24px;line-height:24px;width:15px;heigth:24px;display: inline-block;text-align: center;cursor:pointer;}
+    .item input{font-size:16px;text-align: center;}
+    /*.item .jian{line-height:20px;}
+    .item .jian{line-height:20px;}*/
+</style>
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">所属律师</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="lawyer_information_id" lay-search="">
+                <option value="0" data-type="0"></option>
+                {foreach $lawyer as $id=>$name}
+                {if isset($vo.lawyer_information_id) && $id==$vo.lawyer_information_id}
+                <option selected value="{$id}">{$name}</option>
+                {else}
+                <option value="{$id}">{$name}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+        <!--<label class="layui-form-item">
+            <span class="color-green font-w7 ">服务内容</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="type_id">
+                <option value="0" data-type="0">&#45;&#45;请选择&#45;&#45;</option>
+                {foreach $type as $type_id=>$name}
+                {if isset($vo.type_id) && $type_id==$vo.type_id}
+                <option selected value="{$type_id}">{$name}</option>
+                {else}
+                <option value="{$type_id}">{$name}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>-->
+
+
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">账单日期</span>
+            <input class="layui-input" data-date-input name="bill_date" placeholder="请选择账单日期" value="{$vo.bill_date|default=''}">
+        </label>
+
+
+       <!-- <label class="layui-form-item">
+            <span class="color-green font-w7">服务单价</span>
+            <input class="layui-input" name="price" placeholder="请输入价格" required value="{$vo.price|default='0.00'}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">服务数量1</span>
+            <input class="layui-input" name="num" placeholder="服务数量" required value="{$vo.num|default=0}">
+        </label>-->
+
+        <!--服务start -->
+        <div class="layui-form-item">
+            <div class="help-label"><b>服务</b></div>
+            <div class="layui-textarea help-checks">
+                {foreach $type2 as $item}
+                <div class="item">
+
+                    <label class="think-checkbox">
+                        <input type="checkbox"  name="fuwu[{$item['type_id']}]" value="{$item['type_id']}" lay-ignore>{$item['type_name']} ({$item['price']})
+                    </label>
+
+                    <span class="jian">-</span> <input type="text" style="width:20px;" name="num[{$item['type_id']}]" value="0"> <span  class="jia">+</span>
+
+                </div>
+                {/foreach}
+
+
+
+            </div>
+        </div>
+        <!--服务end -->
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content"]', {height: 500});
+        window.createEditor('[name="audio_desc"]', {height: 500});
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+    });
+
+</script>
+<script>
+    $(document).ready(function(){
+        $(".jia").click(function(){
+            var input_val = $(this).siblings("input").val();
+
+            input_val =  parseInt(input_val)+1;
+            if(input_val > 0){
+                $(this).siblings("label").find("input").prop("checked",true);
+            }
+            $(this).siblings("input").val(input_val);
+        });
+
+        $(".jian").click(function(){
+            var input_val = $(this).siblings("input").val();
+
+            input_val =  parseInt(input_val)-1;
+            if(input_val <= 0){
+                input_val = 0;
+                $(this).siblings("label").find("input").prop("checked",false);
+            }
+            $(this).siblings("input").val(input_val);
+        });
+
+        $("input[type='text']").blur(function(){
+            var input_val = $(this).val();
+            if(input_val > 0){
+                $(this).siblings("label").find("input").prop("checked",true);
+            }else{
+                input_val = 0;
+                $(this).siblings("label").find("input").prop("checked",false);
+            }
+            $(this).val(input_val);
+
+        });
+
+
+
+
+    });
+</script>
+
+
+{/block}
