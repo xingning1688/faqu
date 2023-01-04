@@ -42,9 +42,10 @@ class LawyerInformations extends BaseModel {
                     ->where($where)
                     ->limit($limit)
                     ->page($page)
-                    ->order('id', 'asc')
+                    ->order('id', 'desc')
                     ->select()
                     ->toArray();
+        shuffle($list);//打乱当前页的顺序
         $count = self::where($where)->count('id');
 
         if(empty($list)){
