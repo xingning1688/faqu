@@ -1,0 +1,114 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">所属律师</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="lawyer_information_id" lay-search=""  required  disabled>
+                <option value="0" data-type="0"></option>
+                {foreach $lawyer as $id=>$name}
+                {if isset($vo.lawyer_information_id) && $id==$vo.lawyer_information_id}
+                <option selected value="{$id}">{$name}</option>
+                {else}
+                <option value="{$id}">{$name}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+
+        <div class="layui-form-item" >
+            <span class="label-required-prev font-w7 color-green">问题</span>
+            <textarea class="layui-textarea" name="problem" placeholder="请输入问题" required  disabled> {$vo.problem|default=''|raw}</textarea>
+        </div>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">姓名</span>
+            <span class="color-desc margin-left-5"></span>
+            <input class="layui-input" name="name" placeholder="请输入姓名"  required disabled  value="{$vo.name|default=''}">
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">联系电话</span>
+            <span class="color-desc margin-left-5"></span>
+            <input class="layui-input" name="phone" placeholder="请输入联系电话" required disabled value="{$vo.phone|default=''}">
+        </label>
+
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7">案源地址</span>
+            <span class="color-desc margin-left-5"></span>
+            <input class="layui-input" name="address" placeholder="请输入案源地址" required  disabled  value="{$vo.address|default=''}">
+        </label>
+
+
+
+        {notempty name='vo.id'}
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">状态</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="status"  disabled>
+
+                {foreach $status as $key=>$item}
+                {if isset($vo.status) && $key==$vo.status}
+                <option selected value="{$key}">{$item}</option>
+                {else}
+                <option value="{$key}">{$item}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">是否上下架</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="is_shelves" disabled >
+
+                {foreach $is_shelves as $key=>$item}
+                {if isset($vo.is_shelves) && $key==$vo.is_shelves}
+                <option selected value="{$key}">{$item}</option>
+                {else}
+                <option value="{$key}">{$item}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+        {/notempty}
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">返回</button>
+        </div>
+
+
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+
+    require(['ckeditor', 'angular'], function () {
+
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                    history.back(), $.msg.close(index);
+            };
+        }
+    });
+
+</script>
+
+
+{/block}
