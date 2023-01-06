@@ -137,12 +137,75 @@ class CaseSourceSquare extends Controller
             if (empty($data['problem'])) $this->error('请填写问题内容！');
             if (empty($data['name'])) $this->error('请填写姓名！');
             if (empty($data['phone'])) $this->error('请填写联系电话！');
-            if (empty($data['address'])) $this->error('请填写联系地址！');
+            if (empty($data['province'])) $this->error('请填选择省份！');
+            if (empty($data['city'])) $this->error('请填选择城市！');
+            if (empty($data['area'])) $this->error('请填选择区域！');
 
             if(!preg_match("/^1[3456789]\d{9}$/",$data['phone'])){
                 $this->error('手机号不合法');
             }
+            //$data['shelves_time'] = date('Y-m-d H:i:s',time());
+        }
+    }
+
+    /**
+     * 表单数据处理
+     * @param array $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    protected function _add_form_filter(array &$data)
+    {
+        $lawyer = LawyerInformation::allLawyer();
+        $this->lawyer = $lawyer;
+        $this-> is_shelves;
+        if($this->request->isGet()){
+            $this->title = '案源广场';
+        }elseif($this->request->isPost()){
+            if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
+            if (empty($data['problem'])) $this->error('请填写问题内容！');
+            if (empty($data['name'])) $this->error('请填写姓名！');
+            if (empty($data['phone'])) $this->error('请填写联系电话！');
+            if (empty($data['province'])) $this->error('请填选择省份！');
+            if (empty($data['city'])) $this->error('请填选择城市！');
+            if (empty($data['area'])) $this->error('请填选择区域！');
+
+            if(!preg_match("/^1[3456789]\d{9}$/",$data['phone'])){
+                $this->error('手机号不合法');
+            }
+            $data['allocate_time'] = date('Y-m-d H:i:s',time());
             $data['shelves_time'] = date('Y-m-d H:i:s',time());
+        }
+    }
+
+    /**
+     * 表单数据处理
+     * @param array $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    protected function _edit_form_filter(array &$data)
+    {
+        $lawyer = LawyerInformation::allLawyer();
+        $this->lawyer = $lawyer;
+        $this-> is_shelves;
+        if($this->request->isGet()){
+            $this->title = '案源广场';
+        }elseif($this->request->isPost()){
+            if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
+            if (empty($data['problem'])) $this->error('请填写问题内容！');
+            if (empty($data['name'])) $this->error('请填写姓名！');
+            if (empty($data['phone'])) $this->error('请填写联系电话！');
+            if (empty($data['province'])) $this->error('请填选择省份！');
+            if (empty($data['city'])) $this->error('请填选择城市！');
+            if (empty($data['area'])) $this->error('请填选择区域！');
+
+            if(!preg_match("/^1[3456789]\d{9}$/",$data['phone'])){
+                $this->error('手机号不合法');
+            }
+
         }
     }
 

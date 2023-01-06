@@ -39,13 +39,20 @@
         </label>
 
 
-        <label class="layui-form-item">
+        <!--<label class="layui-form-item">
             <span class="color-green font-w7">案源地址</span>
             <span class="color-desc margin-left-5"></span>
             <input class="layui-input" name="address" placeholder="请输入案源地址" required  value="{$vo.address|default=''}">
-        </label>
+        </label>-->
 
-
+        <div class="layui-form-item label-required-prev">
+            <span class="help-label"><b>案源地址</b></span>
+            <div class="layui-row layui-col-space10">
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="province"></select></label>
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="city"></select></label>
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="area"></select></label>
+            </div>
+        </div>
 
         {notempty name='vo.id'}
         <label class="layui-form-item">
@@ -87,6 +94,15 @@
             <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
         </div>
     </div>
+
+
+    <script>
+        require(['pcasunzips'], function () {
+            (function (province, city, area) {
+                new PCAS("province", "city", "area", province, city, area);
+            })('{$vo.province|default=""}', '{$vo.city|default=""}', '{$vo.area|default=""}');
+        });
+    </script>
 </form>
 {/block}
 
