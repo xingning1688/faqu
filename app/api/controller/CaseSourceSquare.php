@@ -36,8 +36,8 @@ use app\common\model\CaseSourceSquare as CaseSourceSquareModel;
 
 
 
-//class CaseSourceSquare  extends AuthController
-class CaseSourceSquare  extends Controller
+class CaseSourceSquare  extends AuthController
+//class CaseSourceSquare  extends Controller
 {
     //用户添加案源广场
     public function addCaseSourceSquare(){
@@ -62,11 +62,7 @@ class CaseSourceSquare  extends Controller
         $data['area'] = request()->post('area','');
 
         $data['shelves_time'] =date('Y-m-d H:i:s',time());
-        if(!empty($data['lawyer_information_id'])){
-            $data['allocate_time'] =date('Y-m-d H:i:s',time());
-        }
-
-
+        $data['status'] = 1;
 
         $res = $this->check($data);
         if($res!==true){
@@ -137,6 +133,10 @@ class CaseSourceSquare  extends Controller
 
         $data['open_id'] = request()->post('open_id',''); //律师的open_id
         $data['id'] = request()->post('id',0); //案源id
+        $data['type'] = request()->post('type',0); //案源id  案源广场接收案源 1 ；我的待接收列表 接收案源 2
+        if(empty($data['type'])){
+            $this->error('参数错误：type');
+        }
 
         $userIdentity = Common::getUserIdentity();
         if($userIdentity['code'] == 0){
@@ -149,13 +149,24 @@ class CaseSourceSquare  extends Controller
 
         $LawyerInformation = $userIdentity['lawyerInformation'];
 
-        $num = CaseSourceSquareModel::where('lawyer_information_id',$LawyerInformation['id'])->where('is_shelves',0)->where('status',1)->count();
-        if($num>=1){
-            $this->error('你有未处理的案源，请处理完成再接收新的案源');
+        $caseData['id'] = $data['id'];
+        $caseData['allocate_time'] = date('Y-m-d H:i:s',time());
+        $caseData['status'] = 2;
+        if($data['type'] == 1){
+            $num = CaseSourceSquareModel::where('lawyer_information_id',$LawyerInformation['id'])->where('is_shelves',0)->where('status',1)->count();
+            if($num>=1){
+                $this->error('你有未处理的案源，请处理完成再接收新的案源');
+            }
+
+            $num = CaseSourceSquareModel::where('lawyer_information_id',$LawyerInformation['id'])->whereTime('finish_time','today')->where('status',3)->count();
+            if($num>=5){
+                $this->error('今天已到接收案源上限，请明天再接收新的案源');
+            }
+
+
+            $caseData['lawyer_information_id'] = $LawyerInformation['id'];
         }
 
-        $caseData['id'] = $data['id'];
-        $caseData['lawyer_information_id'] = $LawyerInformation['id'];
         $res = CaseSourceSquareModel::receivingSource($caseData);
         if($res === false){
             $this->error('接收案源失败');

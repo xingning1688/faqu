@@ -20,6 +20,7 @@ use app\api\model\Jwt;
 use app\api\model\LeaveMessages;
 use app\api\model\PlatformUser;
 use app\api\validate\Feedback as FeedbackValidate;
+use app\common\model\PayKs;
 use think\admin\Controller;
 use think\facade\Db;
 use app\api\model\Feedback as FeedbackModel;
@@ -39,6 +40,30 @@ use app\common\model\CaseSourceSquare as CaseSourceSquareModel;
 
 class TimedTask  extends Controller
 {
+
+    //定时任务 申请结算
+    public function settleKs(){
+        //dump (strtotime('2023-01-05')); echo "<br/>";
+        //dump (strtotime('2023-01-01')); echo "<br/>";exit;
+
+        //超过1h时间的 (状态是 已经分配律师的，并且是上架的)
+        $time = time()-80*3600;
+        $data = Order::where('platform',1)->where('pay_status',1)->where('is_settle',0)->whereTime('pay_time','<=',$time)->order('pay_time','asc')->limit(50)->select()->toArray();
+
+        if(empty($data)){
+            $this->success('暂无数据');
+        }
+        $payKs = new PayKs();
+        foreach($data as $key=>$item){
+            $res =$payKs->settle($item['order_no'],3); dump($res);exit;
+            if($res !== true){
+                continue;
+            }
+        }
+
+
+    }
+
 
     //定时任务 打回广场  （首先是接收的，）
     public function  backSquare(){
@@ -65,6 +90,7 @@ class TimedTask  extends Controller
         $this->success('成功');
 
     }
+
 
 
 

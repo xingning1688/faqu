@@ -80,6 +80,44 @@
         </label>
         {/notempty}
 
+
+
+        {notempty name='vo.case_data'}
+        <div class="layui-tab" style="padding-top:20px;">
+            <div class="">
+                <div class="layui-tab-item layui-show">
+                    <div>问题反馈记录：</div>
+                    <table class="layui-table margin-top-10" lay-skin="line">
+                        <thead>
+                        <tr>
+                            <th class='text-center nowrap' width="5%">ID</th>
+                            <th class='text-center nowrap' width="10%">律师</th>
+                            <th class='text-center nowrap' width="10%">描述</th>
+                            <th class='text-center nowrap' width="10%">类型</th>
+                            <th class='text-center nowrap' width="15%">状态</th>
+                            <th class='text-center nowrap' width="15%">添加时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $vo.case_data as $item}
+                        <tr>
+                            <td class='text-center nowrap'>{$item.id}</td>
+                            <td class='text-center nowrap'>{$item.lawyer_user_name}</td>
+                            <td class='text-center nowrap'>{$item.description}</td>
+                            <td class='text-center nowrap'>{$item.type}</td>
+                            <td class='text-center nowrap'>{$item.status}</td>
+                            <td class='text-center nowrap'>{$item.create_time}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {/notempty}
+
+
+
+
         <div class="hr-line-dashed margin-top-40"></div>
         {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
         <div class="layui-form-item text-center">

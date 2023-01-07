@@ -49,7 +49,7 @@ class CaseSourceSquare extends BaseModel {
             $query->where('lawyer_information_id',$search['lawyer_information_id']);
         }
 
-        if ($search['status'] != '') {
+        if ($search['status'] !== '') {
             $query->where('status',$search['status']);
         }
 
@@ -70,7 +70,8 @@ class CaseSourceSquare extends BaseModel {
 
      public static function receivingSource($data){
 
-         $res = self::where('is_shelves',0)->where('id',$data['id'])->update(['lawyer_information_id'=>$data['lawyer_information_id'],'allocate_time'=>date('Y-m-d H:i:s',time()),'status'=>1]);
+         //$res = self::where('is_shelves',0)->where('id',$data['id'])->update(['lawyer_information_id'=>$data['lawyer_information_id'],'allocate_time'=>date('Y-m-d H:i:s',time()),'status'=>2]);
+         $res = self::where('is_shelves',0)->where('id',$data['id'])->update($data);
          if(!$res){
             return false;
          }
@@ -97,7 +98,7 @@ class CaseSourceSquare extends BaseModel {
         Db::startTrans();
         try {
             CaseSourceSquareDetail::create($data);
-            CaseSourceSquare::where('id',$data['case_source_square_id'])->update(['finish_time'=>date('Y-m-d H:i:s',time()),'status'=>2]);
+            CaseSourceSquare::where('id',$data['case_source_square_id'])->update(['finish_time'=>date('Y-m-d H:i:s',time()),'status'=>3]);
             // 提交事务
             Db::commit();
         } catch (\Exception $e) {

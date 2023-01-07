@@ -112,6 +112,51 @@ class PayKs extends BaseModel{
 
     }
 
+
+    //发起结算单
+    public function settle($orderNo,$order_type,$amount=0){
+        $platformAccess = PlatformAccess::getPlatform(1);
+        if(empty($platformAccess)){
+            return '快手平台信息获取失败';
+        }
+
+        $access_token = $this->getAccessToken($platformAccess);//获取平台的 access
+        if($access_token === false){
+            return 'access_token失败';
+        }
+
+        $notify_url = 'https://'.$_SERVER['SERVER_NAME'].'/common/PayNotify/settleNotify';
+        $attach = ['order_type'=>$order_type];//自定义字段 订单类型
+        $config['app_id'] =  $platformAccess['app_id'];
+        $config['access_token'] = $access_token;
+
+        $postData['out_order_no'] =   $orderNo;
+        $postData['out_settle_no'] =   $orderNo;
+        $postData['reason'] =   '申请结算';
+        $postData['notify_url'] =   $notify_url;
+        $postData['attach'] =  json_encode($attach);
+        $postData['sign'] = $this->makeSign($config,$postData,$platformAccess['app_secret']);
+
+        $url = 'https://open.kuaishou.com/openapi/mp/developer/epay/settle?'.http_build_query($config);
+
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($order['order_price'],true)."\r\n",FILE_APPEND | LOCK_EX);
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($postData['total_amount'],true)."\r\n",FILE_APPEND | LOCK_EX);
+        $postData = json_encode($postData);
+        $headers = [
+            'Content-Type: application/json',
+        ];
+        $res = $this->doCurl($url,1,$postData,$headers);
+        $res =  json_decode($res,true);
+        if($res['result'] !== 1){   dump($res);exit;
+            //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+            return false;
+        }
+
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+        return true;
+    }
+
+
     public function makeSign($config,$postData,$appSecret){
         unset($config['access_token']);
         $arr = array_merge($config,$postData);

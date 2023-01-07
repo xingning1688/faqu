@@ -28,3 +28,12 @@ function _minipay_log($msg='') {
 
     file_put_contents($_SERVER['DOCUMENT_ROOT'].'/../runtime/data/pay/minipay_'.date('Y-m-d').'.txt',$msg."\r\n",FILE_APPEND);
 }
+
+// 小程序 快手申请结算回调 日志记录
+function settleNotifyLog($msg='') {
+    if(is_array($msg)) {
+        $msg = json_encode($msg);
+    }
+
+    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/../runtime/data/pay/settle_notify_'.date('Y-m-d').'.txt',$msg."\r\n",FILE_APPEND);
+}

@@ -26,7 +26,7 @@ use app\admin\model\CaseSourceSquare as CaseSourceSquareModel;
 class CaseSourceSquare extends Controller
 {
     private $table = 'case_source_square';
-    public $status = [0=>'待接收','1'=>'已接收','2'=>'已完成'];
+    public $status = [0=>'待处理','1'=>'待接收','2'=>'已接收','3'=>'已完成'];
     public $is_shelves = [0=>'上架','1'=>'下架'];
     /**
      * 案源广场列表
@@ -174,8 +174,9 @@ class CaseSourceSquare extends Controller
             if(!preg_match("/^1[3456789]\d{9}$/",$data['phone'])){
                 $this->error('手机号不合法');
             }
-            $data['allocate_time'] = date('Y-m-d H:i:s',time());
+
             $data['shelves_time'] = date('Y-m-d H:i:s',time());
+            $data['status'] = 1;
         }
     }
 
@@ -207,6 +208,44 @@ class CaseSourceSquare extends Controller
             }
 
         }
+    }
+
+    /**
+     * 表单数据处理
+     * @param array $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    protected function _show_form_filter(array &$data)
+    {
+        $lawyer = LawyerInformation::allLawyer();
+        $this->lawyer = $lawyer;
+        $this-> is_shelves;
+        if($this->request->isGet()){
+            $this->title = '案源广场';
+        }
+
+        //获取当前的 问题反馈详情
+        $caseData = $this->app->db->name('case_source_square_detail')->where('case_source_square_id', $data['id'])->order('create_time','desc')->select();
+        if(empty($caseData)){
+            $data['case_data'] = [];
+        }
+        $data['case_data'] = $caseData->toArray();
+        if(!empty($data['case_data'])){
+            $status = $this->status;
+            $type = [0 => '定时任务',1=> '律师操作',2=> '管理员操作'];
+
+            $data['case_data'] = array_map(function($item) use($lawyer,$status,$type){
+                $item['lawyer_user_name'] = isset($lawyer[$item['lawyer_information_id']])? $lawyer[$item['lawyer_information_id']] : '';
+                $item['status'] = isset($status[$item['status']]) ? $status[$item['status']] : '';
+                $item['type'] = isset($type[$item['type']]) ? $type[$item['type']] : '';
+                return $item;
+            },$data['case_data']);
+        }
+
+
+
     }
 
     /**

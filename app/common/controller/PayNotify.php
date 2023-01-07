@@ -268,6 +268,93 @@ class PayNotify  extends Controller
         echo $this->getKsReturn($return,$result['message_id']);
     }
 
+    //快手平台 申请结算 异步回调
+    public function settleNotify(){
+        $return = false;
+        $result = file_get_contents("php://input");
+        settleNotifyLog('快手小程序 申请结算 异步通知返回数据：' . $result);
+        $result = json_decode($result,true);
+
+        if(($result['data']['status'] == 'SUCCESS') ){
+
+            $kwaisign = isset($_SERVER['HTTP_KWAISIGN'])? $_SERVER['HTTP_KWAISIGN'] : '';
+            $appSecret = 'xs9iePnaFdIFG6GBCCw5mw';
+            $resulta = json_encode($result);
+            $notify = md5($resulta.$appSecret);
+            if($notify != $kwaisign){
+                settleNotifyLog('失败-验签失败：快手小程序 申请结算 异步通知返回数据：' . $result);
+                return false;
+            }
+
+
+            if(isset($result['data']['attach'])){
+                $attach = json_decode($result['data']['attach'],true);
+            }
+
+
+            $data['out_settle_no'] =  $result['data']['out_settle_no'];  //外部结算单号，即开发者结算请求的单号。
+            $data['attach'] =  $result['data']['attach'];               //预下单时携带的开发者自定义信息
+            $data['settle_amount'] =  $result['data']['settle_amount'];//结算金额，单位：分
+            $data['status'] =  $result['data']['settle_amount'];      //结算状态。 取值： PROCESSING-处理中，SUCCESS-成功，FAILED-失败
+            $data['ks_order_no'] =  $result['data']['ks_order_no'];  //快手小程序平台订单号。
+            $data['ks_settle_no'] =  $result['data']['ks_settle_no'];  //快手小程序平台结算单号。
+            $data['enable_promotion'] =  $result['data']['enable_promotion'];  //是否参与分销，true:分销，false:非分销
+            $data['promotion_amount'] =  $result['data']['promotion_amount'];  //预计分销金额，单位：分
+
+
+            if(isset($attach['order_type']) && $attach['order_type']==1 ){
+                $dataOrder = Db::name('order_contract')->where(['order_no'=>$data['out_settle_no'],'pay_status'=>1,'is_settle'=>0])->field('id')->find();
+
+                if(!empty($dataOrder)) {
+                    try {
+                        // 修改订单状态
+
+                        $ordersData['is_settle'] = 1;
+
+                        $res = Db::name('order_contract')->where('id', $dataOrder['id'])->update($ordersData);
+                        $return =true;
+                    } catch (\Exception $e) {
+                        settleNotifyLog('order_contract快手平台-申请结算-失败-异常：商城系统中的订单编号:'.$data['out_settle_no'].'订单修改失败 (失败原因：'.$e->getMessage().')');
+                    }
+                }
+            }elseif(isset($attach['order_type']) && $attach['order_type']==2 ){
+                //file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
+                $dataOrder = Db::name('leave_message')->where(['order_no'=>$data['out_settle_no'],'pay_status'=>1,'is_settle'=>0])->field('id')->find();
+                //settleNotifyLog('leave_message 订单数据: '.json_encode($dataOrder));
+                if(!empty($dataOrder)) {
+                    try {
+                        // 修改订单状态
+                        $ordersData['is_settle'] = 1;
+                        $res = Db::name('leave_message')->where('id', $dataOrder['id'])->update($ordersData);
+                        $return =true;
+                    } catch (\Exception $e) {
+                        settleNotifyLog('leave_message快手平台-申请结算-失败失败-异常：商城系统中的订单编号:'.$data['out_settle_no'].'订单修改失败 (失败原因：'.$e->getMessage().')');
+                    }
+                }
+            }elseif(isset($attach['order_type']) && $attach['order_type']==3 ){
+                //file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
+                $dataOrder = Db::name('order')->where(['order_no'=>$data['out_settle_no'],'pay_status'=>1,'is_settle'=>0])->field('id')->find();
+
+                if(!empty($dataOrder)) {
+                    try {
+                        // 修改订单状态
+                        $ordersData['is_settle'] = 1;
+
+                        $res = Db::name('order')->where('id', $dataOrder['id'])->update($ordersData);
+                        $return =true;
+                    } catch (\Exception $e) {
+                        settleNotifyLog('order快手平台-申请结算-异常：商城系统中的订单编号:'.$data['out_settle_no'].'订单修改失败 (失败原因：'.$e->getMessage().')');
+                    }
+                }
+            }
+
+        } else {
+            settleNotifyLog('快手平台 申请结算失败 (失败原因状态：'.$result['data']['status'].')');
+        }
+
+        echo $this->getKsReturn($return,$result['message_id']);
+    }
+
     public function getKsReturn($result = false,$message_id) {
         $msg['result'] = 0;
         if($result===true){
