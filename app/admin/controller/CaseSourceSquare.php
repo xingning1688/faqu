@@ -18,7 +18,7 @@ use app\common\model\LawyerInformation;
 use app\admin\model\CaseSourceSquare as CaseSourceSquareModel;
 
 /**
- * 案源广场管理
+ * 法律线索管理
  * @auth true  # 表示需要验证权限
  * @menu true  # 添加系统菜单节点
  * @login true # 强制登录才可访问
@@ -37,7 +37,7 @@ class CaseSourceSquare extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      */
     public function index() {
-        $this->title = '案源广场列表';
+        $this->title = '法律线索列表';
         $lawyer = LawyerInformation::allLawyer();
         $this->lawyer = $lawyer;
 
@@ -92,7 +92,7 @@ class CaseSourceSquare extends Controller
     }
 
     /**
-     * 添加案源广场
+     * 添加法律线索
      * @auth true
      */
     public function add()
@@ -101,18 +101,18 @@ class CaseSourceSquare extends Controller
     }
 
     /**
-     * 编辑案源广场
+     * 编辑法律线索
      * @auth true
      */
     public function edit()
     {
-        $this->title = '编辑案源';
+        $this->title = '编辑法律线索';
         $this->status ;
         $this->_form($this->table, 'form');
     }
 
     public function show(){
-        $this->title = '查看案源';
+        $this->title = '查看法律线索';
         $this->status;
         $this->_form($this->table, 'show');
     }
@@ -131,7 +131,7 @@ class CaseSourceSquare extends Controller
         $this->lawyer = $lawyer;
         $this-> is_shelves;
         if($this->request->isGet()){
-            $this->title = '案源广场';
+            $this->title = '法律线索';
         }elseif($this->request->isPost()){
             if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
             if (empty($data['problem'])) $this->error('请填写问题内容！');
@@ -161,7 +161,7 @@ class CaseSourceSquare extends Controller
         $this->lawyer = $lawyer;
         $this-> is_shelves;
         if($this->request->isGet()){
-            $this->title = '案源广场';
+            $this->title = '法律线索';
         }elseif($this->request->isPost()){
             if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
             if (empty($data['problem'])) $this->error('请填写问题内容！');
@@ -193,7 +193,7 @@ class CaseSourceSquare extends Controller
         $this->lawyer = $lawyer;
         $this-> is_shelves;
         if($this->request->isGet()){
-            $this->title = '案源广场';
+            $this->title = '法律线索';
         }elseif($this->request->isPost()){
             if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
             if (empty($data['problem'])) $this->error('请填写问题内容！');
@@ -223,7 +223,7 @@ class CaseSourceSquare extends Controller
         $this->lawyer = $lawyer;
         $this-> is_shelves;
         if($this->request->isGet()){
-            $this->title = '案源广场';
+            $this->title = '法律线索';
         }
 
         //获取当前的 问题反馈详情
@@ -242,6 +242,7 @@ class CaseSourceSquare extends Controller
                 $item['type'] = isset($type[$item['type']]) ? $type[$item['type']] : '';
                 return $item;
             },$data['case_data']);
+
         }
 
 
@@ -257,7 +258,7 @@ class CaseSourceSquare extends Controller
         // 这里可以获取到数据记录ID
         //  echo $data['id']
         if ($result && $this->request->isPost()) {
-            $this->success('案源广场数据成功！', 'javascript:history.back()');
+            $this->success('法律线索数据成功！', 'javascript:history.back()');
         }
     }
 

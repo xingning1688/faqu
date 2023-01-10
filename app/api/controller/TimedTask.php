@@ -68,8 +68,9 @@ class TimedTask  extends Controller
     //定时任务 打回广场  （首先是接收的，）
     public function  backSquare(){
 
-        //超过1h时间的 (状态是 已经分配律师的，并且是上架的)
-        $data = CaseSourceSquareModel::where('status',1)->where('is_shelves',0)->whereTime('allocate_time','>=','1 hours')->order('allocate_time','asc')->limit(50)->select()->toArray();
+        //超过1h时间的 (状态是 已经分配律师的，并且是上架的)  ->whereTime('birthday', ['1970-10-1', '2000-10-1'])
+        $date = date('Y-m-d H:i:s',time()-3600);
+        $data = CaseSourceSquareModel::where('status',1)->where('is_shelves',0)->whereTime('shelves_time','<=',$date)->order('shelves_time','asc')->limit(50)->select()->toArray();
 
         if(empty($data)){
             $this->success('暂无数据');
@@ -83,7 +84,8 @@ class TimedTask  extends Controller
             $caseData['status'] = 0;
             $res = CaseSourceSquareModel::unsolved($caseData);
             if($res === false){
-                $this->error('失败');
+                //$this->error('失败');
+                continue;
             }
         }
 

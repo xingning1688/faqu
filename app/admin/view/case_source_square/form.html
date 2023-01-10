@@ -54,6 +54,15 @@
             </div>
         </div>
 
+        <div class="layui-form-item label-required-prev">
+            <span class="help-label"><b>被告人地址</b></span>
+            <div class="layui-row layui-col-space10">
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="province2"></select></label>
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="city2"></select></label>
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="area2"></select></label>
+            </div>
+        </div>
+
         {notempty name='vo.id'}
         <label class="layui-form-item">
             <span class="color-green font-w7 ">状态</span>
@@ -101,6 +110,11 @@
             (function (province, city, area) {
                 new PCAS("province", "city", "area", province, city, area);
             })('{$vo.province|default=""}', '{$vo.city|default=""}', '{$vo.area|default=""}');
+        });
+        require(['pcasunzips'], function () {
+            (function (province, city, area) {
+                new PCAS("province2", "city2", "area2", province, city, area);
+            })('{$vo.province2|default=""}', '{$vo.city2|default=""}', '{$vo.area2|default=""}');
         });
     </script>
 </form>

@@ -38,8 +38,8 @@ class PayKs extends BaseModel{
         $updatePlatform['expires_in'] = $res['expires_in'];
         $updatePlatform['update_time'] = time();
 
-        $res = PlatformAccess::updatePlatform($updatePlatform);  //dump(11,$res,$res['access_token']);exit;
-        if(!$res){
+        $result = PlatformAccess::updatePlatform($updatePlatform);  //dump(11,$res,$res['access_token']);exit;
+        if(!$result){
             return false;
         }
         return $res['access_token'];
