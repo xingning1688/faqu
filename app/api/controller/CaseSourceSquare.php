@@ -20,6 +20,7 @@ use app\api\model\Jwt;
 use app\api\model\LeaveMessages;
 use app\api\model\PlatformUser;
 use app\api\validate\Feedback as FeedbackValidate;
+use app\common\model\DySmsApiModel;
 use app\common\model\PayWx;
 use think\admin\Controller;
 use think\facade\Db;
@@ -75,7 +76,7 @@ class CaseSourceSquare  extends AuthController
         if($res === false){
             $this->error('验证错误');
         }
-
+        //$res = DySmsApiModel::sendSms($data['lawyer_information_id']);
         $this->success('问题留言成功');
     }
 

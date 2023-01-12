@@ -3,6 +3,7 @@
 
 namespace app\admin\controller;
 
+use app\common\model\DySmsApiModel;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
 use think\admin\model\SystemAuth;
@@ -259,6 +260,21 @@ class CaseSourceSquare extends Controller
         //  echo $data['id']
         if ($result && $this->request->isPost()) {
             $this->success('法律线索数据成功！', 'javascript:history.back()');
+        }
+    }
+
+
+    /**
+     * 表单结果处理
+     * @param boolean $result
+     */
+    protected function _add_form_result(bool $result,array $data)
+    {
+        // 这里可以获取到数据记录ID
+        //  echo $data['id']
+        if ($result && $this->request->isPost()) {
+            //$res = DySmsApiModel::sendSms($data['lawyer_information_id']);
+            $this->success('添加法律线索数据成功！', 'javascript:history.back()');
         }
     }
 
