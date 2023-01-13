@@ -67,6 +67,38 @@
 
             </div>
 
+            {notempty name="$order['order_qichacha']['result']['Result']['Data']"}  
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div>订单号：{$order['order_qichacha']['result']['OrderNumber']}</div>
+                    <table class="layui-table margin-top-10" lay-skin="line">
+                        <thead>
+                        <tr>
+                            <th class='text-center nowrap' width="5%">姓名</th>
+                            <th class='text-center nowrap' width="10%">曾用名</th>
+                            <th class='text-center nowrap' width="10%">正件号</th>
+                            <th class='text-center nowrap' width="10%">省份代码</th>
+                            <th class='text-center nowrap' width="15%">标签描述 及 简介</th>
+                            <!--<th class='text-center nowrap' width="15%">简介</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $order['order_qichacha']['result']['Result']['Data'] as $item}
+                        <tr>
+                            <td class='text-center nowrap'>{$item.Name}</td>
+                            <td class='text-center nowrap'>{$item.OriginalName}</td>
+                            <td class='text-center nowrap'>{$item.CerNo}</td>
+                            <td class='text-center nowrap'>{$item.Province}</td>
+                            <td class='text-center nowrap'>{$item.TagDesc|implode }<br/>{$item.Description}  </td>
+                            <!--<td class='text-center nowrap'>{$item.Description}</td>-->
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            {/notempty}
 
         </div>
 

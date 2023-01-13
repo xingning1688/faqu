@@ -23,6 +23,17 @@ class QichachaDeadBeat extends BaseModel {
         return true;
     }
 
+    //获取某个订单的详细
+    public static function getOrder($oid){
+        $row = self::where('order_id',$oid)->find();
+        if(empty($row)){
+            return [];
+        }
+
+        $row = $row->toArray();
+        return $row;
+    }
+
 }
 
 

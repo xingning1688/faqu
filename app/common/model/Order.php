@@ -79,8 +79,14 @@ class Order extends BaseModel {
             $row = $row->toArray();
             $order_details = OrderDetail::getOrderDetail($row['id']);
             $order_consignee =  OrderConsignee::getOrderConsignee($row['id']);
+            $order_qichacha =  QichachaDeadBeat::getOrder($row['id']);
+            if(!empty($order_qichacha)){
+                $order_qichacha['result'] = json_decode($order_qichacha['result'],true);
+            }
+
             $row['order_details'] = $order_details;
             $row['order_consignee'] = $order_consignee;
+            $row['order_qichacha'] = $order_qichacha;
             return $row;
 
         }
