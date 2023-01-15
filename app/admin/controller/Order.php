@@ -68,6 +68,7 @@ class Order extends Controller
         $pay_status = $this->request->get('pay_status', '');
         $platform = $this->request->get('platform', '');
         $create_time = $this->request->get('create_time', '');
+        $product_name = $this->request->get('product_name', '');
 
         if(!empty($order_no)){
             $where[] = ['order_no','=',$order_no];
@@ -94,6 +95,16 @@ class Order extends Controller
             $where[] = ['create_time','>=',strtotime($time_arr[0])];
             $where[] = ['create_time','<=',strtotime($time_arr[1])];
         }
+
+        if(!empty($product_name)){
+            $where2[] = ['product_name','like','%'.$product_name.'%'];
+            $res  = Db::name('order_detail')->where($where2)->select()->toArray();
+            if(!empty($res)){
+                $order_ids = array_unique(array_column($res,'order_id'));
+                $where[] = ['id','in',$order_ids];
+            }
+        }
+
 
         $query = $this->_query($this->table)->where($where)->order('id DESC');
         $query->page();
