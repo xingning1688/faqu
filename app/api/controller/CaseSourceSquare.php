@@ -64,7 +64,7 @@ class CaseSourceSquare  extends AuthController
         $data['city2'] = request()->post('city2','');
         $data['area2'] = request()->post('area2','');
 
-        $data['shelves_time'] =date('Y-m-d H:i:s',time());
+        $data['shelves_time'] =date('Y-m-d H:i:s',time());  
         $data['status'] = 1;
 
         $res = $this->check($data);
@@ -76,7 +76,7 @@ class CaseSourceSquare  extends AuthController
         if($res === false){
             $this->error('验证错误');
         }
-        //$res = DySmsApiModel::sendSms($data['lawyer_information_id']);
+        $res = DySmsApiModel::sendSms($data['lawyer_information_id']);
         $this->success('问题留言成功');
     }
 

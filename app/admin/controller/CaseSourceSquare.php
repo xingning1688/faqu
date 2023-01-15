@@ -273,7 +273,7 @@ class CaseSourceSquare extends Controller
         // 这里可以获取到数据记录ID
         //  echo $data['id']
         if ($result && $this->request->isPost()) {
-            //$res = DySmsApiModel::sendSms($data['lawyer_information_id']);
+            $res = DySmsApiModel::sendSms($data['lawyer_information_id']);
             $this->success('添加法律线索数据成功！', 'javascript:history.back()');
         }
     }
