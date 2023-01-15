@@ -31,7 +31,7 @@ class PayDouYin extends BaseModel{
             'total_amount'=>1,
             'subject'=>'6666666',
             'body'=>'99999999',
-            'valid_time'=>7200,
+            'valid_time'=>172800,
         ];
         $res=$this->post('create_order',$data);
         echo json_encode($res);die;
