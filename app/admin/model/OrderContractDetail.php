@@ -30,6 +30,7 @@ class OrderContractDetail extends BaseModel {
         foreach($data as $key=>$item){ //dump($item,$lawyerCases);exit;
             $item['lawyer_case_title'] = isset($lawyerCases[$item['lawyer_case_id']])? $lawyerCases[$item['lawyer_case_id']]['title']: '';
             $item['lawyer_case_author'] = isset($lawyerCases[$item['lawyer_case_id']])? $lawyerCases[$item['lawyer_case_id']]['author']: '';
+            $item['lawyer_case_file_url'] = isset($lawyerCases[$item['lawyer_case_id']])? $lawyerCases[$item['lawyer_case_id']]['file_url']: '';
             $newData[$item['order_contract_id']][$item['id']] = $item;
         }
         return $newData;
