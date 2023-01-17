@@ -168,9 +168,9 @@ class CaseSourceSquare  extends AuthController
         $caseData['allocate_time'] = date('Y-m-d H:i:s',time());
         $caseData['status'] = 2;
         if($data['type'] == 1){
-            $num = CaseSourceSquareModel::where('lawyer_information_id',$LawyerInformation['id'])->where('is_shelves',0)->where('status',1)->count();
+            $num = CaseSourceSquareModel::where('lawyer_information_id',$LawyerInformation['id'])->where('is_shelves',0)->where('status',2)->count();
             if($num>=1){
-
+                
                 //test
                 //file_put_contents('./log/test_log.txt', 'LawyerInformation_id：'.$LawyerInformation['id']."\r\n",FILE_APPEND | LOCK_EX);
                 //$num = CaseSourceSquareModel::where('lawyer_information_id',$LawyerInformation['id'])->where('is_shelves',0)->where('status',1)->select();
@@ -349,7 +349,8 @@ class CaseSourceSquare  extends AuthController
         }
 
         if( $row['platform'] !=2 ){
-            $this->error('失败，非微信平台不发送');
+            $this->success('成功');
+            //$this->error('失败，非微信平台不发送');
         }
 
 
