@@ -364,6 +364,150 @@ class PayNotify  extends Controller
         return json_encode($msg);
     }
 
+    //抖音支付 异步返回 contractDouYin
+    public function contractDouYin(){
+        $return = false;
+        $result = file_get_contents("php://input");
+        if(empty($content)) return false;
+        _minipay_log('抖音小程序支付异步通知返回数据：' . $result);
+        $result = json_decode($result,true);
+        $sign=$this->handler($result);
+        if($sign!=$result['msg_signature']){
+            return false;
+        }
+
+        //test
+
+        $msg=json_decode($content['msg'],true);
+        /*echo '回调----'.$content['type']."\n";
+        //这里更新应用业务逻辑代码，使用$msg跟应用订单比对更新订单,可以用 $content['type']判断是支付回调还是退款回调，payment支付回调 refund退款回调。
+        $res=['err_no'=>0,'err_tips'=>'success'];
+        echo json_encode($res);*/
+
+        //test
+        if(($msg['status'] == 'SUCCESS') && $result['type'] == 'payment'){
+
+            $ds_order_no  = $msg['order_id'];                         //抖音平台订单号
+            $channel_no   = $msg['channel_no'];                      //支付渠道侧单号
+            $trade_no     = $msg['payment_order_no'];               //用户侧的 交易订单号
+            $order_no     = $msg['cp_orderno'];                    //商城系统中的订单编号
+            $total_amount = $msg['order_price']/100;              // 收款金额
+
+            $pay_type = 30;
+            if($msg['way'] == 1){
+                $pay_type = 31;//抖音-微信
+            }elseif($msg['way'] == 2){
+                $pay_type = 32;//抖音-支付宝
+            }elseif($msg['way'] == 10){
+                $pay_type = 33;//抖音支付
+            }
+
+            if(isset($msg['cp_extra'])){
+                $cp_extra = json_decode($msg['cp_extra'],true);
+            }
+
+
+            if(isset($cp_extra['order_type']) && $cp_extra['order_type']==1 ){
+                $dataOrder = Db::name('order_contract')->where(['order_no'=>$order_no,'order_price'=>$total_amount,'pay_status'=>0])->field('id')->find();
+                _minipay_log('order_contract 订单数据: '.json_encode($dataOrder));
+                if(!empty($dataOrder)) {
+                    $time = time();
+                    try {
+                        // 修改订单状态
+                        $ordersData['platform_order_no']             = $ds_order_no;
+                        $ordersData['channel_no']             = $channel_no;
+                        $ordersData['transaction_id']             = $trade_no;
+                        $ordersData['pay_type']             = $pay_type;
+                        $ordersData['pay_time']             = $time;
+                        $ordersData['update_time']          = $time;
+                        if($msg['status'] == 'SUCCESS') {
+                            $ordersData['pay_status']           = 1;
+                        }else{
+                            $ordersData['pay_status']           = '-1';
+                        }
+
+                        $res = Db::name('order_contract')->where('id', $dataOrder['id'])->update($ordersData);
+                        $return =true;
+                    } catch (\Exception $e) {
+                        _minipay_log('抖音平台支付失败-异常：商城系统中的订单编号:'.$order_no.'抖音支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
+                    }
+                }
+            }elseif(isset($attach['order_type']) && $attach['order_type']==2 ){
+                //file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
+                $dataOrder = Db::name('leave_message')->where(['order_no'=>$order_no,'order_price'=>$total_amount,'status'=>0])->field('id')->find();
+                _minipay_log('leave_message 订单数据: '.json_encode($dataOrder));
+                if(!empty($dataOrder)) {
+                    $time = time();
+                    try {
+                        // 修改订单状态
+                        $ordersData['platform_order_no']    = $ds_order_no;
+                        $ordersData['channel_no']           = $channel_no;
+                        $ordersData['transaction_id']       = $trade_no;
+                        $ordersData['pay_type']             = $pay_type;
+                        $ordersData['pay_time']             = $time;
+                        $ordersData['update_time']          = $time;
+                        if($msg['status'] == 'SUCCESS') {
+                            $ordersData['status']           = 1;
+                            $ordersData['pay_status']           = 1;
+                        } else {
+                            $ordersData['status']           = '-1';
+                            $ordersData['pay_status']           = '-1';
+                        }
+
+                        $res = Db::name('leave_message')->where('id', $dataOrder['id'])->update($ordersData);
+                        $return =true;
+                    } catch (\Exception $e) {
+                        _minipay_log('leave_message抖音平台支付失败-异常：商城系统中的订单编号:'.$order_no.'抖音支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
+                    }
+                }
+            }elseif(isset($attach['order_type']) && $attach['order_type']==3 ){
+                //file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
+                $dataOrder = Db::name('order')->where(['order_no'=>$order_no,'order_price'=>$total_amount,'status'=>0])->field('id')->find();
+                _minipay_log('order 订单数据: '.json_encode($dataOrder));
+                if(!empty($dataOrder)) {
+                    $time = time();
+                    try {
+                        // 修改订单状态
+                        $ordersData['platform_order_no']    = $ds_order_no;
+                        $ordersData['channel_no']           = $channel_no;
+                        $ordersData['transaction_id']             = $trade_no;
+                        $ordersData['pay_type']             = $pay_type;
+                        $ordersData['pay_time']             = $time;
+                        $ordersData['update_time']          = $time;
+                        if($msg['status'] == 'SUCCESS') {
+                            $ordersData['status']           = 1;
+                            $ordersData['pay_status']           = 1;
+                        } else {
+                            $ordersData['status']           = '-1';
+                            $ordersData['pay_status']           = '-1';
+                        }
+
+                        $res = Db::name('order')->where('id', $dataOrder['id'])->update($ordersData);
+                        $return =true;
+                    } catch (\Exception $e) {
+                        _minipay_log('order抖音平台支付失败-异常：商城系统中的订单编号:'.$order_no.'抖音支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
+                    }
+                }
+            }
+
+        } else {
+            _minipay_log('抖音平台支付失败 (失败原因状态：'.$result['data']['status'].')');
+        }
+
+        echo $this->getDsReturn($return);
+    }
+
+    public function getDsReturn($result = false) {
+
+        if($result===true){
+            $res=['err_no'=>0,'err_tips'=>'success'];
+        }else{
+            $res=['err_no'=>400,'err_tips'=>'business fail'];
+        }
+
+        return json_encode($res);
+    }
+
 
 
 

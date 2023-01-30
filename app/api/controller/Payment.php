@@ -17,6 +17,7 @@
 namespace app\api\controller;
 
 use app\api\model\LeaveMessages;
+use app\common\model\PayDouYin;
 use think\admin\Controller;
 use app\api\model\OrderContract;
 use app\common\model\Pay;
@@ -93,6 +94,12 @@ class Payment  extends AuthController
                 if(!is_array($res)){
                     $this->error('快手预付单失败:'.$res);
                 }
+            }elseif(($order['platform'] == 3) &&  ($pay_type == 30)){
+                $pay = new PayDouYin($type=1);  //file_put_contents('./log/pay_log.txt', '订单号日志：'.var_export($order,true)."\r\n",FILE_APPEND | LOCK_EX);
+                $res = $pay->createOrder($order['id'],$order_type);
+                if(!is_array($res)){
+                    $this->error('抖音预付单失败:'.$res);
+                }
             }
 
 
@@ -148,6 +155,12 @@ class Payment  extends AuthController
                 $res = $pay->createOrder($order['id'],$order_type);
                 if(!is_array($res)){
                     $this->error('快手预付单失败:'.$res);
+                }
+            }elseif(($order['platform'] == 3) &&  ($pay_type == 30)){
+                $pay = new PayDouYin($type=1);  //file_put_contents('./log/pay_log.txt', '订单号日志：'.var_export($order,true)."\r\n",FILE_APPEND | LOCK_EX);
+                $res = $pay->createOrder($order['id'],$order_type);
+                if(!is_array($res)){
+                    $this->error('抖音预付单失败:'.$res);
                 }
             }
 
@@ -206,6 +219,13 @@ class Payment  extends AuthController
                 $res = $pay->createOrder($order['id'],$order_type);
                 if(!is_array($res)){
                     $this->error('快手预付单失败:'.$res);
+                }
+
+            }elseif(($order['platform'] == 3) &&  ($pay_type == 30)){
+                $pay = new PayDouYin($type=1);  //file_put_contents('./log/pay_log.txt', '订单号日志：'.var_export($order,true)."\r\n",FILE_APPEND | LOCK_EX);
+                $res = $pay->createOrder($order['id'],$order_type);
+                if(!is_array($res)){
+                    $this->error('抖音预付单失败:'.$res);
                 }
             }
 

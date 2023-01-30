@@ -1,5 +1,10 @@
 <?php
 namespace app\common\model;
+use app\api\model\LeaveMessages;
+use app\api\model\OrderContract;
+use app\api\model\PlatformAccess;
+use think\Exception;
+
 class PayDouYin extends BaseModel{
     public $table = 'email_case';
 
@@ -8,19 +13,83 @@ class PayDouYin extends BaseModel{
     public $token;
     public $salt;
 
-    public function __construct() {
-        $this->app_id = 'tt13c3657e8cfd546101';
-        $this->token='UdIYI4Qdj1WkQ8i8nowyS55nvvLbMlac';
-        $this->salt='oU5zFBfEpKCHoaNGlbyf2ceSu1GHoqsBlgq9X8Xz';
-    }        
-        
+    public function __construct($type=0) {
+        if($type == 0 ){
+
+            $this->app_id = 'tt13c3657e8cfd546101';
+            $this->token='UdIYI4Qdj1WkQ8i8nowyS55nvvLbMlac';
+            $this->salt='oU5zFBfEpKCHoaNGlbyf2ceSu1GHoqsBlgq9X8Xz';
+
+        }elseif($type == 1){ //工具类小程序
+            $this->app_id = 'tt356d43d0aa52bf8101';
+            $this->token='testtesttesttest1esttesttesttest';
+            $this->salt='aascuNan29XQo1BXt7X57q0rcgRzVMOmzozTuy3q';
+        }
+
+    }
+
+//预下单接口  $order_type 订单类型  1 合同；
+    public function createOrder($oid,$order_type){
+
+        if($order_type == 1){ //合同订单
+            $order = OrderContract::getContractById($oid);//获取数据
+            $subject = '购买合同';
+        }elseif($order_type == 2){//咨询订单
+            $order = LeaveMessages::getOrderById($oid);//获取数据
+            $order['order_details'] = $order['title'];
+            $subject = $order['title'];
+        }elseif($order_type == 3){ //服务商城
+            $order = Order::getOrderDetailById($oid);//获取数据
+            $subject = '购买服务商城';
+        }
+
+        if(empty($order)){
+            return '获取订单数据失败';
+        }
+
+        $attach = json_encode(['pay_type'=>30,'order_type'=>$order_type]);//自定义字段
+        $notify_url = 'https://'.$_SERVER['SERVER_NAME'].'/common/PayNotify/contractDouYin';
+
+        $data=[
+            'app_id' => $this->app_id,
+            'out_order_no'=> isset($order['order_no']) ? $order['order_no'] : '', //商户订单号
+            'total_amount'=> intval(strval($order['order_price']*100)),//金额,
+            'subject'=> isset($subject)? $subject : '',
+            'body'=> isset($order['order_details']) ? json_encode($order['order_details']) : '',
+            'valid_time'=>172800,
+            'cp_extra'=>$attach,
+            'notify_url'=>$notify_url,
+        ];
+        $data['sign']=$this->sign($data);
+
+        $url=$this->api_url.'create_order';
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($order['order_price'],true)."\r\n",FILE_APPEND | LOCK_EX);
+        $postData = json_encode($data);
+        $headers = [
+            'Content-Type: application/json',
+        ];
+        $res = $this->doCurl($url,1,$postData,$headers);
+        $res =  json_decode($res,true);
+        if($res['err_no'] !== 0){
+            //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+            return '抖音预付单请求结果返回失败';
+        }
+
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+        return $res['data'];
+
+    }
+
+
+
+
    /* public function run(){
          $action=addslashes($_GET['ac']);
          $action=$action?$action:'order';
          if(!in_array($action,['order','query','refund','settle','notify','set'])){
             echo '非法请求';die;
         }
-        call_user_func(array($this,$action));
+        call_user_func(array($this,$action));  
     }*/
     
     //合同下单
@@ -34,6 +103,7 @@ class PayDouYin extends BaseModel{
             'valid_time'=>172800,
         ];
         $res=$this->post('create_order',$data);
+        dump($res);exit;
         echo json_encode($res);die;
     }
     
@@ -115,8 +185,9 @@ class PayDouYin extends BaseModel{
         if(!empty($notify)){
             //$data['notify_url']='https://tt.csweigou.com/pay.php?ac=notify';//也可以在调用的时候分别设置
             $data['notify_url']='https://test.faquwang.com';//也可以在调用的时候分别设置
+            //$data['notify_url']='https://lawyer.faquwang.com';//也可以在调用的时候分别设置
         }
-        //dump($data);exit;
+        dump(22,$data);exit;
         $data['sign']=$this->sign($data);
         $url=$this->api_url.$method;
         $res=$this->http('POST',$url,json_encode($data),['Content-Type: application/json'],true);
@@ -131,7 +202,7 @@ class PayDouYin extends BaseModel{
      * @return stirng
     */
 
-   /* public function handler($map){
+    public function handler($map){
         $rList = array();
         array_push($rList, $this->token);
         foreach($map as $k =>$v) {
@@ -144,7 +215,7 @@ class PayDouYin extends BaseModel{
         }
         sort($rList,2);
         return sha1(implode($rList));
-    }*/
+    }
     
     /**
      * 请求签名
@@ -219,7 +290,7 @@ class PayDouYin extends BaseModel{
                 $opts[CURLOPT_POSTFIELDS] = $params;
                 break;
             default:
-                throw new Exception('不支持的请求方式！');
+                throw new  Exception('不支持的请求方式！');
         }
     	
         /* 初始化并执行curl请求 */
@@ -231,6 +302,39 @@ class PayDouYin extends BaseModel{
         curl_close($ch);
         if($error) throw new Exception('请求发生错误：' . $error);
         return  $data;
+    }
+
+
+
+    /*
+  $url
+  $type 0代表get ; 1代表 post
+  $data 代表提交数据
+*/
+    function doCurl($url,$type=0,$data=[],$headers = []){
+        //打开一个会话 (初始化)
+        $ch= curl_init();
+
+        //设置curl 传输项
+        curl_setopt($ch,CURLOPT_URL,$url);//设置提交网址
+
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);// curl_exec()执行之后，不直接打印出来，把数据返回为字符串
+        curl_setopt($ch,CURLOPT_HEADER,0);//不输出header 头
+        if(!empty($headers)){
+            curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+        }
+
+        if($type==1){
+            curl_setopt($ch,CURLOPT_POST,1);//设置数据提交方式
+            curl_setopt($ch,CURLOPT_POSTFIELDS,$data);//设置提交数据
+        }
+
+        //执行curl 会话,并获取内容
+        $output=curl_exec($ch);
+        //关闭会话
+        curl_close($ch);
+
+        return $output;
     }
     
     
