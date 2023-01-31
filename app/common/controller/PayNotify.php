@@ -16,6 +16,7 @@
 
 namespace app\common\controller;
 
+use app\common\model\PayDouYin;
 use think\admin\Controller;
 use think\facade\Db;
 
@@ -367,31 +368,27 @@ class PayNotify  extends Controller
     //抖音支付 异步返回 contractDouYin
     public function contractDouYin(){
         $return = false;
-        $result = file_get_contents("php://input");
-        if(empty($content)) return false;
+        $result = file_get_contents("php://input");   //_minipay_log('ceshi：2' );
+        if(empty($result))  echo $this->getDsReturn($return);
+
         _minipay_log('抖音小程序支付异步通知返回数据：' . $result);
+
         $result = json_decode($result,true);
-        $sign=$this->handler($result);
+        $pay = new PayDouYin($type=1);
+        $sign = $pay->handler($result);
         if($sign!=$result['msg_signature']){
-            return false;
+            echo $this->getDsReturn($return);
         }
 
-        //test
+        $msg=json_decode($result['msg'],true);
 
-        $msg=json_decode($content['msg'],true);
-        /*echo '回调----'.$content['type']."\n";
-        //这里更新应用业务逻辑代码，使用$msg跟应用订单比对更新订单,可以用 $content['type']判断是支付回调还是退款回调，payment支付回调 refund退款回调。
-        $res=['err_no'=>0,'err_tips'=>'success'];
-        echo json_encode($res);*/
-
-        //test
         if(($msg['status'] == 'SUCCESS') && $result['type'] == 'payment'){
 
             $ds_order_no  = $msg['order_id'];                         //抖音平台订单号
             $channel_no   = $msg['channel_no'];                      //支付渠道侧单号
             $trade_no     = $msg['payment_order_no'];               //用户侧的 交易订单号
             $order_no     = $msg['cp_orderno'];                    //商城系统中的订单编号
-            $total_amount = $msg['order_price']/100;              // 收款金额
+            $total_amount = $msg['total_amount']/100;              // 收款金额
 
             $pay_type = 30;
             if($msg['way'] == 1){
@@ -403,7 +400,11 @@ class PayNotify  extends Controller
             }
 
             if(isset($msg['cp_extra'])){
-                $cp_extra = json_decode($msg['cp_extra'],true);
+                $str = explode('|',$msg['cp_extra']);
+                $str[0] = explode(':',$str[0]);
+                $str[1] = explode(':',$str[1]);
+                $cp_extra[$str[0][0]] = $str[0][1];
+                $cp_extra[$str[1][0]] = $str[1][1];
             }
 
 
@@ -432,7 +433,7 @@ class PayNotify  extends Controller
                         _minipay_log('抖音平台支付失败-异常：商城系统中的订单编号:'.$order_no.'抖音支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
                     }
                 }
-            }elseif(isset($attach['order_type']) && $attach['order_type']==2 ){
+            }elseif(isset($cp_extra['order_type']) && $cp_extra['order_type']==2 ){
                 //file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
                 $dataOrder = Db::name('leave_message')->where(['order_no'=>$order_no,'order_price'=>$total_amount,'status'=>0])->field('id')->find();
                 _minipay_log('leave_message 订单数据: '.json_encode($dataOrder));
@@ -460,7 +461,7 @@ class PayNotify  extends Controller
                         _minipay_log('leave_message抖音平台支付失败-异常：商城系统中的订单编号:'.$order_no.'抖音支付系统生成的订单编号:'.$trade_no.'订单修改失败 (失败原因：'.$e->getMessage().')');
                     }
                 }
-            }elseif(isset($attach['order_type']) && $attach['order_type']==3 ){
+            }elseif(isset($cp_extra['order_type']) && $cp_extra['order_type']==3 ){
                 //file_put_contents('./log/pay_log.txt', '订单号：'.$order_no.'支付单成功返回信息：'.var_export($result,true)."\r\n",FILE_APPEND | LOCK_EX);
                 $dataOrder = Db::name('order')->where(['order_no'=>$order_no,'order_price'=>$total_amount,'status'=>0])->field('id')->find();
                 _minipay_log('order 订单数据: '.json_encode($dataOrder));

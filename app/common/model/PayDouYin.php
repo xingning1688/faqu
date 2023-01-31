@@ -47,23 +47,24 @@ class PayDouYin extends BaseModel{
             return '获取订单数据失败';
         }
 
-        $attach = json_encode(['pay_type'=>30,'order_type'=>$order_type]);//自定义字段
+        //$attach = json_encode(['pay_type'=>30,'order_type'=>$order_type]);//自定义字段
+        $attach = 'pay_type:30|order_type:'.$order_type;//自定义字段
         $notify_url = 'https://'.$_SERVER['SERVER_NAME'].'/common/PayNotify/contractDouYin';
 
         $data=[
-            'app_id' => $this->app_id,
-            'out_order_no'=> isset($order['order_no']) ? $order['order_no'] : '', //商户订单号
-            'total_amount'=> intval(strval($order['order_price']*100)),//金额,
-            'subject'=> isset($subject)? $subject : '',
-            'body'=> isset($order['order_details']) ? json_encode($order['order_details']) : '',
-            'valid_time'=>172800,
-            'cp_extra'=>$attach,
-            'notify_url'=>$notify_url,
+            "app_id" => $this->app_id,
+            "out_order_no" => isset($order['order_no']) ? $order['order_no'] : '', //商户订单号
+            "total_amount" => intval(strval($order['order_price']*100)),//金额,
+            "subject" => isset($subject)? $subject : '',
+            "body" => isset($order['order_details']) ? json_encode($order['order_details']) : '',
+            "valid_time" =>172800,
+            "cp_extra" =>$attach,
+            "notify_url" =>$notify_url,
         ];
         $data['sign']=$this->sign($data);
 
         $url=$this->api_url.'create_order';
-        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($order['order_price'],true)."\r\n",FILE_APPEND | LOCK_EX);
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($data,true)."\r\n",FILE_APPEND | LOCK_EX);
         $postData = json_encode($data);
         $headers = [
             'Content-Type: application/json',
