@@ -204,6 +204,10 @@ class LeaveMessage  extends AuthController{
             $this->error('参数不能为空');
         }
 
+        if(($data['open_id'] == 'ol76D5KFBPwstIeXUs8LvMIY4ZBM') || ($data['open_id'] == 'ol76D5H1fi0_WR076cg-I6lN8PUs') || ($data['open_id'] == 'ol76D5MHVSGZKj4GNcpi4pi944I8')  ){
+            $this->error('error_error');
+        }
+
         $validate = new LeaveMessageValidate();
         $returnVal = $validate->form($data);
         if($returnVal != ''){

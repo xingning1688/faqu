@@ -114,7 +114,7 @@ class PayKs extends BaseModel{
 
 
     //发起结算单
-    public function settle($orderNo,$order_type,$amount=0){
+    public function settle($orderNo,$order_type){
         $platformAccess = PlatformAccess::getPlatform(1);
         if(empty($platformAccess)){
             return '快手平台信息获取失败';
@@ -147,7 +147,7 @@ class PayKs extends BaseModel{
         ];
         $res = $this->doCurl($url,1,$postData,$headers);
         $res =  json_decode($res,true);
-        if($res['result'] !== 1){   dump($res);exit;
+        if($res['result'] !== 1){
             //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
             return false;
         }
@@ -155,6 +155,89 @@ class PayKs extends BaseModel{
         //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
         return true;
     }
+
+    //核销 订单同步接口  注意：订单表需要  添加 settle_time  后续用与 结算
+    public function report($orderNo,$open_id,$order_create_time,$imgId){
+        $platformAccess = PlatformAccess::getPlatform(1);
+        if(empty($platformAccess)){
+            return '快手平台信息获取失败';
+        }
+
+        $access_token = $this->getAccessToken($platformAccess);//获取平台的 access
+        if($access_token === false){
+            return 'access_token失败';
+        }
+
+
+        $config['app_id'] =  $platformAccess['app_id'];
+        $config['access_token'] = $access_token;
+
+        $postData['out_biz_order_no'] =   $orderNo;
+        $postData['out_order_no'] =   $orderNo;
+        $postData['open_id'] =   $open_id;
+        $postData['order_create_time'] =   (int) str_pad($order_create_time,13,'0',STR_PAD_RIGHT);
+        //$postData['notify_url'] =   $notify_url;
+        $postData['order_status'] =  11;
+        $postData['order_path'] =  'pages/user/myContract/myContract';
+        $postData['product_cover_img_id'] =  $imgId;
+        //$postData['sign'] = $this->makeSign($config,$postData,$platformAccess['app_secret']);
+        $url = 'https://open.kuaishou.com/openapi/mp/developer/order/v1/report?'.http_build_query($config);
+
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($order['order_price'],true)."\r\n",FILE_APPEND | LOCK_EX);
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($postData['total_amount'],true)."\r\n",FILE_APPEND | LOCK_EX);
+        $postData = json_encode($postData);
+        $headers = [
+            'Content-Type: application/json',
+        ];
+        $res = $this->doCurl($url,1,$postData,$headers);
+        $res =  json_decode($res,true);
+        if($res['result'] !== 1){
+            //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+            return false;
+        }
+
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+        return true;
+    }
+
+    //图片上传 - 订单同步接口用到
+    public function uploadWithUrl($url){
+        $platformAccess = PlatformAccess::getPlatform(1);
+        if(empty($platformAccess)){
+            return '快手平台信息获取失败';
+        }
+
+        $access_token = $this->getAccessToken($platformAccess);//获取平台的 access
+        if($access_token === false){
+            return 'access_token失败';
+        }
+
+        $config['app_id'] =  $platformAccess['app_id'];
+        $config['access_token'] = $access_token;
+
+        $config['url'] =   $url;
+
+        $url = 'https://open.kuaishou.com/openapi/mp/developer/file//img/uploadWithUrl?'.http_build_query($config);
+
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($order['order_price'],true)."\r\n",FILE_APPEND | LOCK_EX);
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($postData['total_amount'],true)."\r\n",FILE_APPEND | LOCK_EX);
+        //$postData = json_encode($postData);
+        $headers = [
+            'Content-Type: application/json',
+        ];
+        $res = $this->doCurl($url,1,[],$headers);
+        $res =  json_decode($res,true);
+        if($res['result'] !== 1){
+            //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+            return false;
+        }
+
+        //file_put_contents('./log/pay_log.txt', '订单号：'.$order['order_no'].'创建支付单成功返回信息：'.var_export($res,true)."\r\n",FILE_APPEND | LOCK_EX);
+
+        return $res;
+    }
+
+
 
 
     public function makeSign($config,$postData,$appSecret){

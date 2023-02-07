@@ -81,6 +81,26 @@
             </select>
         </label>
 
+        <div class="layui-form-item" >
+            <span class="color-green font-w7 ">icon图片</span>
+
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width:150px">icon图片</th>
+                    <th class="text-center" style="width:auto"></th>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <input name="icon_img" type="hidden" value="{$vo.icon_img|default=''}">
+                        <script>$('[name="icon_img"]').uploadOneImage();</script>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
         <div class="layui-form-item label-required-prev">
             <span class="help-label"><b>商品封面及轮播图片</b>Cover and Carousel Pictures</span>
             <table class="layui-table">

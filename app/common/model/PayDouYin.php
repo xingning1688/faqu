@@ -32,6 +32,7 @@ class PayDouYin extends BaseModel{
     public function createOrder($oid,$order_type){
 
         if($order_type == 1){ //合同订单
+            return 'error';
             $order = OrderContract::getContractById($oid);//获取数据
             $subject = '购买合同';
         }elseif($order_type == 2){//咨询订单

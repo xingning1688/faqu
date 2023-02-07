@@ -36,9 +36,14 @@ class OrderDetail extends BaseModel {
         $data = self::where('order_id',$oid)->select()->toArray();
         $lawyer_user_id = array_unique(array_column($data,'lawyer_user_id'));
         $lawyerInformations = LawyerInformations:: getByUserIds($lawyer_user_id);
-        $data = array_map(function($item) use($lawyerInformations) {
+
+        $product_ids = array_unique(array_column($data,'product_id'));
+        $products = Product::pluckAttrByIds($product_ids,'id,img_id'); //产品id=》lawyer_information_id
+
+        $data = array_map(function($item) use($lawyerInformations,$products) {
             $item['lawyer_user_name'] = isset($lawyerInformations[$item['lawyer_user_id']]) ? $lawyerInformations[$item['lawyer_user_id']]['name'] : '';
-            return $item;    
+            $item['img_id'] = isset($products[$item['product_id']]) ? $products[$item['product_id']]['img_id'] : '';
+            return $item;
         },$data);
 
         return $data;
