@@ -44,10 +44,10 @@ class Ali  extends   Controller{
         $data['search'] = json_encode($postData);
         $data['result'] = !empty($res) ? json_encode($res) : $res;
         $data['status'] = 0;
-        if( $res === false ){
+        if( $res['code'] != 200 ){
             //添加到数据库
             IdNameLog::addData($data);
-            $this->error('失败');
+            $this->error('失败',$res);
         }
         $data['status'] = 1;
 

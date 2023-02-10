@@ -28,10 +28,11 @@ class AliApi extends BaseModel{
 
         $res = $this->doCurl($url,1,$postData,$headers);
         $res =  json_decode($res,true);
-        if(!isset($res['code']) && $res['code'] != 200){
+        return $res;
+        /*if(!isset($res['code']) || $res['code'] != 200){
             return false;
         }
-        return $res['data'];
+        return $res['data'];*/
     }
 
 
