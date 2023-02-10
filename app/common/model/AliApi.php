@@ -11,7 +11,7 @@ class AliApi extends BaseModel{
 
 
 
-    //预下单接口  $order_type 订单类型  1 合同；
+    // 身份证号 与 姓名
     public function idNameverify($postData){
         $host = "https://idname.market.alicloudapi.com";
         $path = "/id_name/verify";

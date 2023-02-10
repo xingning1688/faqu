@@ -157,8 +157,8 @@ class TimedTask  extends Controller
     //定时任务 申请结算（核销状态后 满足3天） 每4小时
     public function settleKs(){
         //超过1h时间的 (状态是 已经分配律师的，并且是上架的)
-        $time = date('Y-m-d H:i:s',time()-73*3600);
-        $data = Order::where('platform',1)->where('pay_status',1)->where('is_settle',0)->whereTime('check_order_time','<=',$time)->order('pay_time','asc')->limit(50)->select()->toArray();
+        $time = date('Y-m-d H:i:s',time()-72*3600);
+        $data = Order::where('platform',1)->where('pay_status',1)->where('is_settle',0)->whereTime('check_order_time','<=',$time)->order('pay_time','asc')->limit(200)->select()->toArray();
         if(empty($data)){
             $this->success('暂无数据');
         }
