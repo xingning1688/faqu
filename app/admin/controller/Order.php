@@ -27,6 +27,8 @@ use think\admin\model\SystemUser;
 use think\admin\service\AdminService;
 use think\model\Relation;
 use think\facade\Session;
+use app\common\model\LawyerInformation;
+use app\common\model\Product;
 use think\facade\Db;
 use app\common\model\Order as OrderModel;
 
@@ -69,6 +71,7 @@ class Order extends Controller
         $platform = $this->request->get('platform', '');
         $create_time = $this->request->get('create_time', '');
         $product_name = $this->request->get('product_name', '');
+        $lawyer_user_name = $this->request->get('lawyer_user_name', '');
 
         if(!empty($order_no)){
             $where[] = ['order_no','=',$order_no];
@@ -103,6 +106,22 @@ class Order extends Controller
                 $order_ids = array_unique(array_column($res,'order_id'));
                 $where[] = ['id','in',$order_ids];
             }
+        }
+
+        if(!empty($lawyer_user_name)){
+            $lawyer = LawyerInformation::getMsgByRow(['name'=>$lawyer_user_name],'id,name');
+            if(!empty($lawyer)){
+                $products = Product::where('lawyer_information_id',$lawyer['id'])->field('id,lawyer_information_id,name')->select()->toArray();
+                if(!empty($products)){
+                    $productIds = array_unique(array_column($products,'id'));
+                    $orderDetails = OrderDetail::whereIn('product_id',$productIds)->field('id,order_id,product_id')->select()->toArray();
+                    if(!empty($orderDetails)){
+                        $orderIds = array_unique(array_column($orderDetails,'order_id'));
+                        $where[] = ['id','in',$orderIds];
+                    }
+                }
+            }
+
         }
 
 

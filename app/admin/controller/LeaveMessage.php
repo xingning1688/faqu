@@ -25,6 +25,7 @@ use think\admin\model\SystemUser;
 use think\admin\service\AdminService;
 use think\model\Relation;
 use think\facade\Session;
+use app\common\model\LawyerInformation;
 use think\facade\Db;
 
 /**
@@ -64,6 +65,7 @@ class LeaveMessage extends Controller
         $platform = $this->request->get('platform', '');
 
         $create_time = $this->request->get('create_time', '');
+        $lawyer_name = $this->request->get('lawyer_name', '');
 
         if(!empty($phone)){
             $where[] = ['phone','=',$phone];
@@ -92,6 +94,14 @@ class LeaveMessage extends Controller
             $time_arr = explode(' - ',$create_time);
             $where[] = ['create_time','>=',strtotime($time_arr[0])];
             $where[] = ['create_time','<=',strtotime($time_arr[1])];
+        }
+
+        if(!empty($lawyer_name)){
+            $lawyerInformations =  LawyerInformation::where('name',$lawyer_name)->field('id,user_id,name')->select()->toArray();
+            if(!empty($lawyerInformations)){
+                $user_ids = array_unique(array_column($lawyerInformations,'user_id'));
+                $where[] = ['lawyer_user_id','in',$user_ids];
+            }
         }
 
         $query = $this->_query($this->table)->where($where)->order('id DESC');

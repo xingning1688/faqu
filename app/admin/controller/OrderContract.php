@@ -19,6 +19,7 @@ namespace app\admin\controller;
 use app\api\model\LawyerInformations;
 use app\admin\model\OrderContractDetail;
 use think\admin\Controller;
+use app\common\model\LawyerCase;
 use think\admin\helper\QueryHelper;
 use think\admin\model\SystemAuth;
 use think\admin\model\SystemBase;
@@ -65,6 +66,7 @@ class OrderContract extends Controller
         $pay_status = $this->request->get('pay_status', '');
         $platform = $this->request->get('platform', '');
         $create_time = $this->request->get('create_time', '');
+        $author = $this->request->get('author', '');
 
         if(!empty($order_no)){
             $where[] = ['order_no','=',$order_no];
@@ -86,6 +88,22 @@ class OrderContract extends Controller
             $time_arr = explode(' - ',$create_time);
             $where[] = ['create_time','>=',strtotime($time_arr[0])];
             $where[] = ['create_time','<=',strtotime($time_arr[1])];
+        }
+
+        if(!empty($author)){
+            $cases = LawyerCase::where('author',$author)->field('id,author')->select()->toArray();
+            if(!empty($cases)){
+                $caseIds = array_unique(array_column($cases,'id'));
+                $details = OrderContractDetail::whereIn('lawyer_case_id',$caseIds)->field('id,order_contract_id')->select()->toArray();
+                if(!empty($details)){
+                    $order_contract_ids = array_unique(array_column($details,'order_contract_id'));
+                    $where[] = ['id','in',$order_contract_ids];
+                }
+            }
+
+
+
+
         }
 
         $query = $this->_query($this->table)->where($where)->order('id DESC');
