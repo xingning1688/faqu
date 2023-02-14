@@ -36,6 +36,23 @@
             </select>
         </label>
 
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 ">所属律师</span>
+            <span class="color-desc margin-left-5"></span>
+            <select class="layui-select" name="user_id" lay-search=""  required>
+                <option value="0" data-type="0"></option>
+                {foreach $lawyer as $user_id=>$name}
+                {if isset($vo.user_id) && $user_id==$vo.user_id}
+                <option selected value="{$user_id}">{$name}</option>
+                {else}
+                <option value="{$user_id}">{$name}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </label>
+
+
         <label class="layui-form-item">
             <span class="color-green font-w7">拟定人</span>
             <input class="layui-input" name="author" placeholder="请输入拟定人" required value="{$vo.author|default=''}">

@@ -127,6 +127,7 @@ class LawyerCaseAudit extends Controller
     {
         $this->title = '编辑律师合同审核';
         $this->contractType = ContractType::getContractType();
+        $this->lawyer = \app\common\model\LawyerInformation::column('name','user_id');
         $this->_form($this->table, 'form');
     }
 
