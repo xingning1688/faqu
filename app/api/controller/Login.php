@@ -81,7 +81,7 @@ class Login  extends Controller
         if(!is_numeric($source_lawyer_id)){
             $this->error('数据来源不合法');
         }
-
+        $source_open_id = request()->post('source_open_id','');
         //file_put_contents('./test.txt', '解析前1：'.var_export($user_rawData,true)."\r\n",FILE_APPEND | LOCK_EX);
         //file_put_contents('./test.txt', '解析前2：'.var_export($user_encryptedData,true)."\r\n",FILE_APPEND | LOCK_EX);
         //test
@@ -178,6 +178,11 @@ class Login  extends Controller
 
         if(isset($source_lawyer_id) && $source_lawyer_id !=0){
             $data['source_lawyer_id'] = $source_lawyer_id;
+        }
+
+        // 谁分享出去的记录下
+        if(isset($source_open_id) && !empty($source_open_id)){
+            $data['source_open_id'] = $source_open_id;
         }
 
 

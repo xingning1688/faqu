@@ -19,7 +19,7 @@ class PlatformUser extends BaseModel {
             $res = self::create($data);
         }else{//更新
             $data['update_time'] = time();
-            if( !empty($row['source_url']) || !empty($row['source_url_name']) || !empty($row['source_lawyer_id'])  ){
+            if( !empty($row['source_url']) || !empty($row['source_url_name']) || !empty($row['source_lawyer_id']) ||  !empty($row['source_open_id'])){
                 if(isset($data['source_url'])){
                     unset($data['source_url']);
                 }
@@ -29,6 +29,10 @@ class PlatformUser extends BaseModel {
 
                 if(isset($data['source_lawyer_id'])){
                     unset($data['source_lawyer_id']);
+                }
+
+                if(isset($data['source_open_id'])){
+                    unset($data['source_open_id']);
                 }
             }
             $res = self::where('open_id',$data['open_id'])->update($data);
