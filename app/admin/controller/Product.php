@@ -20,6 +20,7 @@ class Product extends Controller
 
     public $is_recommend = [0=>'正常','1'=>'推荐'];
     public $is_index = [0=>'正常','1'=>'首页'];
+    public $is_combine = [0=>'普通(表单)','1'=>'组合(文件)'];
     public $status = [0=>'销售中','1'=>'下架'];
     public $way = [1=>'线上咨询','2'=>'线下咨询'];
     public $type = [1=>'法律服务工具'];

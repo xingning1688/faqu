@@ -1,0 +1,91 @@
+{extend name="../../admin/view/main"}
+
+{block name="content"}
+
+<form autocomplete="off" class='layui-form layui-card' data-auto="true" id="Form" action="{:request()->url()}" method="post" onsubmit="return false;">
+    <div class="layui-card-body padding-40 padding-bottom-20">
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 label-required-prev">所属商品</span>
+            <select class="layui-select" name="product_id" lay-search="">
+                <option value="0" >--请选择--</option>
+
+                {foreach $products as $k=>$item}
+                {if isset($vo.product_id) && $k==$vo.product_id}
+                <option selected value="{$k}" >{$item.name}--(id:{$item.id})</option>
+                {else}
+                <option  value="{$k}" >{$item.name}--(id:{$item.id})</option>
+                {/if}
+                {/foreach}
+
+            </select>
+        </label>
+
+        <label class="layui-form-item">
+            <span class="color-green font-w7 label-required-prev">商品类型</span>
+            <select class="layui-select" name="type" lay-filter="type">
+                <option value="0" >--请选择--</option>
+                {foreach $type as $k=>$item}
+                    {if isset($vo.type) && $k==$vo.type}
+                    <option selected value="{$k}" >{$item}</option>
+                    {else}
+                    <option  value="{$k}" >{$item}</option>
+                    {/if}
+                {/foreach}
+
+            </select>
+        </label>
+
+        <label class="">
+            <span class="color-green font-w7 label-required-prev">商品名称</span>
+            <input class="layui-input" name="name" placeholder="请输入商品名称"  value="{$vo.name|default=''}">
+        </label>
+
+
+        <div class="layui-form-item">
+            <label class=" color-green font-w7 label-required-prev">文件上传</label>
+            <div class="">
+                <div class="padding-right-0 padding-left-0">
+                    <input style="margin: 0; padding-left: 10px; width:100%" name="url" required value="{$vo.url|default=''}"
+                           class="layui-input" title="请输入链接或点击上传文件" placeholder="请输入链接或点击上传文件" >
+                </div>
+                <div class="padding-right-0 padding-left-0">
+                    <button id="url" data-file="one" data-type="doc,docx,mp3,mp4,mpeg,asf,mov,wmv,flv,m4a,wav" data-field="url" type="button" class="layui-btn layui-btn-sm" style="height:38px;line-height:38px;width:100%">
+                        点我重新上传文件
+                    </button>
+                </div>
+                <p class="help-block"><b></b></p>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="hr-line-dashed margin-top-40"></div>
+        {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">提交信息</button>
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+        </div>
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    /*! 表单初始化 */
+    window.form.render();
+
+
+    $(document).ready(function() {
+        // select下拉框选中触发事件
+        form.on('select(type)', function (data) {
+
+
+        });
+    });
+
+
+</script>
+{/block}

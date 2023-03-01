@@ -16,9 +16,6 @@ class QiChaCha extends BaseModel{
 
     //查询老赖核查
     public function getDeadBeatCheck($postData=[]){
-        //test
-        //$postData['searchKey'] = '';
-        //test
 
         $data['key'] = self::key;
         if(isset($postData['searchKey']) && !empty($postData['searchKey'])){
@@ -38,6 +35,22 @@ class QiChaCha extends BaseModel{
         }
 
         $url = 'https://api.qichacha.com/DeadBeatCheck/GetList?'.http_build_query($data);
+        $headers = self::getHeaders();
+        $res = $this->doCurl($url,0,$data=[],$headers);
+
+        return $res;
+
+    }
+
+    //查询企业自身风险扫描
+    public function getEnterpriseRiskScanning($postData=[]){
+
+        $data['key'] = self::key;
+        if(isset($postData['searchKey']) && !empty($postData['searchKey'])){
+            $data['searchKey'] = $postData['searchKey'];
+        }
+
+        $url = 'https://api.qichacha.com/CompanySelfRiskCount/GetInfo?'.http_build_query($data);
         $headers = self::getHeaders();
         $res = $this->doCurl($url,0,$data=[],$headers);
 

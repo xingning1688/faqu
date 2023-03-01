@@ -183,6 +183,21 @@
                 {/foreach}
             </div>
         </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label label-required">是否组合产品</label>
+            <div class="layui-input-block">
+                {foreach $is_combine as $k=>$v}
+                <label class="think-radio">
+                    {if (isset($vo.is_combine) && ($k eq $vo.is_combine)  || (!isset($vo.id) && $k==0 ) )}
+                    <input name="is_combine" checked type="radio" value="{$k}" lay-ignore> {$v}
+                    {else}
+                    <input name="is_combine" type="radio" value="{$k}" lay-ignore> {$v}
+                    {/if}
+                </label>
+                {/foreach}
+            </div>
+        </div>
                                                         
         <div class="hr-line-dashed margin-top-40"></div>
         {notempty name='vo.id'}<input name="id" type="hidden" value="{$vo.id}">{/notempty}

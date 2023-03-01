@@ -58,19 +58,24 @@ class Order  extends AuthController
             $parameter['order_detail'] =  json_decode(request()->param('order_detail'),true);
         }
 
-        if(is_array(request()->param('order_consignee'))){
-            $parameter['order_consignee'] =  request()->param('order_consignee');
-        }else{
-            $parameter['order_consignee'] =  json_decode(request()->param('order_consignee'),true);
+        $order_consignee = request()->param('order_consignee','');
+        if(!empty($order_consignee)){
+            if(is_array($order_consignee)){
+                $parameter['order_consignee'] =  $order_consignee;
+            }else{
+                $parameter['order_consignee'] =  json_decode($order_consignee,true);
+            }
         }
+
 
         $parameter['open_id'] = request()->param('open_id');
         $parameter['pay_type'] = request()->param('pay_type');
         $parameter['platform'] = request()->param('platform');//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']
         $parameter['order_type'] = request()->param('order_type');
+        $parameter['type'] = request()->param('type',0);             
 
         //验证提交过来的数据
-        if( (isset($parameter['pay_type']) && !is_numeric($parameter['pay_type']) ) || !is_numeric($parameter['platform']) || empty($parameter['open_id']) || empty($parameter['order_detail'])  || empty($parameter['order_consignee'])){
+        if( (isset($parameter['pay_type']) && !is_numeric($parameter['pay_type']) ) || !is_numeric($parameter['platform']) || empty($parameter['open_id']) || empty($parameter['order_detail'])  /*|| empty($parameter['order_consignee'])*/){
             $this->error('参数不合法1');
         }
 
@@ -78,7 +83,7 @@ class Order  extends AuthController
             $this->error('参数不合法2');
         }
 
-        if( empty($parameter['order_consignee'])){
+        if(empty($parameter['type']) && empty($parameter['order_consignee'])){
             $this->error('参数不合法3');
         }
 
@@ -103,6 +108,15 @@ class Order  extends AuthController
     public function getByIdOrder(){
         $oid = request()->param('id');
         $order = OrderModel::getOrderDetailById($oid);//获取数据
+        if(empty($order)){
+            $this->error('失败，暂无数据');
+        }
+        $this->success('订单成功',$order);
+    }
+
+    public function getByIdOrder2(){
+        $oid = request()->param('id',4);
+        $order = OrderModel::getOrderDetailById2($oid);//获取数据
         if(empty($order)){
             $this->error('失败，暂无数据');
         }

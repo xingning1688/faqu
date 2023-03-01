@@ -32,10 +32,12 @@ class Order extends BaseModel {
             return false;
         }
 
-        $res = OrderConsignee::addOrderConsignee($parameter);
-        if($res===false){
-            Db::rollback();
-            return false;
+        if(isset($parameter['order_consignee'])){
+            $res = OrderConsignee::addOrderConsignee($parameter);
+            if($res===false){
+                Db::rollback();
+                return false;
+            }
         }
 
         Db::commit();
@@ -90,6 +92,34 @@ class Order extends BaseModel {
             return $row;
 
         }
+
+    //获取某个服务商城订单的详情
+    public static function getOrderDetailById2($oid){
+        $row = self::where('id',$oid)->find();
+        if(empty($row)){
+            return [];
+        }
+        $row = $row->toArray();
+        $order_details = OrderDetail::getOrderDetail($row['id']);
+        $product_ids = array_column($order_details,'product_id');
+        $subProduct = SubProduct::whereIn('product_id',$product_ids)->select()->toArray();
+        $newSubProduct = [];
+        if(!empty($subProduct)){
+            foreach($subProduct as $key=>$item){
+                $newSubProduct[$item['product_id']][] = $item;
+            }
+        }
+
+        foreach($order_details as $key=>$item){
+            if(isset($newSubProduct[$item['product_id']])){
+                $order_details[$key]['sub_product'] = $newSubProduct[$item['product_id']];
+                $order_details[$key]['sub_product_total'] = count($newSubProduct[$item['product_id']]);
+            }
+        }
+        $row['order_details'] = $order_details;
+        return $row;
+
+    }
 
 
     //获取我的服务订单
