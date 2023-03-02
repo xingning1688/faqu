@@ -53,9 +53,31 @@
 
                         <tr>
 
-                            <td class='text-center nowrap'>{$order['order_consignee']['name']}</td>
-                            <td class='text-center nowrap'>{$order['order_consignee']['phone']}</td>
-                            <td class='text-center '>{$order['order_consignee']['content']}</td>
+                            <td class='text-center nowrap'>
+                                {if isset($order['order_consignee']['name']) }
+                                    {$order['order_consignee']['name']}
+                                {else /}
+
+                                {/if}
+                            </td>
+                            <td class='text-center nowrap'>
+                                {if isset($order['order_consignee']['phone']) }
+                                {$order['order_consignee']['phone']}
+                                {else /}
+
+                                {/if}
+
+
+                            </td>
+                            <td class='text-center '>
+                                {if isset($order['order_consignee']['content']) }
+                                {$order['order_consignee']['content']}
+                                {else /}
+
+                                {/if}
+
+
+                            </td>
 
                         </tr>
 

@@ -52,7 +52,7 @@ class Order extends BaseModel {
         $order['order_price'] = $parameter['order_price'];
         $order['pay_type'] = $parameter['pay_type'];
         $order['order_type'] = $parameter['order_type'];
-
+        $order['type'] = $parameter['type'];
         $res = self::create($order);
         if(!isset($res->id) && empty($res->id)){
             return false;

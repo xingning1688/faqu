@@ -61,8 +61,12 @@ class Product extends Controller
     {
         $lawyer_information_ids = array_column($data,'lawyer_information_id');
         $lawyer = LawyerInformation::pluckAttrByIds($lawyer_information_ids,'id,name');
-        $data = array_map(function($item) use($lawyer) {
+        $way = $this->way;
+        $type = $this->type;
+        $data = array_map(function($item) use($lawyer,$way,$type) {
             $item['lawyer_name'] = isset($lawyer[$item['lawyer_information_id']])?   $lawyer[$item['lawyer_information_id']]['name'] : '';
+            $item['way'] = isset($way[$item['way']]) ? $way[$item['way']]: $item['way'];
+            $item['type'] = isset($type[$item['type']]) ? $type[$item['type']]: $item['type'];
             return $item;
         },$data);
     }

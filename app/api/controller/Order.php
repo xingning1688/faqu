@@ -72,7 +72,7 @@ class Order  extends AuthController
         $parameter['pay_type'] = request()->param('pay_type');
         $parameter['platform'] = request()->param('platform');//platform              平台  [0=>'未知','1'=>'快手','2'=>'微信','3'=>'抖音']
         $parameter['order_type'] = request()->param('order_type');
-        $parameter['type'] = request()->param('type',0);             
+        $parameter['type'] = request()->param('type');
 
         //验证提交过来的数据
         if( (isset($parameter['pay_type']) && !is_numeric($parameter['pay_type']) ) || !is_numeric($parameter['platform']) || empty($parameter['open_id']) || empty($parameter['order_detail'])  /*|| empty($parameter['order_consignee'])*/){
@@ -115,7 +115,10 @@ class Order  extends AuthController
     }
 
     public function getByIdOrder2(){
-        $oid = request()->param('id',4);
+        $oid = request()->param('id',0);
+        if(empty($oid)){
+            $this->error('失败，参数不合法');
+        }
         $order = OrderModel::getOrderDetailById2($oid);//获取数据
         if(empty($order)){
             $this->error('失败，暂无数据');
