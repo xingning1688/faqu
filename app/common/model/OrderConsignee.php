@@ -35,6 +35,16 @@ class OrderConsignee extends BaseModel {
     }
 
 
+    public static function addConsignee($data){
+        $res = self::create($data);
+        if(!isset($res->id) && empty($res->id)){
+            return false;
+        }
+
+        return true;
+    }
+
+
 
 
 

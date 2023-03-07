@@ -109,7 +109,8 @@ class QiChaCha  extends AuthController
             $data['status'] = 0;
             QichachaDeadBeat::addData($data);
 
-            $this->error($res['Message']);
+            //$this->error($res['Message']);
+            $this->error('error',$res);
         }
         //成功到添加数据库
         $data['status'] = 0;

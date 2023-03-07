@@ -18,6 +18,7 @@ namespace app\api\controller;
 
 use app\admin\model\OrderContractDetail;
 use app\api\model\Jwt;
+use app\common\model\OrderConsignee;
 use think\admin\Controller;
 use think\facade\Db;
 use app\api\model\LawyerInformations;
@@ -124,6 +125,25 @@ class Order  extends AuthController
             $this->error('失败，暂无数据');
         }
         $this->success('订单成功',$order);
+    }
+
+    //企业查风险 完成订单后，点击了解详情 获取手机号
+    public function addOrderConsignee(){
+        $data['order_id'] = request()->param('order_id',0);
+        $data['phone'] = request()->param('phone',0);
+
+        if(empty($data['order_id'])){
+            $this->error('数据不合法,订单id 错误');
+        }
+        if(strlen($data['phone']) != 11 ){
+            $this->error('数据不合法,手机号格式错误');
+        }
+        $res = OrderConsignee::addConsignee($data);
+        if($res!==true){
+            $this->error('失败');
+        }
+        $this->success('成功');
+
     }
 
 
