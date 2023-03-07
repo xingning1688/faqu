@@ -134,7 +134,7 @@ class CaseSourceSquare extends Controller
         if($this->request->isGet()){
             $this->title = '法律线索';
         }elseif($this->request->isPost()){
-            if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
+            //if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
             if (empty($data['problem'])) $this->error('请填写问题内容！');
             if (empty($data['name'])) $this->error('请填写姓名！');
             if (empty($data['phone'])) $this->error('请填写联系电话！');
@@ -157,14 +157,14 @@ class CaseSourceSquare extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      */
     protected function _add_form_filter(array &$data)
-    {
+    {  //dump($data);exit;
         $lawyer = LawyerInformation::allLawyer();
         $this->lawyer = $lawyer;
         $this-> is_shelves;
         if($this->request->isGet()){
             $this->title = '法律线索';
         }elseif($this->request->isPost()){
-            if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
+            //if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
             if (empty($data['problem'])) $this->error('请填写问题内容！');
             if (empty($data['name'])) $this->error('请填写姓名！');
             if (empty($data['phone'])) $this->error('请填写联系电话！');
@@ -196,7 +196,7 @@ class CaseSourceSquare extends Controller
         if($this->request->isGet()){
             $this->title = '法律线索';
         }elseif($this->request->isPost()){
-            if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
+            //if (empty($data['lawyer_information_id'])) $this->error('请选择律师！');
             if (empty($data['problem'])) $this->error('请填写问题内容！');
             if (empty($data['name'])) $this->error('请填写姓名！');
             if (empty($data['phone'])) $this->error('请填写联系电话！');

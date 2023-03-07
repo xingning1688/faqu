@@ -62,6 +62,7 @@ class CaseSourceSquare extends BaseModel {
         $platform_user = PlatformUser::whereIn('open_id',$open_ids)->column('open_id,avatar_url','open_id');
         $data = array_map(function($item) use($platform_user){
             $item['avatar_url'] = isset($platform_user[$item['open_id']]) ? $platform_user[$item['open_id']]['avatar_url'] : '';
+            $item['img'] = empty($item['img']) ? $item['img'] : explode('|',$item['img']);
             return $item;
         },$data);
         return $data;

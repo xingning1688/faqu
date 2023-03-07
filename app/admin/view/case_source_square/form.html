@@ -8,7 +8,7 @@
         <label class="layui-form-item">
             <span class="color-green font-w7 ">所属律师</span>
             <span class="color-desc margin-left-5"></span>
-            <select class="layui-select" name="lawyer_information_id" lay-search=""  required>
+            <select class="layui-select" name="lawyer_information_id" lay-search=""  >
                 <option value="0" data-type="0"></option>
                 {foreach $lawyer as $id=>$name}
                 {if isset($vo.lawyer_information_id) && $id==$vo.lawyer_information_id}
@@ -24,6 +24,26 @@
         <div class="layui-form-item" >
             <span class="label-required-prev font-w7 color-green">问题</span>
             <textarea class="layui-textarea" name="problem" placeholder="请输入问题" required> {$vo.problem|default=''|raw}</textarea>
+        </div>
+
+        <div class="layui-form-item ">
+            <span class="help-label"><b>附件图片上传</b></span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-left" style="width:100%">图片上传</th>
+                </tr>
+                <tr>
+
+                    <td class="text-left padding-0">
+                        <div class="help-images">
+                            <input name="img" data-max-width="2048" data-max-height="1024" type="hidden" value="{$vo.img|default=''}">
+                            <script>$('[name="img"]').uploadMultipleImage();</script>
+                        </div>
+                    </td>
+                </tr>
+                </thead>
+            </table>
         </div>
 
         <label class="layui-form-item">
