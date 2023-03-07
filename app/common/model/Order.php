@@ -127,7 +127,9 @@ class Order extends BaseModel {
         $open_id = $parameter['open_id'];
         $page = $parameter['page'];
         $where['open_id'] = $open_id;
-
+        if(isset($parameter['pay_status']) && $parameter['pay_status'] != -1){
+            $where['pay_status'] =  $parameter['pay_status'];
+        }
         $data = self::where($where)->order('create_time','desc')->page($page,50)->select()->toArray();
         if(empty($data)){
             return [];

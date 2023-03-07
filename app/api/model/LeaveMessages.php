@@ -25,6 +25,9 @@ class LeaveMessages extends BaseModel {
     public static function myConsulting($parameter){
 
         $where['open_id'] = $parameter['open_id'];
+        if(isset($parameter['pay_status']) && $parameter['pay_status'] != -1){
+            $where['pay_status'] =  $parameter['pay_status'];
+        }
         $data = self::where($where)->page($parameter['page'],50)->field('id,order_no,title,status,pay_status')->select()->toArray();
         return $data;
     }

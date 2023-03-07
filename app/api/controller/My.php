@@ -36,6 +36,7 @@ class My  extends AuthController
     public function myContract(){
         $parameter['open_id'] = request()->get('open_id','');
         $parameter['page'] = request()->get('page',1);
+        $parameter['pay_status'] = request()->get('pay_status',-1);
         if(empty($parameter['open_id']) || !is_numeric($parameter['page'])){
             $this->error('参数不合法');
         }
@@ -46,6 +47,7 @@ class My  extends AuthController
     public function myConsulting(){
         $parameter['open_id'] = request()->get('open_id','');
         $parameter['page'] = request()->get('page',1);
+        $parameter['pay_status'] = request()->get('pay_status',-1);
         if(empty($parameter['open_id']) || !is_numeric($parameter['page'])){
             $this->error('参数不合法');
         }
@@ -57,6 +59,7 @@ class My  extends AuthController
     public function myOrder(){
         $parameter['open_id'] = request()->get('open_id','');
         $parameter['page'] = request()->get('page',1);
+        $parameter['pay_status'] = request()->get('pay_status',-1);
         if(empty($parameter['open_id']) || !is_numeric($parameter['page'])){
             $this->error('参数不合法');
         }
