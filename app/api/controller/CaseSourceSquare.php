@@ -300,6 +300,7 @@ class CaseSourceSquare  extends AuthController
 
         $platform_user = PlatformUser::where('open_id',$row['open_id'])->column('open_id,avatar_url','open_id');
         $row['avatar_url'] = isset($platform_user[$row['open_id']]) ? $platform_user[$row['open_id']]['avatar_url'] : '';
+        $row['img'] = empty($row['img']) ? $row['img'] : explode('|',$row['img']);
         $this->success('成功',$row);
     }
 

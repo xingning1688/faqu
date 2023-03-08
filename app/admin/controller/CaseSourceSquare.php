@@ -177,7 +177,7 @@ class CaseSourceSquare extends Controller
             }
 
             $data['shelves_time'] = date('Y-m-d H:i:s',time());
-            $data['status'] = 1;
+
         }
     }
 
