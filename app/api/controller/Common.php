@@ -19,8 +19,8 @@ namespace app\api\controller;
 use think\admin\Controller;
 use think\facade\Db;
 use app\api\model\LawyerCase as LawyerCases;
-
-
+use app\common\model\CaseSourceSquare as CaseSourceSquareModel;
+use app\api\model\PlatformUser;
 class Common  extends Controller
 {
 
@@ -123,6 +123,23 @@ class Common  extends Controller
 
 
         $this->success('ok',$data);
+    }
+
+    //获取某个案源详情
+    public function getCaseSourceSquare(){
+        $id = request()->get('id',0); //案源id
+        if(empty($id)){
+            $this->error('参数错误');
+        }
+        $row = CaseSourceSquareModel::getMsgById($id);
+        if(empty($row)){
+            $this->error('失败，暂无数据');
+        }
+
+        $platform_user = PlatformUser::where('open_id',$row['open_id'])->column('open_id,avatar_url','open_id');
+        $row['avatar_url'] = isset($platform_user[$row['open_id']]) ? $platform_user[$row['open_id']]['avatar_url'] : '';
+        $row['img'] = empty($row['img']) ? $row['img'] : explode('|',$row['img']);
+        $this->success('成功',$row);
     }
 
 

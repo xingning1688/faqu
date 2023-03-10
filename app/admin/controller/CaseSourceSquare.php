@@ -84,9 +84,13 @@ class CaseSourceSquare extends Controller
         $lawyer_information_ids = array_unique(array_column($data,'lawyer_information_id'));
         $lawyer = LawyerInformation::pluckAttrByIds($lawyer_information_ids,'id,name');
         $status = $this->status;
-        $data = array_map(function($item) use($lawyer,$status) {
+
+        $system_user_ids = array_unique(array_column($data,'add_user'));
+        $system_user = SystemUser::whereIn('id',$system_user_ids)->column('id,nickname','id');
+        $data = array_map(function($item) use($lawyer,$status,$system_user) {
             $item['lawyer_name'] = isset($lawyer[$item['lawyer_information_id']])?   $lawyer[$item['lawyer_information_id']]['name'] : '';
             $item['status'] = isset($status[$item['status']])?   $status[$item['status']] : '';
+            $item['add_user'] = $item['add_source']==1? (isset($system_user[$item['add_user']])?   $system_user[$item['add_user']]['nickname'] : '') : $item['add_user'];
             return $item;
         },$data);
 
@@ -177,7 +181,8 @@ class CaseSourceSquare extends Controller
             }
 
             $data['shelves_time'] = date('Y-m-d H:i:s',time());
-
+            $data['add_source'] = 1;//后端添加
+            $data['add_user'] = session('user.id');
         }
     }
 

@@ -67,6 +67,9 @@ class CaseSourceSquare  extends AuthController
         $data['shelves_time'] =date('Y-m-d H:i:s',time());  
         $data['status'] = 1;
 
+        $data['add_source'] = 2;//前端端添加
+        $data['add_user'] = $data['open_id'] ;
+
         $res = $this->check($data);
         if($res!==true){
             $this->error('验证错误');
