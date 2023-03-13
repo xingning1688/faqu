@@ -120,7 +120,7 @@ class LawyerInformations extends BaseModel {
 
 
     public static function detail($id){
-        $data = LawyerInformations::field(['id','user_id','professional_field_id','name','law_firm_affiliation','profile_photo','lawyer_introduction ','honor','professional_studies','professional_title','experience','classic_case','share_copy'])->find($id);
+        $data = LawyerInformations::field(['id','user_id','professional_field_id','name','law_firm_affiliation','profile_photo','certificate','lawyer_introduction ','honor','professional_studies','professional_title','experience','classic_case','share_copy'])->find($id);
         if(empty($data)){
             return [];
         }

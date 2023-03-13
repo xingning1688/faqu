@@ -26,6 +26,26 @@
             </table>
         </div>
 
+        <div class="layui-form-item" data-rebate="1">
+            <span class="color-green font-w7 ">上传律师证</span>
+
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width:150px">律师证图片</th>
+                    <th class="text-center" style="width:auto"></th>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <input name="certificate" type="hidden" value="{$vo.certificate|default=''}">
+                        <script>$('[name="certificate"]').uploadOneImage();</script>
+                    </td>
+                    <td class="text-left"></td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
 
         <label class="layui-form-item">
             <span class="color-green font-w7">姓名</span>
