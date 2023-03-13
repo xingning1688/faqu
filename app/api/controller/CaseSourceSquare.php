@@ -171,6 +171,18 @@ class CaseSourceSquare  extends AuthController
         $caseData['allocate_time'] = date('Y-m-d H:i:s',time());
         $caseData['status'] = 2;
         if($data['type'] == 1){
+            $CaseSourceSquare = CaseSourceSquareModel::where('id',$data['id'])->where('is_shelves',0)->find();
+            if(!empty($CaseSourceSquare)){
+                $CaseSourceSquare = $CaseSourceSquare->toArray();
+                if($CaseSourceSquare['status'] == 2){
+                    $this->error('此案源已被其他律师接收');
+                }
+                if($CaseSourceSquare['status'] == 3){
+                    $this->error('该案源已经完成服务，请接收其它案源');
+                }
+
+            }
+
             $num = CaseSourceSquareModel::where('lawyer_information_id',$LawyerInformation['id'])->where('is_shelves',0)->where('status',2)->count();
             if($num>=1){
                 
