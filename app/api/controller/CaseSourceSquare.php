@@ -181,6 +181,10 @@ class CaseSourceSquare  extends AuthController
                     $this->error('该案源已经完成服务，请接收其它案源');
                 }
 
+                if($CaseSourceSquare['province2'] != $LawyerInformation['province']){
+                    $this->error('本地区律师优先，不能接收');
+                }
+
             }
 
             $num = CaseSourceSquareModel::where('lawyer_information_id',$LawyerInformation['id'])->where('is_shelves',0)->where('status',2)->count();

@@ -1,0 +1,41 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body think-box-shadow padding-left-40">
+        <fieldset class="margin-bottom-20 relative" data-max-index="0">
+            <legend class="color-green font-s14">备注<span class="color-desc font-s12"></span></legend>
+            <!--<div class="layui-form-item">-->
+
+                <div class="layui-form-item" data-rebate="1">
+                    <span class=" font-w7 color-green"></span>
+
+                    <textarea class="layui-hide" name="remark">{$vo.remark|default=''|raw}</textarea>
+                </div>
+
+            <!--</div>-->
+        </fieldset>
+
+        <div class="layui-form-item text-center" style="margin-top: 250px;">
+            <input type="hidden" name="id" value="{$vo.id}">
+            <button class="layui-btn" type="submit">提交备注</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    window.form.render();
+
+    /*! 加载扩展插件 */
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="remark"]', {height: 200,});
+        var app = angular.module("Form", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            // 返回列表
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+    });
+</script>

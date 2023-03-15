@@ -37,7 +37,7 @@ class Common extends Model {
             return $data;
         }
         $wherePhone['phone'] = $PlatformUser['phone'];
-        $LawyerInformation = LawyerInformation::getMsgByRow($wherePhone,['id,user_id,phone,name,profile_photo,fw_end_date']);
+        $LawyerInformation = LawyerInformation::getMsgByRow($wherePhone,['id,user_id,phone,name,profile_photo,fw_end_date,province,city,area']);
         if(empty($LawyerInformation)){
             $data['code'] = 1;
             $data['msg'] = '普通用户，有手机号，暂无律师信息';

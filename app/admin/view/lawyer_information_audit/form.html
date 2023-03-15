@@ -85,7 +85,14 @@
             </div>
         </div>
 
-
+        <div class="layui-form-item label-required-prev">
+            <span class="help-label"><b>律师地址</b></span>
+            <div class="layui-row layui-col-space10">
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="province"></select></label>
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="city"></select></label>
+                <label class="layui-col-xs4"><select class="layui-select block full-width" lay-ignore name="area"></select></label>
+            </div>
+        </div>
 
         <label class="layui-form-item">
             <span class="color-green font-w7">律师所</span>
@@ -128,6 +135,13 @@
         </div>
     </div>
 </form>
+<script>
+    require(['pcasunzips'], function () {
+        (function (province, city, area) {
+            new PCAS("province", "city", "area", province, city, area);
+        })('{$vo.province|default=""}', '{$vo.city|default=""}', '{$vo.area|default=""}');
+    });
+</script>
 {/block}
 
 {block name='script'}

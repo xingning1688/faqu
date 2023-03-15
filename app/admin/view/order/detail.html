@@ -35,6 +35,29 @@
 
             </div>
 
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div>备注</div>
+                    <table class="layui-table margin-top-10" lay-skin="line">
+                        <thead>
+                        <tr>
+                            <th class='text-center nowrap' width="10%">备注</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class=''>
+                                {if isset($order['remark']) }
+                                {:htmlspecialchars_decode($order.remark)}
+                                {else /}
+                                {/if}
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
 
             <div class="layui-tab-content">

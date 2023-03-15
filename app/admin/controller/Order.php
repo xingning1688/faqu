@@ -195,7 +195,17 @@ class Order extends Controller
         }
     }
 
+    //备注
+    public function remark() {
+        $this->title = '备注信息';
+        $this->_form($this->table, 'remark');
+    }
+    protected function _remark_form_filter(&$data) {
 
+        if($this->request->isPost()) {
+            $data['update_time'] = time();
+        }
+    }
 
 
 
