@@ -63,9 +63,15 @@ class CaseSourceSquare  extends AuthController
         $data['province2'] = request()->post('province2','');
         $data['city2'] = request()->post('city2','');
         $data['area2'] = request()->post('area2','');
+        $data['is_priority'] = request()->post('is_priority',0);
 
-        $data['shelves_time'] =date('Y-m-d H:i:s',time());  
-        $data['status'] = 1;
+        $data['shelves_time'] =date('Y-m-d H:i:s',time());
+
+        if(empty($data['lawyer_information_id'])){
+            $data['status'] = 0;
+        }else{
+            $data['status'] = 1;
+        }
 
         $data['add_source'] = 2;//前端端添加
         $data['add_user'] = $data['open_id'] ;
@@ -136,6 +142,10 @@ class CaseSourceSquare  extends AuthController
             $this->error('手机号不合法');
         }
 
+        if(!in_array($data['is_priority'],[0,1])){
+            $this->error('限制本地律师数据不合法');
+        }
+
         return true;
     }
 
@@ -181,8 +191,12 @@ class CaseSourceSquare  extends AuthController
                     $this->error('该案源已经完成服务，请接收其它案源');
                 }
 
-                if($CaseSourceSquare['province2'] != $LawyerInformation['province']){
-                    $this->error('本地区律师优先，不能接收');
+                if(empty($CaseSourceSquare['lawyer_information_id'])){
+                    if($CaseSourceSquare['is_priority'] == 1){
+                        if(($CaseSourceSquare['province'] != $LawyerInformation['province']) || ($CaseSourceSquare['city'] != $LawyerInformation['city'])){
+                            $this->error('限本地律师服务，您不能接收');
+                        }
+                    }
                 }
 
             }

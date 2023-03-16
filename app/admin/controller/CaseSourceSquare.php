@@ -29,6 +29,7 @@ class CaseSourceSquare extends Controller
     private $table = 'case_source_square';
     public $status = [0=>'待处理','1'=>'待接收','2'=>'已接收','3'=>'已完成'];
     public $is_shelves = [0=>'上架','1'=>'下架'];
+    public $is_priority = [0=>'不限','1'=>'限本地律师'];
     /**
      * 案源广场列表
      * @auth true
@@ -135,6 +136,7 @@ class CaseSourceSquare extends Controller
         $lawyer = LawyerInformation::allLawyer();
         $this->lawyer = $lawyer;
         $this-> is_shelves;
+        $this->is_priority;
         if($this->request->isGet()){
             $this->title = '法律线索';
         }elseif($this->request->isPost()){
@@ -161,7 +163,7 @@ class CaseSourceSquare extends Controller
      * @throws \think\db\exception\ModelNotFoundException
      */
     protected function _add_form_filter(array &$data)
-    {  //dump($data);exit;
+    {
         $lawyer = LawyerInformation::allLawyer();
         $this->lawyer = $lawyer;
         $this-> is_shelves;
@@ -181,7 +183,12 @@ class CaseSourceSquare extends Controller
             }
 
             $data['shelves_time'] = date('Y-m-d H:i:s',time());
-            $data['status'] = 1;
+            if(empty($data['lawyer_information_id'])){
+                $data['status'] = 0;
+            }else{
+                $data['status'] = 1;
+            }
+
             $data['add_source'] = 1;//后端添加
             $data['add_user'] = session('user.id');
         }

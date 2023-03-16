@@ -83,6 +83,21 @@
             </div>
         </div>
 
+        <div class="layui-form-item  ">
+            <label class="layui-form-label label-required" style="padding-left:0px;text-align: left;color: #090!important;font-weight: bold;">是否优先本地</label>
+            <div class="layui-input-block">
+                {foreach $is_priority as $k=>$v}
+                <label class="think-radio">
+                    {if ( (isset($vo.is_priority) && ($k eq $vo.is_priority)) || (!isset($vo.id) && $k==0 ) )  }
+                    <input name="is_priority"  checked  type="radio" value="{$k}" lay-ignore> {$v}
+                    {else}
+                    <input name="is_priority" type="radio" value="{$k}" lay-ignore> {$v}
+                    {/if}
+                </label>
+                {/foreach}
+            </div>
+        </div>
+
         {notempty name='vo.id'}
         <label class="layui-form-item">
             <span class="color-green font-w7 ">状态</span>
