@@ -31,7 +31,7 @@ class Product extends BaseModel {
         $search['lawyer_information_id'] = request()->param('lawyer_information_id',0);
 
 
-        $query = self::where('status',0)->order('sort', 'desc')->order('id', 'desc');
+        $query = self::where('status',0)->whereNotIn('id',[9,10,11])->order('sort', 'desc')->order('id', 'desc');
         if(isset($search['name']) && !empty($search['name'])){
             $query->like('name', '%'.$search['name'].'%');
         }
