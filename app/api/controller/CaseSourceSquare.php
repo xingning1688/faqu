@@ -85,7 +85,10 @@ class CaseSourceSquare  extends AuthController
         if($res === false){
             $this->error('验证错误');
         }
-        $res = DySmsApiModel::sendSms($data['lawyer_information_id']);
+        if(!empty($data['lawyer_information_id'])){
+            $res = DySmsApiModel::sendSms($data['lawyer_information_id']);
+        }
+
         $this->success('问题留言成功');
     }
 
@@ -94,9 +97,9 @@ class CaseSourceSquare  extends AuthController
             $this->error('请先授权登录');
         }
 
-        if(empty($data['lawyer_information_id'])){
+        /*if(empty($data['lawyer_information_id'])){
             $this->error('律师参数错误');
-        }
+        }*/
 
         if(empty($data['platform'])){
             $this->error('平台参数错误');
