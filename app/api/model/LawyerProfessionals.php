@@ -20,10 +20,10 @@ class LawyerProfessionals extends BaseModel {
 
     public static function getProfessionalList(){
 
-        $where[] = ['status','=',1];
+        $where[] = ['status','=',0];
         $list = self::field(['id','professional','status'])
                     ->where($where)
-                    ->limit(20)
+                    //->limit(20)
                     ->order('sort', 'desc')
                     ->select()
                     ->toArray();

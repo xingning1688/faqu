@@ -35,7 +35,7 @@ class LawyerProfessional  extends Controller
         if(empty($list)){
             $this->error('暂无数据');
         }
-        $this->success('ok');
+        $this->success('ok',$list);
     }
 
     /*public function detail(){
