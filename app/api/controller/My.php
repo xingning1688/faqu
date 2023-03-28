@@ -143,7 +143,7 @@ class My  extends AuthController
         $keys = array_keys($LawyerProfessionals);
         foreach($data['professional_field_id'] as $key=>$item){
             if(!in_array($item,$keys)){
-                $this->error('专题研究不合法：'.json_encode($data['professional_field_id']));
+                $this->error('请选择专题研究');
             }
         }
         $data['professional_field_id'] = ','.(implode(',',$data['professional_field_id'])).',';
@@ -153,7 +153,7 @@ class My  extends AuthController
         }
 
         if(empty($data['province'])){
-            $this->error('省份不能为空');
+            $this->error('请选择工作地点');
         }
 
         if(empty($data['city'])){
