@@ -113,10 +113,13 @@
             </div>
 
             {notempty name="$order['order_qichacha']['result']['Result']['Data']"}
+            {if (!isset($order['order_qichacha']['result']['Result']['Data']['Id'])) }
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div>订单号：{$order['order_qichacha']['result']['OrderNumber']}</div>
                     <table class="layui-table margin-top-10" lay-skin="line">
+
+
                         <thead>
                         <tr>
                             <th class='text-center nowrap' width="5%">姓名</th>
@@ -128,6 +131,8 @@
                         </tr>
                         </thead>
                         <tbody>
+
+
                         {foreach $order['order_qichacha']['result']['Result']['Data'] as $item}
                         <tr>
                             <td class='text-center nowrap'>{$item.Name}</td>
@@ -138,11 +143,153 @@
                             <!--<td class='text-center nowrap'>{$item.Description}</td>-->
                         </tr>
                         {/foreach}
+
+
+
+
                         </tbody>
                     </table>
                 </div>
 
             </div>
+            {else}
+
+
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div>订单号：{$order['order_qichacha']['result']['OrderNumber']}</div>
+                    <table class="layui-table margin-top-10" lay-skin="line">
+
+
+                        <!--<thead>
+                        <tr>
+                            <th class='text-center nowrap' width="5%">Id</th>
+                            <th class='text-center nowrap' width="10%">SXCount</th>
+                            <th class='text-center nowrap' width="10%">ZXCount</th>
+                            <th class='text-center nowrap' width="10%">JUDCount</th>
+                            <th class='text-center nowrap' width="15%">JSCount</th>
+                            <th class='text-center nowrap' width="15%">EXCount</th>
+                            <th class='text-center nowrap' width="15%">CSACount</th>
+                            <th class='text-center nowrap' width="15%">TICount</th>
+
+                        </tr>
+                        </thead>-->
+
+                        <tbody>
+                        <tr>
+                            <!--<th class='text-center nowrap' width="5%">Id</th>-->
+                            <th class='text-center nowrap' width="10%">SXCount</th>
+                            <th class='text-center nowrap' width="10%">ZXCount</th>
+                            <th class='text-center nowrap' width="10%">JUDCount</th>
+                            <th class='text-center nowrap' width="15%">JSCount</th>
+                            <th class='text-center nowrap' width="15%">EXCount</th>
+                            <th class='text-center nowrap' width="15%">CSACount</th>
+                            <th class='text-center nowrap' width="15%">TICount</th>
+
+                        </tr>
+                        <tr>
+                            <!--<td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["Id"]}</td>-->
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["SXCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["ZXCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["JUDCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["JSCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["EXCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["CSACount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["TICount"]}</td>
+
+
+                        </tr>
+
+                        <tr>
+                            <!--<th class='text-center nowrap' width="5%">Id</th>-->
+                            <th class='text-center nowrap' width="10%">PLECount</th>
+                            <th class='text-center nowrap' width="10%">MLECount</th>
+                            <th class='text-center nowrap' width="10%">ASCount</th>
+                            <th class='text-center nowrap' width="15%">CTACount</th>
+                            <th class='text-center nowrap' width="15%">LMCount</th>
+                            <th class='text-center nowrap' width="15%">EPCount</th>
+                            <th class='text-center nowrap' width="15%">SVCount</th>
+
+                        </tr>
+                        <tr>
+                            <!--<td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["Id"]}</td>-->
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["PLECount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["MLECount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["ASCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["CTACount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["LMCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["EPCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["SVCount"]}</td>
+
+
+                        </tr>
+
+                        <tr>
+                            <!--<th class='text-center nowrap' width="5%">Id</th>-->
+                            <th class='text-center nowrap' width="10%">LACount</th>
+                            <th class='text-center nowrap' width="10%">DLNCount</th>
+                            <th class='text-center nowrap' width="10%">TOCount</th>
+                            <th class='text-center nowrap' width="15%">PNCount</th>
+                            <th class='text-center nowrap' width="15%">SCCount</th>
+                            <th class='text-center nowrap' width="15%">DWCount</th>
+                            <th class='text-center nowrap' width="15%">WGCount</th>
+
+                        </tr>
+                        <tr>
+                            <!--<td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["Id"]}</td>-->
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["LACount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["DLNCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["TOCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["PNCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["SCCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["DWCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["WGCount"]}</td>
+
+
+                        </tr>
+
+                        <tr>
+                            <!--<th class='text-center nowrap' width="5%">Id</th>-->
+                            <th class='text-center nowrap' width="10%">STPCount</th>
+                            <th class='text-center nowrap' width="10%">STCount</th>
+                            <th class='text-center nowrap' width="10%">ENCCount</th>
+                            <th class='text-center nowrap' width="15%">BRYCount</th>
+                            <th class='text-center nowrap' width="15%">INECount</th>
+                            <th class='text-center nowrap' width="15%">ELQCount</th>
+                            <th class='text-center nowrap' width="15%">APCount</th>
+
+                        </tr>
+                        <tr>
+                            <!--<td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["Id"]}</td>-->
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["STPCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["STCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["ENCCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["BRYCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["INECount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["ELQCount"]}</td>
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["APCount"]}</td>
+
+                        </tr>
+
+                        <tr>
+                            <!--<th class='text-center nowrap' width="5%">Id</th>-->
+                            <th class='text-center nowrap' width="10%">LOCount</th>
+
+                        </tr>
+                        <tr>
+                            <!--<td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["Id"]}</td>-->
+                            <td class='text-center nowrap'>{$order['order_qichacha']['result']['Result']['Data']["LOCount"]}</td>
+
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            {/if}
             {/notempty}
 
         </div>

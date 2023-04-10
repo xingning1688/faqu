@@ -167,7 +167,7 @@ class Order extends Controller
             $this->error('参数错误1！');
         }
 
-        $order = OrderModel::getOrderDetailById($order_id);
+        $order = OrderModel::getOrderDetailById($order_id);  //dump($order);exit;
         $this->assign('order', $order);
         return $this->fetch();
     }
